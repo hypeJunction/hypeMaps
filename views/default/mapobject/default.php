@@ -1,12 +1,15 @@
 <?php
 
 $entity = elgg_extract('entity', $vars, false);
-if (!$entity || !elgg_instanceof($entity)) {
+
+if (!$entity || !elgg_instanceof(get_entity($entity->guid))) {
     return true;
 }
 
+$full_view = elgg_extract('full_view', $vars, false);
+
 $entity = get_entity($entity->guid);
-$icon = elgg_extract('icon', $vars, $entity->getIconURL());
+$icon = elgg_extract('icon', $vars);
 
 if (!$title = $entity->title) {
     $title = $entity->name;
@@ -46,14 +49,18 @@ $menu = elgg_view_menu('mapobject', array(
     'sort_by' => 'priority'
 ));
 
+if ($full_view) {
+	$description = elgg_get_excerpt($entity->description, 400);
+}
 $html = <<<HTML
-<div class="hj-map-entity clearfix">
+<div id="hj-map-entity-$entity->guid" class="hj-map-entity" clearfix">
     <div class="hj-map">
         <img src="$icon" />
     </div>
     <div class="hj-stats">
         <span class="hj-title">$title</span><br />
         <span class="hj-address">{$entity->getLocation()}</span>
+		<span class="hj-description">$description</span>
         <span class="hj-extras">
             $menu
         </span>

@@ -11,6 +11,11 @@
 .hj-map-entity {
         font-size:0.8em;
         line-height:1em;
+		cursor:pointer;
+}
+
+.hj-map-onthemap .hj-map-entity:hover {
+		background:#f4f4f4;
 }
 
 .hj-map-entity .hj-map {
@@ -44,8 +49,7 @@
         margin-bottom:10px;
 }
 .hj-map-onthemap {
-        height:315px;
-        max-height:315px;
+        height:360px;
         overflow-y:auto;
 }
 .hj-maps-owner-block label {
@@ -75,6 +79,29 @@ a.hj-maps-submenu-link:hover {
         text-decoration:underline;
 }
 
-.elgg-menu-map-object li {
-padding:0 3px;
+.elgg-menu-mapobject li {
+	padding:0 3px;
+}
+
+.hj-map-and-stats-wrapper {
+	border:1px solid #b0b0b0;
+	position:relative;
+}
+
+.hj-ajaxed-map-static {
+	margin-left:20px;
+}
+
+.hj-maps-location-forms {
+	margin:5px 0;
+	color:#666;
+}
+
+.hj-maps-location-forms form {
+	border:1px solid #b0b0b0;
+	padding:4px;
+}
+
+.hj-maps-location-forms label {
+	text-transform:uppercase;
 }

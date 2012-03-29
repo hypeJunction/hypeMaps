@@ -1,13 +1,10 @@
 <?php
-gatekeeper();
-
 $guid = get_input('e');
 $entity = get_entity($guid);
 
 if (!$entity) {
-    exit;
+	$entity = elgg_get_logged_in_user_entity();
 }
-
 $rec = get_input('rec');
 
 $location = get_input('location');

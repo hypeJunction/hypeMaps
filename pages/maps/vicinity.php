@@ -1,6 +1,4 @@
 <?php
-gatekeeper();
-
 $type = get_input('type', null);
 $subtype = get_input('subtype', null);
 $owner = get_input('owner_guid', null);
@@ -17,43 +15,123 @@ if ($subtype) {
 if ($owner) $owner = explode(',', $owner);
 if ($container) $container = explode(',', $container);
 if ($markertype) $markertype = explode(',', $markertype);
-$limit = get_input('limit', 0);
+$limit = get_input('limit', 5);
 $offset = get_input('offset', 0);
 
+$user = elgg_get_logged_in_user_entity();
+	if ($user) {
+		$userlocation = new hjEntityLocation($user->guid);
+	};
+
+if ($user && $user->temp_location) {
+	$address = $user->location;
+	$latitude = $userlocation->getTempLatitude();
+	$longitude = $userlocation->getTempLongitude();
+} else if ($_SESSION['location']) {
+	$address = $_SESSION['location'];
+	$latitude = $_SESSION['latitude'];
+	$longitude = $_SESSION['longitude'];
+} else if ($user && $user->getLocation()) {
+	$address = $user->getLocation();
+	$latitude = $userlocation->getLatitude();
+	$longitude = $userlocation->getLongitude();
+} else {
+	$address = $site->default_location;
+	$site_location = new hjEntityLocation(elgg_get_site_entity()->guid);
+	$latitude = $site_location->getLatitude();
+	$longitude = $site_location->getLongitude();
+}
 
 $title = elgg_echo('hj:maps:vicinity');
-elgg_push_breadcrumb($title);
 
-$entities = elgg_get_entities_from_metadata(array(
+$form = hj_framework_get_data_pattern('object', 'hjplace');
+$data_options = array(
+	'form_guid' => $form->guid,
+	'fbox_x' => 900,
+	'target' => 'hj-map-vicinity',
+	'event' => 'create'
+);
+
+$data_options = hj_framework_extract_params_from_params($data_options);
+
+elgg_register_menu_item('title', array(
+    'name' => 'addnewplace',
+    'title' => elgg_echo('hj:maps:addnew'),
+    'text' => elgg_view('input/button', array('value' => elgg_echo('hj:maps:addnew'), 'class' => 'elgg-button-action')),
+    'href' => "action/framework/entities/edit",
+	'data-options' => htmlentities(json_encode(array('params' => $data_options)), ENT_QUOTES, 'UTF-8'),
+    'is_action' => true,
+    'rel' => 'fancybox',
+    'id' => "hj-ajaxed-add-hjplace",
+    'class' => "hj-ajaxed-add",
+    'priority' => 400
+));
+
+$title .= elgg_view_menu('title');
+
+$db_prefix = elgg_get_config('dbprefix');
+$list_params = array(
     'types' => $type,
     'subtypes' => $subtype,
     'owner_guids' => $owner,
     'container_guids' => $container,
     'limit' => $limit,
     'offset' => $offset,
-    'metadata_name_value_pairs' => array(
-        array('name' => 'location', 'value' => '', 'operand' => '!='),
-        array('name' => 'markertype', 'value' => $markertype)
-    )
+	'selects' => array("(((acos(sin(($latitude*pi()/180)) * sin((msv1.string*pi()/180))+cos(($latitude*pi()/180)) * cos((msv1.string*pi()/180)) * cos((($longitude - msv2.string)*pi()/180))))*180/pi())*60*1.1515*1.609344) as distance"),
+	//'wheres' => array("((((acos(sin(($latitude*pi()/180)) * sin((msv1.string*pi()/180))+cos(($latitude*pi()/180)) * cos((msv1.string*pi()/180)) * cos((($longitude - msv2.string)*pi()/180))))*180/pi())*60*1.1515*1.609344) > 5000) AND ((((acos(sin(($latitude*pi()/180)) * sin((msv1.string*pi()/180))+cos(($latitude*pi()/180)) * cos((msv1.string*pi()/180)) * cos((($longitude - msv2.string)*pi()/180))))*180/pi())*60*1.1515*1.609344) < 7000)"),
+	'metadata_name_value_pairs' => array(
+        array('name' => 'geo:lat', 'value' => '', 'operand' => "!="),
+		array('name' => 'geo:long', 'value' => '', 'operand' => "!="),
+		array('name' => 'markertype', 'value' => $markertype)
+    ),
+	'order_by' => "distance ASC",
+	'count' => true
+);
+
+$count = elgg_get_entities_from_metadata($list_params);
+$list_params['count'] = false;
+
+$entities = elgg_get_entities_from_metadata($list_params);
+
+$map = elgg_view_entity_list($entities, array(
+	'list_type' => 'geomap',
+	'data-options' => $list_params,
+	'sync' => true,
+	'pagination' => true,
+	'position' => 'after',
+	'base_url' => 'places/sync',
+	'list_class' => 'hj-geomap-list',
+	'count' => $count,
+	'autorefresh' => false,
+	'limit' => 10,
+	'limit_prev' => $limit,
+	'offset' => $offset,
+	'class' => 'hj-view-list',
+	'list_id' => 'hj-map-vicinity',
+	'map_params' => array('useSessionLocation' => get_input('useSessionLocation', true))
 ));
 
-$user = elgg_get_logged_in_user_entity();
+$find_location = elgg_view('hj/maps/changelocation', array('address' => $address, 'rel' => 'hj-map-vicinity'));
+if (elgg_is_logged_in()) {
+	$set_default_location = elgg_view('hj/maps/setdefaultlocation', array('address' => $user->temp_location, 'rel' => 'hj-map-vicinity'));
+}
 
-$params = array('entity' => $user, 'markers' => $entities);
+$location_forms = '<div class="hj-maps-location-forms">' . elgg_view_layout('hj/dynamic', array(
+	'grid' => array(6,6),
+	'content' => array($find_location, $set_default_location)
+)) . '</div>';
 
-$map = elgg_view('hj/maps/map', $params);
-$stats = elgg_view('hj/maps/stats', $params);
+//$sidebar = elgg_view('hj/maps/sidebar', array('markers' => $entities));
+$module = elgg_view_module('aside', $title, $location_forms . $map);
 
-$content = elgg_view_layout('hj/dynamic', array('content' => array($map, $stats), 'grid' => array('8', '4')));
+$filter = elgg_view('hj/maps/filter');
+$filter_module = elgg_view_module('aside', elgg_echo('hj:maps:filter'), $filter);
 
-$sidebar = elgg_view('hj/maps/sidebar', $params);
-$module = elgg_view_module('aside', $title, $content);
-
-$content = elgg_view_layout('hj/profile', array(
-    'content' => $module,
-    'sidebar' => $sidebar,
+$body = elgg_view_layout('one_column', array(
+    'content' => $module . $filter_mdoule,
+//    'sidebar' => $sidebar,
         ));
 
-$body = elgg_view_layout('one_column', array('content' => $content));
+//$body = elgg_view_layout('one_column', array('content' => $content));
 
 echo elgg_view_page($title, $body);

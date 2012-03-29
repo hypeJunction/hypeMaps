@@ -44,10 +44,11 @@ function hj_maps_init() {
 	// Register Actions
 	elgg_register_action('maps/getter', $shortcuts['actions'] . 'hj/maps/getter.php', 'public');
 	elgg_register_action('maps/abstract', $shortcuts['actions'] . 'hj/maps/abstract.php', 'public');
-	elgg_register_action('maps/setlocation', $shortcuts['actions'] . 'hj/maps/setlocation.php');
+	elgg_register_action('maps/setlocation', $shortcuts['actions'] . 'hj/maps/setlocation.php', 'public');
 	elgg_register_action('maps/changelocation', $shortcuts['actions'] . 'hj/maps/changelocation.php');
 	elgg_register_action('maps/filter', $shortcuts['actions'] . 'hj/maps/filter.php', 'public');
 
+	elgg_register_action('hypeMaps/settings/save', $shortcuts['actions'] . 'hj/settings/maps.php', 'admin');
 	// Register new admin menu item
 	//elgg_register_admin_menu_item('administer', 'maps', 'hj', 300);
 	// Register CSS and JS
@@ -65,6 +66,8 @@ function hj_maps_init() {
 	$js_url = elgg_get_simplecache_url('js', 'hj/maps/base');
 	elgg_register_js('hj.maps.base', $js_url);
 
+	elgg_extend_view('js/initialize_elgg', 'js/hj/maps/sessionLocation');
+	
 	// Add hypeFormBuilder Field Types and processing algorithms
 	elgg_register_plugin_hook_handler('hj:formbuilder:fieldtypes', 'all', 'hj_maps_location_input');
 	elgg_register_plugin_hook_handler('hj:framework:field:process', 'all', 'hj_maps_location_input_process');
@@ -75,13 +78,7 @@ function hj_maps_init() {
 	// Geolocate user's location on profile update
 	elgg_register_event_handler('profileupdate', 'user', 'hj_maps_geocode_user_location');
 
-	if (elgg_is_logged_in()) {
-		$user = elgg_get_logged_in_user_entity();
-		if (!$user->location) {
-			hj_maps_geocode_user_location('profileupdate', 'user', $user);
-			system_message(elgg_echo('hj:maps:locationchangedtodefault', array(elgg_get_plugin_setting('default_location', 'hypeMaps'))));
-		}
-	}
+	elgg_register_plugin_hook_handler('hj:framework:submit:output', 'all', 'hj_maps_form_submit');
 
 	/**
 	 * PLACES
@@ -92,7 +89,7 @@ function hj_maps_init() {
 		elgg_register_menu_item('site', array(
 			'name' => 'maps',
 			'text' => elgg_echo('hj:maps:places'),
-			'href' => 'places/all',
+			'href' => 'places',
 			'priority' => 400
 		));
 	}
@@ -190,9 +187,9 @@ function hj_maps_location_input_process($hook, $type, $return, $params) {
 function hj_maps_geocode_user_location($event, $type, $entity) {
 	if (elgg_instanceof($entity, 'user')) {
 		$location = new hjEntityLocation($entity->guid);
-		if (!$entity->location) {
-			$entity->location = elgg_get_plugin_setting('default_location', 'hypeMaps');
-		}
+//		if (!$entity->location) {
+//			$entity->location = elgg_get_plugin_setting('default_location', 'hypeMaps');
+//		}
 		$location->setAddressMetadata($entity->location);
 		$location->setEntityLocation($entity->location);
 	}
@@ -203,8 +200,7 @@ function hj_maps_page_handler($page) {
 	elgg_load_js('hj.comments.base');
 	elgg_load_css('hj.comments.bar');
 	elgg_load_js('hj.framework.ajax');
-	elgg_load_js('hj.framework.fieldcheck');
-
+	
 	elgg_load_js('hj.maps.base');
 	elgg_load_js('hj.maps.google');
 	elgg_load_js('hj.maps.googlegears');
@@ -217,13 +213,43 @@ function hj_maps_page_handler($page) {
 	// Check if the username was provided in the url
 	// If no username specified, display logged in user's portfolio
 
-	$type = elgg_extract(0, $page, 'owner');
+	$type = elgg_extract(0, $page, 'objects');
 
 	switch ($type) {
 		case 'vicinity' :
 		case 'all' :
+			set_input('useSessionLocation', true);
+			set_input('type', 'object,group,user');
+			include "{$pages}vicinity.php";
+			break;
+
+		case 'objects' :
 		default :
 			set_input('useSessionLocation', true);
+			set_input('type', 'object');
+			if (isset($page[1])) {
+				set_input('subtype', $page[1]);
+			} else {
+				set_input('subtype', 'hjplace');
+			}
+			include "{$pages}vicinity.php";
+			break;
+
+		case 'users' :
+			set_input('useSessionLocation', true);
+			set_input('type', 'user');
+			if (isset($page[1])) {
+				set_input('subtype', $page[1]);
+			}
+			include "{$pages}vicinity.php";
+			break;
+
+		case 'groups' :
+			set_input('useSessionLocation', true);
+			set_input('type', 'group');
+			if (isset($page[1])) {
+				set_input('subtype', $page[1]);
+			}
 			include "{$pages}vicinity.php";
 			break;
 
@@ -239,11 +265,6 @@ function hj_maps_page_handler($page) {
 			}
 			break;
 
-		case 'all' :
-			set_input('useSessionLocation', true);
-			include "{$pages}vicinity.php";
-			break;
-
 		case 'marker' :
 			$guid = elgg_extract(1, $page, 0);
 			$size = elgg_extract(2, $page, 'tiny');
@@ -254,9 +275,23 @@ function hj_maps_page_handler($page) {
 
 		case 'owner' :
 			set_input('useSessionLocation', true);
-			$owner = elgg_extract(1, $page, elgg_get_logged_in_user_entity()->username);
-			set_input('username', $owner);
-			include "{$pages}owner.php";
+			$username = elgg_extract(1, $page, elgg_get_logged_in_user_entity()->username);
+			$owner_guid = get_user_by_username($username)->guid;
+			set_input('owner_guid', $owner_guid);
+			if (isset($page[2])) {
+				set_input('type', $page[2]);
+				if (isset($page[3])) {
+					set_input('subtype', $page[3]);
+				}
+			} else {
+				set_input('type', 'object');
+				set_input('subtype', 'hjplace');
+			}
+			include "{$pages}vicinity.php";
+			break;
+
+		case 'sync' :
+			include "{$pages}sync.php";
 			break;
 	}
 	return true;
@@ -278,14 +313,13 @@ function hj_places_owner_block_menu($hook, $type, $return, $params) {
 	if (elgg_instanceof($params['entity'], 'user')) {
 		$url = "places/owner/{$params['entity']->username}";
 		$return[] = new ElggMenuItem('places', elgg_echo('hj:maps:places:menu:owner_block'), $url);
-		return $return;
 	}
-	return false;
+	return $return;
 }
 
 function hj_maps_places_owner_block_menu($hook, $type, $return, $params) {
 
-	if ($params['context'] == 'places') {
+	if (elgg_in_context('places')) {
 		$all = array(
 			'name' => 'all',
 			'title' => elgg_echo('hj:maps:allplaces'),
@@ -311,7 +345,7 @@ function hj_maps_places_owner_block_menu($hook, $type, $return, $params) {
 //            'href' => "places/friends",
 //            'priority' => 700
 //        );
-		$return[] = ElggMenuItem::factory($friends);
+//		$return[] = ElggMenuItem::factory($friends);
 	}
 	return $return;
 }
@@ -344,5 +378,19 @@ function hj_maps_places_entity_head_menu($hook, $type, $return, $params) {
 		);
 		$return[] = ElggMenuItem::factory($fullview);
 	}
+	return $return;
+}
+
+function hj_maps_form_submit($hook, $type, $return, $params) {
+	$guid = elgg_extract('guid', $params);
+	$entity = get_entity($guid);
+
+	if (!elgg_instanceof($entity, 'object', 'hjplace')) {
+		return $return;
+	}
+
+	$location = new hjEntityLocation($entity->guid);
+	$return['geo'] = $location->getMapParams();
+
 	return $return;
 }

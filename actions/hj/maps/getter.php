@@ -6,7 +6,7 @@ $user_position = $temp->getMapParams();
 
 $clat = get_input('clat');
 $clong = get_input('clong');
-$useSessionLocation = get_input('sl', null);
+$useSessionLocation = get_input('useSessionLocation', true);
 
 $guids = get_input('e');
 $guids = explode(',', $guids);

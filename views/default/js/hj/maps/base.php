@@ -1,261 +1,382 @@
 <?php if (FALSE) : ?>
-    <script type="text/javascript">
+	<script type="text/javascript">
 <?php endif; ?>
-    elgg.provide('hj.maps.base');
 
-    hj.maps.base.init = function() {
-        window.loader = '<div class="hj-ajax-loader hj-loader-circle"></div>';
-        hj.maps.base.getSessionLocation();
+	elgg.provide('hj.maps.base');
 
-        $('.hj-ajaxed-map-single-popup')
-        .unbind('click')
-        .bind('click', hj.maps.base.popup);
+	hj.maps.base.init = function() {
+		$('.hj-ajaxed-map-single-popup')
+		.unbind('click')
+		.bind('click', hj.maps.base.popup);
 
-        $('.hj-ajaxed-map-abstract-popup')
-        .unbind('click')
-        .bind('click', hj.maps.base.popup);
+		$('.hj-ajaxed-map-abstract-popup')
+		.unbind('click')
+		.bind('click', hj.maps.base.popup);
 
-        if (!window.mapInit) {
-            $('.hj-ajaxed-map-static').each(function() {
-                hj.maps.base.staticmap($(this));
-            });
-        }
+		$('.hj-ajaxed-map-static').each(function() {
+			hj.maps.base.staticmap($(this));
+		});
 
-    }
+		$('#hj-maps-change-session-location')
+		.unbind('submit')
+		.bind('submit', function(event) {
+			event.preventDefault();
+			var address = $('input[name="address"]', $(this)).val();
+			var list_id = $(this).attr('rel');
 
-    hj.maps.base.getSessionLocation = function() {
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                window.sessionLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            });
-        } else if (google.gears) {
-            var geo = google.gears.factory.create('beta.geolocation');
-            geo.getCurrentPosition(function(position) {
-                window.sessionLocation = new google.maps.LatLng(position.latitude, position.longitude);
-            });
-        }
-        return true;
-    }
+			var params = {
+				address : address
+			}
 
-    hj.maps.base.popup = function(event) {
-        event.preventDefault();
+			new google.maps.Geocoder().geocode(params, function(result) {
+				var coords = result[0]['geometry'].location;
+				window.maps[list_id].setCenter(coords);
+			});
+		})
 
-        var action = $(this).attr('href');
+		$('#hj-maps-change-default-location')
+		.unbind('submit')
+		.bind('submit', function(event) {
+			event.preventDefault();
+			var address = $('input[name="temp_location"]', $(this)).val();
+			var list_id = $(this).attr('rel');
 
-        $.fancybox({
-            content : window.loader
-        });
+			var params = {
+				address : address
+			}
 
-        elgg.action(action, {
-            success : function(output) {
+			new google.maps.Geocoder().geocode(params, function(result) {
+				var coords = result[0]['geometry'].location;
+				window.maps[list_id].setCenter(coords);
+			});
 
-                var container = $("<div>");
-                output = output.output;
-                container
-                .attr('id', 'hj-entity-map-' + output.center.id)
-                .css({'width':'500px', 'height':'500px', 'float':'left'});
+			elgg.action('action/maps/setlocation', {
+				data : {
+					temp_location : address
+				}
+			})
+		})
+	}
 
-                var popout_width = '500';
+	hj.maps.base.popup = function(event) {
+		event.preventDefault();
 
-                if (output.markers) {
-                    var stats = hj.maps.base.setStats(output);
-                    popout_width = '800';
-                }
+		var action = $(this).attr('href');
 
-                $.fancybox({
-                    content : container,
-                    autoDimensions : false,
-                    width : popout_width,
-                    height : '500',
-                    onComplete : function() {
-                        var map = hj.maps.base.initMap(output);
-                        elgg.trigger_hook('success', 'hj:framework:ajax');
-                        if (output.markers) {
-                            container.after(stats);
-                        }
-                    }
-                });
+		$.fancybox({
+			content : window.loader
+		});
 
-                $.fancybox.resize();
-            }
-        });
-    }
+		elgg.action(action, {
+			success : function(output) {
 
-    hj.maps.base.staticmap = function(selector) {
-        var action = selector.find('input[name="map_params"]').val();
-        var container = $("div[id^=hj-entity-map-]", selector);
+				var container = $("<div>");
+				output = output.output;
+				container
+				.attr('id', 'hj-entity-map-' + output.center.id)
+				.css({'width':'500px', 'height':'500px', 'float':'left'});
 
-        container.html(window.loader);
+				var popout_width = '500';
 
-        elgg.action(action, {
-            success : function(output) {
-                container.html('');
+				if (output.markers) {
+					var stats = hj.maps.base.setStats(output);
+					popout_width = '800';
+				}
 
-                var map = hj.maps.base.initMap(output.output);
-                //elgg.trigger_hook('success', 'hj:framework:ajax');
+				$.fancybox({
+					content : container,
+					autoDimensions : false,
+					width : popout_width,
+					height : '500',
+					onComplete : function() {
+						var map = hj.maps.base.initMap(output);
+						elgg.trigger_hook('success', 'hj:framework:ajax');
+						if (output.markers) {
+							container.after(stats);
+						}
+					}
+				});
 
-            }
-        });
-    }
+				$.fancybox.resize();
+			}
+		});
+	}
 
-    hj.maps.base.initMap = function(data) {
-        if(data.center) {
-            var latlng = new google.maps.LatLng (data.center.latitude, data.center.longitude);
-        }
-        var params = {
-            zoom: <?php echo elgg_get_plugin_setting('default_zoom', 'hypeMaps') ?>,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
+	hj.maps.base.staticmap = function(selector) {
+		var container = selector.find('.hj-map-full-page:first').attr('rel');
+		if (!window.maps) {
+			window.maps = new Object();
+		}
+		if (!window.maps[container]) {
+			// Initialize a new map
+			var map = hj.maps.base.initMap(window.hjdata.lists[container].geo);
+			window.maps[container] = map;
+		} else {
+			// Update markers on the map
+			hj.maps.base.setMarkers(window.maps[container], window.hjdata.lists[container].geo);
+		}
+	}
 
-        var map = new google.maps.Map(document.getElementById('hj-entity-map-' + data.center.id), params);
-        window.mapInit = true;
+	hj.maps.base.initMap = function(data, container) {
 
-        if (data.markers) {
-            hj.maps.base.setMarkers(map, data);
-            google.maps.event.addListener(map, 'idle', function() {
-                hj.maps.base.getMarkers(this, data);
-            });
-            if (window.sessionLocation && data.center.useSessionLocation) {
-                map.setCenter(window.sessionLocation);
-            }
-        } else {
-            var center_marker = new google.maps.Marker({
-                position: latlng,
-                map: map
-            });
-        }
-        if (window.sessionLocation) {
-            elgg.action('action/maps/setlocation', {
-                data: {
-                    e:elgg.get_logged_in_user_guid,
-                    session_latitude:window.sessionLocation.lat(),
-                    session_longitude:window.sessionLocation.lng()
-                }
-            });
-        }
-    }
+		// Map has already been initialized
+		if (window.maps[container]) {
+			return window.maps[container];
+		}
 
-    hj.maps.base.setMarkers = function(map, data) {
+		if(data.center) {
+			var latlng = new google.maps.LatLng (data.center.latitude, data.center.longitude);
+		}
 
-        var markers = data.markers;
-        var stats = '#hj-entity-map-stats-' + data.center.id;
-        var user_position;
+		var params = {
+			zoom: <?php echo elgg_get_plugin_setting('default_zoom', 'hypeMaps') ?>,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			overviewMapControl : false,
+			panControl : false,
+			center : latlng,
+			streetViewControl : false,
+			zoomControl : true,
+			zoomControlOptions : {
+				position : google.maps.ControlPosition.RIGHT_TOP,
+				style : google.maps.ZoomControlStyle.LARGE
+			}
+		}
 
-        if (data.user.temp_location) {
-            user_position = new google.maps.LatLng(data.user.temp_location.latitude, data.user.temp_location.longitude);
-        } else if (window.sessionLocation) {
-            user_position = window.sessionLocation;
-        } else {
-            user_position = new google.maps.LatLng(data.user.location.latitude, data.user.location.longitude);
-        }
+		var map = new google.maps.Map(document.getElementById('map-container-' + data.container), params);
 
-        if (user_position) {
-            var user_marker = new google.maps.Marker({
-                position: user_position,
-                map: map,
-                icon: elgg.get_site_url() + 'mod/hypeMaps/graphics/icons/youarehere.png',
-                title: data.user.entity.title,
-                zIndex: 0
-            });
-        }
-        for (var i = 0; i < markers.length; i++) {
-            var params = markers[i];
+		if (data.markers) {
+			hj.maps.base.setMarkers(map, data);
+			var user_position;
+			if (data.user && data.user.temp_location) {
+				user_position = new google.maps.LatLng(data.user.temp_location.latitude, data.user.temp_location.longitude);
+			} else if (window.sessionLocation || hj.maps.base.getSessionLocation()) {
+				user_position = window.sessionLocation.coords;
+			} else if (elgg.is_logged_in()) {
+				user_position = new google.maps.LatLng(data.user.location.latitude, data.user.location.longitude);
+			} else {
+				user_position = latlng;
+			}
+			map.setCenter(user_position);
+			google.maps.event.addListener(map, 'idle', function() {
+				hj.maps.base.getMarkers(this, data);
+			});
 
-            var paramsLatLng = new google.maps.LatLng(params.location.latitude, params.location.longitude);
+			
+		} else {
+			var center_marker = new google.maps.Marker({
+				position: latlng,
+				map: map
+			});
+		}
 
-            var distance = google.maps.geometry.spherical.computeDistanceBetween(paramsLatLng, user_position);
+		return map;
+	}
 
-            if (!isNaN(distance)) {
-                distance = Math.round(distance);
-                if (distance > 1000) {
-                    distance = Math.round(distance/100)/10 + elgg.echo('hj:measurements:km');
-                } else {
-                    distance = distance + elgg.echo('hj:measurements:m');
-                }
-            } else {
-                distance = '';
-            }
-            var paramsInfo = params.entity.tooltip;
+	hj.maps.base.setMarkers = function(map, data) {
 
-            var marker = new google.maps.Marker({
-                position: paramsLatLng,
-                map: map,
-                icon: params.entity.icon,
-                title: params.entity.title,
-                zIndex: i,
-                entityInfo: paramsInfo,
-                entityURL: params.entity.url,
-                distance: distance
-            });
+		if (!window.markers) {
+			window.markers = new Object();
+		}
+		if (!window.markers[data.container]) {
+			window.markers[data.container] = new Array();
+		}
 
-            var entityInfoWindow = new google.maps.InfoWindow({
-                content: 'holding...'
-            });
+		var markers = data.markers;
+		var stats = '#map-stats-' + data.container;
+		var user_position;
 
-            google.maps.event.addListener(marker, 'click', function() {
-                //                entityInfoWindow.setContent(this.entityInfo);
-                //                entityInfoWindow.open(map, this);
-                map.setCenter(this.position);
-                $('.hj-map-selected', $(stats)).html(this.entityInfo);
-                $('.hj-map-selected .hj-distance', $(stats)).html(this.distance);
-            });
+		if (data.user && data.user.temp_location) {
+			user_position = new google.maps.LatLng(data.user.temp_location.latitude, data.user.temp_location.longitude);
+		} else if (window.sessionLocation || hj.maps.base.getSessionLocation()) {
+			user_position = window.sessionLocation.coords;
+		} else if (elgg.is_logged_in()) {
+			user_position = new google.maps.LatLng(data.user.location.latitude, data.user.location.longitude);
+		}
 
-            //            google.maps.event.addListener(marker, 'click', function() {
-            //                entityInfoWindow.setContent(this.entityInfo);
-            //                entityInfoWindow.open(map, this);
-            //            });
-        }
-        return true;
-    }
+		if (user_position) {
+			if (!window.markers[data.container][data.user.entity.guid]) {
+				var user_marker = new google.maps.Marker({
+					position: user_position,
+					map: map,
+					icon: elgg.get_site_url() + 'mod/hypeMaps/graphics/icons/youarehere.png',
+					title: data.user.entity.title,
+					zIndex: 0
+				});
+				window.markers[data.container][data.user.entity.guid] = user_marker;
+			}
+		}
 
-    hj.maps.base.getMarkers = function(map, data) {
-        var stats = '#hj-entity-map-stats-' + data.center.id;
-        var onthemap = '.hj-map-onthemap';
+		if (markers) {
+			for (var i = 0; i < markers.length; i++) {
+				var params = markers[i];
 
-        $(onthemap, $(stats)).html('');
+				if (window.markers[data.container][params.entity.guid]) {
+					continue;
+				}
 
-        for (var i = 0; i < data.markers.length; i++) {
-            var entity = data.markers[i];
-            var entityLatLng = new google.maps.LatLng(entity.location.latitude, entity.location.longitude);
-            var mapBounds = new google.maps.LatLngBounds(entityLatLng, entityLatLng);
-            if (map.getBounds()) {
-                mapBounds = map.getBounds();
-            }
-            if (mapBounds.contains(entityLatLng)) {
-                $('.hj-map-onthemap', $(stats)).append(entity.entity.tooltip);
-                $('.hj-ajaxed-mapobject-preview')
-                .die()
-                .live('click', hj.framework.ajax.base.view);
-            }
-        }
-    }
+				var paramsLatLng = new google.maps.LatLng(params.location.latitude, params.location.longitude);
 
-    hj.maps.base.setStats = function(data) {
-        var stats = $("<div>");
-        var stats_onthemap = $("<div>");
-        var stats_selected = $("<div>");
+				if (user_position) {
+					var distance = google.maps.geometry.spherical.computeDistanceBetween(paramsLatLng, user_position);
+				}
 
-        stats
-        .attr('id', 'hj-entity-map-stats-' + data.center.id)
-        .addClass('elgg-module elgg-module-info hj-padding-ten')
-        .append(stats_selected)
-        .append(stats_onthemap);
+				if (!isNaN(distance)) {
+					distance = Math.round(distance);
+					if (distance > 1000) {
+						distance = Math.round(distance/100)/10 + elgg.echo('hj:measurements:km');
+					} else {
+						distance = distance + elgg.echo('hj:measurements:m');
+					}
+				} else {
+					distance = '';
+				}
+				var paramsInfo = params.entity.tooltip;
 
-        stats_onthemap
-        .addClass('hj-map-onthemap')
-        .html(elgg.echo('hj:maps:noneonthemap'))
-        .before('<div class="elgg-head">' + elgg.echo('hj:maps:onthemap') + '</div>');
+				var marker = new google.maps.Marker({
+					position: paramsLatLng,
+					icon: params.entity.icon,
+					title: params.entity.title,
+					zIndex: i,
+					entityInfo: paramsInfo,
+					entityURL: params.entity.url,
+					distance: distance
+				});
 
-        stats_selected
-        .addClass('hj-map-selected')
-        .html(elgg.echo('hj:maps:noneselected'))
-        .before('<div class="elgg-head">' + elgg.echo('hj:maps:selected') + '</div>');
+				marker.setMap(map);
+				window.markers[data.container][params.entity.guid] = marker;
 
-        return stats;
-    }
+				var entityInfoWindow = new google.maps.InfoWindow({
+					content: 'holding...',
+					maxWidth : 600,
+					disableAutoPan : false
+				});
 
-    elgg.register_hook_handler('init', 'system', hj.maps.base.init);
-    elgg.register_hook_handler('success', 'hj:framework:ajax', hj.maps.base.init, 500);
+				google.maps.event.addListener(marker, 'click', function() {
+					entityInfoWindow.setContent(this.entityInfo);
+					entityInfoWindow.open(map, this);
+					window.infoWindow = entityInfoWindow;
+					map.setCenter(this.position);
+					$('.hj-map-selected', $(stats)).html(this.entityInfo);
+					hj.framework.ajax.base.init();
+				});
+			}
+		}
+		$.each(window.markers[data.container], function(key, val) {
+			var remove_marker = true;
+			$.each(window.hjdata.lists[data.container].items, function(key1, val1) {
+				if (key == val1) {
+					remove_marker = false;
+				}
+			});
+			if (remove_marker) {
+				if (window.markers[data.container][key]) {
+					window.markers[data.container][key].setMap(null);
+					//window.markers[data.container][key] = null;
+					//delete window.markers[data.container][key];
+				}
+				//				google.maps.event.addListener(map, 'idle', function() {
+				//					hj.maps.base.getMarkers(this, data);
+				//				});
+			}
+		});
+		return true;
+	}
 
+	hj.maps.base.getMarkers = function(map, data) {
+		var stats = '#map-stats-' + data.container;
+		var onthemap = '.hj-map-onthemap';
+
+		$(onthemap, $(stats)).html('');
+
+		for (var i = 0; i < data.markers.length; i++) {
+			var entity = data.markers[i];
+			var entityLatLng = new google.maps.LatLng(entity.location.latitude, entity.location.longitude);
+			var mapBounds = new google.maps.LatLngBounds(entityLatLng, entityLatLng);
+			if (map.getBounds()) {
+				mapBounds = map.getBounds();
+			}
+			if (mapBounds.contains(entityLatLng)) {
+				$('.hj-map-onthemap', $(stats))
+				.append(entity.entity.summary);
+				$('.hj-ajaxed-mapobject-preview')
+				.die()
+				.live('click', hj.framework.ajax.base.view);
+			}
+		}
+
+		$('.hj-map-entity')
+		.each(function() {
+			var id = $(this).attr('id').replace('hj-map-entity-', '');
+			var marker = window.markers[data.container][id];
+			var map = window.maps[data.container];
+
+			$(this)
+			.unbind('click')
+			.bind('click', function() {
+				if (window.infoWindow) {
+					window.infoWindow.close();
+				}
+				google.maps.event.trigger(marker, 'click');
+			})
+
+			$(this)
+			.unbind('mouseenter')
+			.bind('mouseenter', function() {
+				//map.setCenter(marker.getPosition());
+				if (!window.mzindex) {
+					window.mzindex = data.markers.length;
+				}
+				window.mzindex++;
+				marker.setZIndex(window.mzindex);
+			});
+
+			$(this)
+			.find('.hj-distance')
+			.html(marker.distance);
+		})
+	}
+
+	hj.maps.base.setStats = function(data) {
+		var stats = $("<div>");
+		var stats_onthemap = $("<div>");
+		var stats_selected = $("<div>");
+
+		stats
+		.attr('id', 'map-stats-' + data.container)
+		.addClass('elgg-module elgg-module-info hj-padding-ten')
+		.append(stats_selected)
+		.append(stats_onthemap);
+
+		stats_onthemap
+		.addClass('hj-map-onthemap')
+		.html(elgg.echo('hj:maps:noneonthemap'))
+		.before('<div class="elgg-head">' + elgg.echo('hj:maps:onthemap') + '</div>');
+
+		stats_selected
+		.addClass('hj-map-selected')
+		.html(elgg.echo('hj:maps:noneselected'))
+		.before('<div class="elgg-head">' + elgg.echo('hj:maps:selected') + '</div>');
+
+		return stats;
+	}
+
+	hj.maps.base.updateLists = function(hook, type, params, value) {
+		var list_id = params.list_id,
+		data = params.data;
+		if (data.geo) {
+			var n_data = new Array();
+			n_data.push(data);
+			data = n_data;
+		
+			$.each(data, function(key, val) {
+				window.hjdata.lists[list_id].geo.markers.push(val.geo);
+				hj.maps.base.setMarkers(window.maps[list_id], window.hjdata.lists[list_id].geo, list_id);
+			});
+			google.maps.event.trigger(window.maps[list_id], 'idle');
+		}
+	}
+
+	elgg.register_hook_handler('init', 'system', hj.maps.base.init);
+	elgg.register_hook_handler('success', 'hj:framework:ajax', hj.maps.base.init);
+	elgg.register_hook_handler('new_lists', 'hj:framework:ajax', hj.maps.base.updateLists);
 <?php if (FALSE) : ?></script><?php endif; ?>

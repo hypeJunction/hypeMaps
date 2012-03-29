@@ -17,6 +17,7 @@
         <type>plugin</type>
         <name>hypeFramework</name>
         <version>1.8.5</version>
+		<priority>after</priority>
     </requires>
     <admin_interface>simple</admin_interface>
     <activate_on_install>false</activate_on_install>

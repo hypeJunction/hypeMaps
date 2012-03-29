@@ -52,7 +52,7 @@ class hjLocation {
             $long = $data['results'][0]['geometry']['location']['lng'];
             $latlong = new hjLatLong($lat, $long);
         } else {
-            $latlong = new hjLatLong(0, 0);
+            $latlong = false;
         }
         return $latlong;
     }
@@ -64,7 +64,10 @@ class hjLocation {
      * @return string
      */
     public function getReverseGeoCode($latlong) {
-        $latlong_str = "{$latlong->lat()},{$latlong->long()}";
+        if (!$latlong instanceof hjLatLong) {
+			return false;
+		}
+		$latlong_str = "{$latlong->lat()},{$latlong->long()}";
         $params = array(
             'latlng' => $latlong_str,
             'sensor' => 'false'
@@ -79,7 +82,7 @@ class hjLocation {
         if (is_array($data) && $data['status'] == 'OK' && $data['results'][0]['geometry']['location_type'] == 'ROOFTOP') {
             $address = $data['results'][0]['formatted_address'];
         } else {
-            $address = $latlong_str;
+            $address = false;
         }
         return $address;
     }

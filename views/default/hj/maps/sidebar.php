@@ -3,6 +3,7 @@
 /**
  * Maps owner block
  */
+
 $user = elgg_get_logged_in_user_entity();
 
 $session_location = $_SESSION['location'];
@@ -62,20 +63,8 @@ if ($markers) {
     ));
 }
 
-elgg_load_js('hj.framework.fieldcheck');
-$form = hj_framework_get_data_pattern('object', 'hjplace');
-elgg_register_menu_item('page', array(
-    'name' => 'addnewplace',
-    'title' => elgg_echo('hj:maps:addnew'),
-    'text' => elgg_echo('hj:maps:addnew'),
-    'href' => "action/framework/entities/edit?f=$form->guid&ajaxify=0",
-    'is_action' => true,
-    'rel' => 'fancybox',
-    'id' => "hj-ajaxed-add-hjplace",
-    'class' => "hj-ajaxed-add",
-    'target' => "",
-    'priority' => 400
-));
+
+
 
 //elgg_register_menu_item('page', array(
 //    'name' => 'addnewplace:details',
@@ -86,16 +75,16 @@ elgg_register_menu_item('page', array(
 //));
 
 
-$content_menu = elgg_view_menu('page', array(
-    'entity' => $user,
-    'class' => 'profile-content-menu',
-    'context' => elgg_get_context(),
-    'sort_by' => 'priority'
-        ));
-
-echo <<<HTML
-        <div id="hj-maps-owner-block-$user->guid" class="hj-maps-owner-block">
-                $content_menu
-</div>
-
-HTML;
+//$content_menu = elgg_view_menu('page', array(
+//    'entity' => $user,
+//    'class' => 'profile-content-menu',
+//    'context' => elgg_get_context(),
+//    'sort_by' => 'priority'
+//        ));
+//
+//echo <<<HTML
+//        <div id="hj-maps-owner-block-$user->guid" class="hj-maps-owner-block">
+//                $content_menu
+//</div>
+//
+//HTML;

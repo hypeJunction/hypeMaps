@@ -50,11 +50,11 @@ $content = elgg_view_layout('hj/dynamic', array('content' => array($map, $stats)
 $sidebar = elgg_view('hj/maps/sidebar', $params);
 $module = elgg_view_module('aside', $title, $content);
 
-$content = elgg_view_layout('hj/profile', array(
+$body = elgg_view_layout('one_sidebar', array(
     'content' => $module,
     'sidebar' => $sidebar,
         ));
 
-$body = elgg_view_layout('one_column', array('content' => $content));
+//$body = elgg_view_layout('one_column', array('content' => $content));
 
 echo elgg_view_page($title, $body);

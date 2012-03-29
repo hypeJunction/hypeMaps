@@ -59,7 +59,8 @@ class hjEntityLocation extends ElggEntity {
                 //'icon' => elgg_get_config('url') . 'mod/hypeMaps/graphics/icons/' . $this->getSubtype() . '.png',
                 //'url' => $this->getURL(),
                 //'description' => elgg_get_excerpt($this->description),
-                'tooltip' => $this->getMapTooltip()
+                'tooltip' => $this->getMapTooltip(),
+				'summary' => $this->getMapTooltip(false)
             ),
             'location' => array(
                 'latitude' => $this->getLatitude(),
@@ -131,12 +132,15 @@ class hjEntityLocation extends ElggEntity {
             $address = $this->getAddressString($address);
             $latlong = $this->getGeoCodedAddress($address);
         }
-        $this->setLatLong($latlong->lat(), $latlong->long());
-
+		if ($latlong) {
+			$this->setLatLong($latlong->lat(), $latlong->long());
+		}
         if (!$address) {
             $geocode = new hjLocation;
             $address = $geocode->getReverseGeoCode($latlong);
-            $this->setEntityLocation($address, $latlong);
+            if ($address) {
+				$this->setEntityLocation($address, $latlong);
+			}
         }
 
         return true;
@@ -200,12 +204,16 @@ class hjEntityLocation extends ElggEntity {
             $address = $this->getAddressString($address);
             $latlong = $this->getGeoCodedAddress($address);
         }
-        $this->setTempLatLong($latlong);
+		if ($latlong) {
+			$this->setTempLatLong($latlong);
+		}
 
         if (!$address) {
             $geocode = new hjLocation;
             $address = $geocode->getReverseGeoCode($latlong);
-            $this->setEntityTempLocation($address);
+            if ($address) {
+				$this->setEntityTempLocation($address);
+			}
         }
 
         return true;
@@ -261,7 +269,7 @@ class hjEntityLocation extends ElggEntity {
         return $icon;
     }
 
-    public function getMapTooltip() {
+    public function getMapTooltip($full_view = true) {
         $type = $this->getType();
         if (!$subtype = $this->getSubtype()) {
             $subtype = 'default';
@@ -270,9 +278,9 @@ class hjEntityLocation extends ElggEntity {
         $view = "mapobject/$type/$subtype";
         $icon = $this->getMapIcon();
         if (elgg_view_exists($view)) {
-            return elgg_view($view, array('entity' => $this, 'icon' => $icon));
+            return elgg_view($view, array('entity' => $this, 'icon' => $icon, 'full_view' => $full_view));
         } else {
-            return elgg_view('mapobject/default', array('entity' => $this, 'icon' => $icon));
+            return elgg_view('mapobject/default', array('entity' => $this, 'icon' => $icon, 'full_view' => $full_view));
         }
     }
 

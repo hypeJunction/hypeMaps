@@ -19,7 +19,6 @@ $english = array(
     'hj:maps:addnew' => 'Add new place',
     'hj:maps:changelocation' => 'Change',
     'hj:maps:detectlocation' => 'Detect',
-    'hj:maps:allplaces' => 'All places',
     'hj:maps:mine' => 'My places',
     'hj:maps:friends' => 'Friends\' places',
     'hj:maps:locationchangedtodefault' => 'This site uses geolocation services. Your location has been set default: %s. You can change it by editing your profile',
@@ -159,6 +158,9 @@ $english = array(
     'river:create:object:hjplace' => '%s added a new place | %s',
     'river:update:object:hjplace' => '%s updated a place | %s',
 
+	'hj:maps:searchlocation' => 'Find Location',
+	'hj:maps:setdefaultlocation' => 'Set Default Location',
+	
 );
 
 
