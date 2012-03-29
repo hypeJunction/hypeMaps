@@ -1,0 +1,9 @@
+The project “Map Icons Collection” was created by Nicolas Mollet under the Creative Commons Attribution-Share Alike 3.0 Unported license (CC BY SA 3.0).
+
+This license lets you remix, tweak, and build upon our work even for commercial reasons, as long as you credit the project and license your new creations under the identical terms.
+
+Please credit: Maps Icons Collection http://mapicons.nicolasmollet.com
+
+Some icons are derived from the project SJJB Map Icons by SJJB Management, licensed under Creative Commons Public Domain Dedication.
+
+Some icons are derived from the project User Interface Design Framework by Webalys.

@@ -1,0 +1,30 @@
+You can add location to your Elgg entities by following these steps:
+
+1. Create a form input, either by overloading an entity form or using profile_manager plugin
+You can add an input to a form using this code:
+
+{{{
+echo elgg_view('input/text', array(
+    'name' => 'location',
+    'value' => $vars['entity']->location
+)};
+}}}
+
+2. Add an event handler to your start.php
+
+    elgg_register_event_handler('create', 'all', 'my_event_handler');
+    elgg_register_event_handler('update', 'all', 'my_event_handler');
+
+    function my_event_handler($event, $type, $entity) {
+
+        if ($entity && elgg_instanceof($entity, 'mytype', 'mysubtype')) { // change this to whatever entity type / subtype you are trying to process or remove to use for all entities
+            if ($address = get_input('location', false)) {
+                $location = new hjEntityLocation($entity->guid);
+                $location->setAddressMetadata($address);
+                $location->setEntityLocation($address);
+            }
+        }
+
+        return true;
+
+    }

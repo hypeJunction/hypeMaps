@@ -1,0 +1,8 @@
+1.8.1 -> 1.8.1.5
+
+- Users with no permanent profile location are assigned default site location
+- Fixed some corks in views and page layouts
+- Added error message to notify admins if file_get_contents is unable to reach Google Maps
+
+1.8.1.5 -> 1.8.2
+
