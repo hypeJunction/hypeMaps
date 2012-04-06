@@ -16,17 +16,7 @@
 				hj.maps.base.saveSessionLocation();
 			});
 			return true;
-		} else if (typeof google !== "undefined" && google.gears) {
-			var geo = google.gears.factory.create('beta.geolocation');
-			geo.getCurrentPosition(function(position) {
-				window.sessionLocation = new Object();
-				window.sessionLocation.coords = new google.maps.LatLng(position.latitude, position.longitude);
-				window.sessionLocation.lat = position.latitude;
-				window.sessionLocation.lng = position.longitude;
-				hj.maps.base.saveSessionLocation();
-			});
-			return true;
-		}
+		} 
 		return false;
 	}
 

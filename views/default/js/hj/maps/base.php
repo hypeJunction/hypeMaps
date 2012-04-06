@@ -56,6 +56,11 @@
 				}
 			})
 		})
+
+		$('.hj-location-autocomplete')
+		.each(function() {
+			autocomplete = new google.maps.places.Autocomplete($(this), {});
+		})
 	}
 
 	hj.maps.base.popup = function(event) {

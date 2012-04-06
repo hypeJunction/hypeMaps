@@ -4,7 +4,6 @@ elgg_load_js('hj.framework.ajax');
 
 elgg_load_js('hj.maps.base');
 elgg_load_js('hj.maps.google');
-elgg_load_js('hj.maps.googlegears');
 
 //if (elgg_is_xhr()) {
 //	echo '<script src="http://maps.googleapis.com/maps/api/js?libraries=geometry,adsense&sensor=true&language={$current_language}&output=svembed" type="text/javascript">';

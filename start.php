@@ -10,7 +10,7 @@
  * @copyright Copyrigh (c) 2011, Ismayil Khayredinov
  */
 
-elgg_register_event_handler('init', 'system', 'hj_maps_init');
+elgg_register_event_handler('init', 'system', 'hj_maps_init', 504);
 
 function hj_maps_init() {
 
@@ -57,11 +57,8 @@ function hj_maps_init() {
 	elgg_load_css('hj.maps.base');
 
 	$current_language = get_current_language();
-	$google_url = "http://maps.googleapis.com/maps/api/js?libraries=geometry,adsense&sensor=true&language={$current_language}&output=svembed";
+	$google_url = "http://maps.googleapis.com/maps/api/js?libraries=geometry,adsense,places&sensor=true&language={$current_language}&output=svembed";
 	elgg_register_js('hj.maps.google', $google_url);
-
-	$google_gear_url = 'http://code.google.com/apis/gears/gears_init.js';
-	elgg_register_js('hj.maps.googlegears', $google_gear_url);
 
 	$js_url = elgg_get_simplecache_url('js', 'hj/maps/base');
 	elgg_register_js('hj.maps.base', $js_url);
@@ -203,7 +200,6 @@ function hj_maps_page_handler($page) {
 	
 	elgg_load_js('hj.maps.base');
 	elgg_load_js('hj.maps.google');
-	elgg_load_js('hj.maps.googlegears');
 
 	$plugin = 'hypeMaps';
 	$shortcuts = hj_framework_path_shortcuts($plugin);
