@@ -4,7 +4,8 @@ $location_label = elgg_echo('hj:maps:searchlocation');
 $location_input = elgg_view('input/text', array(
 	'name' => 'address',
 	'value' => $vars['address'],
-	'class' => 'hj-location-autocomplete'
+	'class' => 'hj-location-autocomplete',
+	'id' => 'hj-location-searchlocation'
 ));
 $location_submit = elgg_view('input/submit', array(
 	'value' => elgg_echo('change')

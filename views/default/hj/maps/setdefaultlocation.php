@@ -3,7 +3,9 @@
 $location_label = elgg_echo('hj:maps:setdefaultlocation');
 $location_input = elgg_view('input/text', array(
 	'name' => 'temp_location',
-	'value' => $vars['address']
+	'value' => $vars['address'],
+	'class' => 'hj-location-autocomplete',
+	'id' => 'hj-location-setdefaultlocation'
 ));
 $location_submit = elgg_view('input/submit', array(
 	'value' => elgg_echo('save')
