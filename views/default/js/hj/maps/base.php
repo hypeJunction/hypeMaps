@@ -56,8 +56,26 @@
 				}
 			})
 		})
+
+		$('.hj-location-autocomplete')
+		.each(function() {
+			hj.maps.base.autocomplete($(this));
+			$('.pac-container').css('z-index', 10000);
+		})
+		
+		$('input[name="location"]')
+		.each(function() {
+			hj.maps.base.autocomplete($(this));
+		})
+
 	}
 
+	hj.maps.base.autocomplete = function ($input) {
+		var options = {};
+		var input = $input.get(0);
+		var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+	}
 	hj.maps.base.popup = function(event) {
 		event.preventDefault();
 
