@@ -58,7 +58,7 @@ $params = array(
 
 $params = $params + $vars;
 $list_body = elgg_view('object/elements/summary', $params);
-$loc = new hjEntityLocation($entity->guid);
-$icon = "<img src=\"{$loc->getMapIcon()}\" />";
+//$loc = new hjEntityLocation($entity->guid);
+//$icon = "<img src=\"{$loc->getMapIcon()}\" />";
 
 echo elgg_view_image_block($icon, $list_body);

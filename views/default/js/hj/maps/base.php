@@ -149,8 +149,10 @@
 			var user_position;
 			if (data.user && data.user.temp_location) {
 				user_position = new google.maps.LatLng(data.user.temp_location.latitude, data.user.temp_location.longitude);
-			} else if (window.sessionLocation || hj.maps.base.getSessionLocation()) {
+			} else if (window.sessionLocation) {
 				user_position = window.sessionLocation.coords;
+			} else if (hj.maps.base.getSessionLocation()) {
+				//
 			} else if (elgg.is_logged_in()) {
 				user_position = new google.maps.LatLng(data.user.location.latitude, data.user.location.longitude);
 			} else {
@@ -187,8 +189,10 @@
 
 		if (data.user && data.user.temp_location) {
 			user_position = new google.maps.LatLng(data.user.temp_location.latitude, data.user.temp_location.longitude);
-		} else if (window.sessionLocation || hj.maps.base.getSessionLocation()) {
-			user_position = window.sessionLocation.coords;
+		} else if (window.sessionLocation) {
+				user_position = window.sessionLocation.coords;
+		} else if (hj.maps.base.getSessionLocation()) {
+				//user_position = window.sessionLocation.coords;
 		} else if (elgg.is_logged_in()) {
 			user_position = new google.maps.LatLng(data.user.location.latitude, data.user.location.longitude);
 		}
@@ -209,7 +213,9 @@
 		if (markers) {
 			for (var i = 0; i < markers.length; i++) {
 				var params = markers[i];
-
+				if (!params || !params.entity) {
+					continue;
+				}
 				if (window.markers[data.container][params.entity.guid]) {
 					continue;
 				}
@@ -290,6 +296,9 @@
 
 		for (var i = 0; i < data.markers.length; i++) {
 			var entity = data.markers[i];
+			if (!entity) {
+				continue;
+			}
 			var entityLatLng = new google.maps.LatLng(entity.location.latitude, entity.location.longitude);
 			var mapBounds = new google.maps.LatLngBounds(entityLatLng, entityLatLng);
 			if (map.getBounds()) {

@@ -50,6 +50,9 @@ class hjEntityLocation extends ElggEntity {
 
     public function getMapParams() {
         $entity = get_entity($this->guid);
+		if (!$entity) {
+			return;
+		}
         $params = array(
             'entity' => array(
                 'guid' => $this->guid,
