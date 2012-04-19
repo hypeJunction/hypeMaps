@@ -11,22 +11,30 @@ $location = new hjLocation();
 $latlong = $location->getGeoCodedAddress($address);
 
 if ($clat && $clong) {
-    $center = array(
-        'latitude' => $clat,
-        'longitude' => $clong,
-        'id' => rand(0, 100)
+    $params = array(
+        'clat' => $clat,
+        'clong' => $clong,
+        'useSessionLocation' => false
     );
 } else {
-    $center = array(
-        'latitude' => $latlong->lat(),
-        'longitude' => $latlong->long(),
-        'id' => rand(0, 100)
+    $params = array(
+        'clat' => $latlong->lat(),
+        'clong' => $latlong->long(),
+        'useSessionLocation' => false
     );
 }
 
-$output = array('center' => $center);
+$map = elgg_view_entity_list(array(), array(
+	'list_type' => 'geomap',
+	'list_class' => 'hj-geomap-list',
+	'autorefresh' => false,
+	'class' => 'hj-view-list',
+	'list_id' => 'hj-map-popup',
+	'map_params' => $params
+));
 
-print(json_encode($output));
+echo $map;
+
 if (elgg_is_xhr()) {
     return true;
 } else {

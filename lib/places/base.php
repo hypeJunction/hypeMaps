@@ -110,14 +110,16 @@ function hj_maps_process_markers($entities = array(), $params = array()) {
 		$center = array(
 			'latitude' => $clat,
 			'longitude' => $clong,
-			'id' => rand(0, 100)
+			'id' => rand(0, 100),
+			'useSessionLocation' => $useSessionLocation
 		);
 	} else if (sizeof($markers) == 1) {
 		$entity = $markers[0];
 		$center = array(
 			'latitude' => $entity['location']['latitude'],
 			'longitude' => $entity['location']['longitude'],
-			'id' => $entity['entity']['guid']
+			'id' => $entity['entity']['guid'],
+			'useSessionLocation' => $useSessionLocation
 		);
 	} else if ($user->location || $user->temp_location) {
 		$center = array(
@@ -130,7 +132,8 @@ function hj_maps_process_markers($entities = array(), $params = array()) {
 		$center = array(
 			'latitude' => $site_position['location']['latitude'],
 			'longitude' => $site_position['location']['longitude'],
-			'id' => $site_position['entity']['guid']
+			'id' => $site_position['entity']['guid'],
+			'useSessionLocation' => $useSessionLocation
 		);
 	}
 

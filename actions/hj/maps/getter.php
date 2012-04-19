@@ -12,36 +12,20 @@ $guids = get_input('e');
 $guids = explode(',', $guids);
 
 foreach ($guids as $guid) {
-    $marker = new hjEntityLocation($guid);
-    $markers[] = $marker->getMapParams();
+    $entities[] = get_entity($guid);
 }
 
-if ($clat && $clong) {
-    $center = array(
-        'latitude' => $clat,
-        'longitude' => $clong,
-        'id' => rand(0, 100)
-    );
-} else if (sizeof($markers) == 1) {
-    $entity = $markers[0];
-    $center = array(
-        'latitude' => $entity['location']['latitude'],
-        'longitude' => $entity['location']['longitude'],
-        'id' => $entity['entity']['guid']
-    );
-} else {
-    $center = array(
-        'latitude' => $user_position['location']['latitude'],
-        'longitude' => $user_position['location']['longitude'],
-        'id' => $user_position['entity']['guid'],
-        'useSessionLocation' => $useSessionLocation
-    );
-}
+$map = elgg_view_entity_list($entities, array(
+	'list_type' => 'geomap',
+	'list_class' => 'hj-geomap-list',
+	'autorefresh' => false,
+	'class' => 'hj-view-list',
+	'list_id' => 'hj-map-popup',
+	'map_params' => array('useSessionLocation' => false)
+));
 
+echo $map;
 
-$output = array('center' => $center, 'markers' => $markers, 'user' => $user_position);
-
-print(json_encode($output));
 if (elgg_is_xhr()) {
     return true;
 } else {
