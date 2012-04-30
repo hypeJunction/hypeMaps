@@ -355,26 +355,30 @@ function hj_maps_places_entity_head_menu($hook, $type, $return, $params) {
 	$handler = elgg_extract('handler', $params);
 	$data = hj_framework_json_query($params);
 
-	if (elgg_in_context('print') || elgg_in_context('activity')) {
+	if (elgg_in_context('print')) {
 		return $return;
 	}
 
-	if (elgg_instanceof($entity, 'object', 'hjplace')) {
+	if (elgg_instanceof($entity, 'object') && $entity->location) {
 		$action = "action/maps/getter?e=$entity->guid";
-		$fullview = array(
-			'name' => 'fullview',
+		$showmap = array(
+			'name' => 'location',
 			'title' => elgg_echo('hj:maps:showmap'),
-			'text' => elgg_view_icon('hj hj-icon-location'),
+			'text' => elgg_echo('hj:maps:showmap'),
 			'href' => $action,
 			'is_action' => true,
 			'rel' => 'fancybox',
 			'data-options' => $data,
 			'class' => "hj-ajaxed-map-single-popup",
 			'id' => "hj-entity-map-popup-$entity->guid",
+			'section' => 'dropdown'
 		);
-		$return[] = ElggMenuItem::factory($fullview);
+		$return[] = ElggMenuItem::factory($showmap);
 	}
+
 	return $return;
+
+
 }
 
 function hj_maps_form_submit($hook, $type, $return, $params) {

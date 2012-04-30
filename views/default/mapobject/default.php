@@ -21,6 +21,7 @@ if (!$title = $entity->title) {
 $data = elgg_clean_vars($vars);
 $data = hj_framework_extract_params_from_params($data);
 $data['full_view'] = true;
+$data['push_context'] = 'fancybox';
 $data['fbox_x'] = '900';
 
 $data = hj_framework_json_query($data);

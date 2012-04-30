@@ -163,8 +163,10 @@ hj.maps.base.initMap = function(data, container) {
 		if (data.useSessionLocation === true) {
 			if (data.user && data.user.temp_location) {
 				user_position = new google.maps.LatLng(data.user.temp_location.latitude, data.user.temp_location.longitude);
-			} else if (window.sessionLocation || hj.maps.base.getSessionLocation()) {
+			} else if (window.sessionLocation) {
 				user_position = window.sessionLocation.coords;
+			} else if (hj.maps.base.getSessionLocation()) {
+				//
 			} else if (elgg.is_logged_in()) {
 				user_position = new google.maps.LatLng(data.user.location.latitude, data.user.location.longitude);
 			} else {
