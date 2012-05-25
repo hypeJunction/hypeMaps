@@ -64,7 +64,7 @@ function hj_maps_init() {
 	elgg_register_js('hj.maps.base', $js_url);
 
 	elgg_extend_view('js/initialize_elgg', 'js/hj/maps/sessionLocation');
-	
+
 	// Add hypeFormBuilder Field Types and processing algorithms
 	elgg_register_plugin_hook_handler('hj:formbuilder:fieldtypes', 'all', 'hj_maps_location_input');
 	elgg_register_plugin_hook_handler('hj:framework:field:process', 'all', 'hj_maps_location_input_process');
@@ -82,14 +82,13 @@ function hj_maps_init() {
 	 */
 	elgg_register_page_handler('places', 'hj_maps_page_handler');
 
-	if (elgg_is_logged_in()) {
-		elgg_register_menu_item('site', array(
-			'name' => 'maps',
-			'text' => elgg_echo('hj:maps:places'),
-			'href' => 'places',
-			'priority' => 400
-		));
-	}
+	elgg_register_menu_item('site', array(
+		'name' => 'maps',
+		'text' => elgg_echo('hj:maps:places'),
+		'href' => 'places',
+		'priority' => 400
+	));
+
 	elgg_register_entity_url_handler('object', 'hjplace', 'hj_places_url_forwarder');
 
 	// Register new profile menu item
@@ -197,7 +196,7 @@ function hj_maps_page_handler($page) {
 	elgg_load_js('hj.comments.base');
 	elgg_load_css('hj.comments.bar');
 	elgg_load_js('hj.framework.ajax');
-	
+
 	elgg_load_js('hj.maps.base');
 	elgg_load_js('hj.maps.google');
 
@@ -377,8 +376,6 @@ function hj_maps_places_entity_head_menu($hook, $type, $return, $params) {
 	}
 
 	return $return;
-
-
 }
 
 function hj_maps_form_submit($hook, $type, $return, $params) {

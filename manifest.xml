@@ -4,6 +4,9 @@
     <author>Ismayil Khayredinov (hypeJunction)</author>
     <version>1.8.6</version>
     <category>enhancements</category>
+	<category>maps</category>
+	<category>geolocation</category>
+	<category>hypeJunction</category>
     <blurb>hypeFramework</blurb>
     <description>Geolocation support for hypeJunction plugins</description>
     <website>http://hypeJunction.com</website>
@@ -11,7 +14,7 @@
     <license>GNU Public License version 2</license>
     <requires>
         <type>elgg_version</type>
-		<version>2011123101</version>
+		<version>2012041801</version>
     </requires>
     <requires>
         <type>plugin</type>

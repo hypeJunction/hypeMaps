@@ -10,6 +10,7 @@ $english = array(
     'hj:maps:showmap' => 'Show Map',
     'hj:maps:seedetails' => 'Details',
     'hj:maps:owner' => 'Map of %s',
+	'hj:maps:owner:user' => 'Places added by %s',
     'hj:maps:vicinity' => 'Your neighbourhood',
     'hj:maps:sessionlocation' => 'Your current location',
     'hj:maps:label:sessionlocation' => 'Change current location',

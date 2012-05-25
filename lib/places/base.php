@@ -152,7 +152,7 @@ function hj_maps_identify_map_center($user = null) {
 	};
 
 	if ($user && $user->temp_location) {
-		$address = $user->location;
+		$address = $user->temp_location;
 		$latitude = $userlocation->getTempLatitude();
 		$longitude = $userlocation->getTempLongitude();
 	} else if ($_SESSION['location']) {
@@ -171,7 +171,7 @@ function hj_maps_identify_map_center($user = null) {
 		$longitude = $site_location->getLongitude();
 	}
 
-	$return = arraY(
+	$return = array(
 		'address' => $address,
 		'latitude' => $latitude,
 		'longitude' => $longitude,
