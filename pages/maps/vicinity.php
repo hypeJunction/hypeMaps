@@ -20,7 +20,7 @@ if ($container)
 	$container = explode(',', $container);
 if ($markertype)
 	$markertype = explode(',', $markertype);
-$limit = get_input('limit', 5);
+$limit = get_input('limit', 10);
 $offset = get_input('offset', 0);
 
 $username = get_input('username', false);
@@ -40,7 +40,7 @@ $title = elgg_echo('hj:maps:vicinity');
 $form = hj_framework_get_data_pattern('object', 'hjplace');
 $data_options = array(
 	'form_guid' => $form->guid,
-	'fbox_x' => 900,
+	'fbox_x' => 500,
 	'target' => 'hj-map-vicinity',
 	'event' => 'create'
 );

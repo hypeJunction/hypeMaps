@@ -208,18 +208,19 @@ function hj_maps_page_handler($page) {
 	// Check if the username was provided in the url
 	// If no username specified, display logged in user's portfolio
 
-	$type = elgg_extract(0, $page, 'objects');
+	$type = elgg_extract(0, $page);
 
 	switch ($type) {
 		case 'vicinity' :
 		case 'all' :
+		default :
 			set_input('useSessionLocation', true);
-			set_input('type', 'object,group,user');
+			//set_input('type', 'object,group,user');
 			include "{$pages}vicinity.php";
 			break;
 
 		case 'objects' :
-		default :
+		//default :
 			set_input('useSessionLocation', true);
 			set_input('type', 'object');
 			if (isset($page[1])) {

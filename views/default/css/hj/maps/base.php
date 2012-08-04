@@ -12,6 +12,7 @@
         font-size:0.8em;
         line-height:1em;
 		cursor:pointer;
+		margin-bottom:3px;
 }
 
 .hj-map-onthemap .hj-map-entity:hover {

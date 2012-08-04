@@ -372,17 +372,16 @@ hj.maps.base.setStats = function(data) {
 hj.maps.base.updateLists = function(hook, type, params, value) {
 	var list_id = params.list_id,
 	data = params.data;
-	if (data.geo) {
-		var n_data = new Array();
-		n_data.push(data);
-		data = n_data;
-		
+	if (window.maps && window.maps[list_id]) {
 		$.each(data, function(key, val) {
-			window.hjdata.lists[list_id].geo.markers.push(val.geo);
-			hj.maps.base.setMarkers(window.maps[list_id], window.hjdata.lists[list_id].geo, list_id);
+			if (val.geo) {
+				window.hjdata.lists[list_id].geo.markers.push(val.geo);
+				hj.maps.base.setMarkers(window.maps[list_id], window.hjdata.lists[list_id].geo, list_id);
+			}
 		});
 		google.maps.event.trigger(window.maps[list_id], 'idle');
 	}
+	
 }
 
 elgg.register_hook_handler('init', 'system', hj.maps.base.init);
