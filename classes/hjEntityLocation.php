@@ -1,3 +1,4 @@
+
 <?php
 
 class hjEntityLocation extends ElggEntity {
@@ -286,6 +287,11 @@ class hjEntityLocation extends ElggEntity {
             return elgg_view('mapobject/default', array('entity' => $this, 'icon' => $icon, 'full_view' => $full_view));
         }
     }
+
+	// fix ElggUser calls for isBanned
+	public function isBanned() {
+		return false;
+	}
 
 }
 
