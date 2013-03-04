@@ -33,11 +33,10 @@ $xOffset = 6;
 $yOffset = 6;
 imagecopymerge($background, $insert, $xOffset, $yOffset, 0, 0, $insert_x, $insert_y, 100);
 
-
+$contents = imagepng($background, null, 0);
 header("Content-type: image/png");
 header('Expires: ' . date('r', time() + 864000));
 header("Pragma: public");
 header("Cache-Control: public");
-header("Content-Length: " . strlen($contents));
+//header("Content-Length: " . strlen($contents));
 
-imagepng($background, null, 0);

@@ -1,45 +1,20 @@
 <?php
 
-elgg_load_js('hj.framework.ajax');
-
-elgg_load_js('hj.maps.base');
-elgg_load_js('hj.maps.google');
-
-//if (elgg_is_xhr()) {
-//	echo '<script src="http://maps.googleapis.com/maps/api/js?libraries=geometry,adsense&sensor=true&language={$current_language}&output=svembed" type="text/javascript">';
-//	echo '<script src="http://code.google.com/apis/gears/gears_init.js"';
-//	echo elgg_view('js/hj/maps/base');
-//}
 $value = elgg_extract('value', $vars, null);
-$entity = elgg_extract('entity', $vars, false);
+$entity = elgg_extract('entity', $vars, null);
 
-if (!$entity && is_numeric($value)) {
-	$entity = get_entity($value);
-}
-
-if (elgg_instanceof($entity)) {
-	$action = "action/maps/getter?e=$entity->guid";
-	$output = elgg_view('output/url', array(
-		'title' => elgg_echo('hj:maps:showmap'),
-		'text' => $entity->getLocation(),
-		'href' => $action,
-		'is_action' => true,
-		'rel' => 'fancybox',
-		'class' => "hj-ajaxed-map-single-popup",
-		'id' => "hj-entity-map-popup-$entity->guid",
-			));
+if (HYPEMAPS_LINK_MAP) {
+	$url = "maps/map/$entity->guid?location=$value";
+	$class = "hj-maps-popup";
+	$trusted = true;
 } else {
-	$action = "action/maps/abstract?location=$value";
-	$rand = rand(0, 500);
-	$output = elgg_view('output/url', array(
-		'title' => elgg_echo('hj:maps:showmap'),
-		'text' => $value,
-		'href' => $action,
-		//'is_action' => true,
-		'rel' => 'fancybox',
-		'class' => "hj-ajaxed-map-abstract-popup",
-		'id' => "hj-entity-map-popup-$rand",
-			));
+	$url = "http://maps.google.com/maps?q=$value";
+	$target = "_blank";
 }
-
-echo $output;
+echo elgg_view('output/url', array(
+	'text' => $value,
+	'href' => $url,
+	'class' => $class,
+	'is_trusted' => $trusted,
+	'target' => $target
+));
