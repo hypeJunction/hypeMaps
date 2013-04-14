@@ -91,7 +91,7 @@ function hj_maps_get_custom_location_clause($options, $params = null) {
 
 	$options['joins'][] = "JOIN {$dbprefix}metadata mdlong on e.guid = mdlong.entity_guid";
 	$options['joins'][] = "JOIN {$dbprefix}metastrings msnlong on mdlong.name_id = msnlong.id";
-	$options['joins'][] = "JOIN {$dbprefix}metastrings msvlong on mdlong.value_id = msvlong.id";
+	$options['joins'][] = "JOIN {$dbprefix}metastrings msvlong ON mdlong.value_id = msvlong.id";
 
 	$order_by_key = elgg_extract('order_by_key', $list_options, "__ord_$list_id");
 	$order_by = get_input($order_by_key);
@@ -103,12 +103,9 @@ function hj_maps_get_custom_location_clause($options, $params = null) {
 		$ratio = 1.609344; // convert to km
 	}
 
-	$options['selects'] = array("(((acos(sin(($latitude*pi()/180)) * sin((CAST(msvlat.string AS DECIMAL(52,8))*pi()/180))+cos(($latitude*pi()/180)) * cos((CAST(msvlat.string AS DECIMAL(52,8))*pi()/180)) * cos((($longitude - CAST(msvlong.string AS DECIMAL(52,8)))*pi()/180))))*180/pi())*60*1.1515*$ratio) as distance");
-
 	if ($order_by == 'maps.distance' || !isset($options['order_by'])) {
+		$options['selects'] = array("(((acos(sin(($latitude*pi()/180)) * sin((CAST(msvlat.string AS DECIMAL(52,8))*pi()/180))+cos(($latitude*pi()/180)) * cos((CAST(msvlat.string AS DECIMAL(52,8))*pi()/180)) * cos((($longitude - CAST(msvlong.string AS DECIMAL(52,8)))*pi()/180))))*180/pi())*60*1.1515*$ratio) as distance");
 		$options['order_by'] = "distance $direction, e.time_created DESC";
-	} else {
-		$options['order_by'] = "{$options['order_by']}, distance ASC";
 	}
 
 	$rad = (int)get_input('__rad');

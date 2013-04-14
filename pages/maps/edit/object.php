@@ -31,7 +31,7 @@ $content = hj_framework_view_form("edit:$type:$subtype", array(
 	'entity' => $entity,
 		));
 
-$layout = elgg_view_layout('create', array(
+$layout = elgg_view_layout('one_sidebar', array(
 	'title' => $title,
 	'content' => $content,
 		));

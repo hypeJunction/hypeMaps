@@ -23,7 +23,11 @@ $id = false;
 if (elgg_instanceof($item)) {
 	$uid = $item->guid;
 	$ts = max(array($item->time_created, $item->time_updated, $item->last_action));
-	$title = $item->title;
+	if ($item->name) {
+		$title = $item->name;
+	} else {
+		$title = $item->title;
+	}
 	if ($location = $item->getLocation()) {
 		$title = "$title: $location";
 	} else {

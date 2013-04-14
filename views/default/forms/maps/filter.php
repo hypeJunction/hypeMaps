@@ -66,15 +66,15 @@ $body .= elgg_view('input/dropdown', array(
 ));
 $body .= '</div>';
 
+// Loader placeholder
+$footer .= '<div class="pull-left">';
+$footer .= '<div class="hj-ajax-loader hj-loader-indicator hidden"></div>';
+$footer .= '</div>';
+
 $footer .= '<div class="pull-left">';
 $footer .= elgg_view('input/submit', array(
 	'value' => elgg_echo('search')
 ));
-$footer .= '</div>';
-
-// Loader placeholder
-$footer .= '<div class="pull-left">';
-$footer .= '<div class="hj-ajax-loader hj-loader-indicator hidden"></div>';
 $footer .= '</div>';
 
 echo elgg_view_module('form', '', $body, array('footer' => $footer));
