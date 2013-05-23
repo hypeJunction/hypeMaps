@@ -301,7 +301,7 @@
 			data : {
 				guid : $element.data('uid'),
 				view : 'xhr',
-				endpoint : 'layout'
+				endpoint : 'content'
 			},
 
 			beforeSend : function() {

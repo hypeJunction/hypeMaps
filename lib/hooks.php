@@ -114,10 +114,10 @@ function hj_maps_get_custom_location_clause($options, $params = null) {
 		$options['wheres'][] = "(((acos(sin(($latitude*pi()/180)) * sin((CAST(msvlat.string AS DECIMAL(52,8))*pi()/180))+cos(($latitude*pi()/180)) * cos((CAST(msvlat.string AS DECIMAL(52,8))*pi()/180)) * cos((($longitude - CAST(msvlong.string AS DECIMAL(52,8)))*pi()/180))))*180/pi())*60*1.1515) <= $rad";
 	}
 
-	global $XHR_OUTPUT;
-	$XHR_OUTPUT['lists'][$list_id]['center']['latitude'] = $latitude;
-	$XHR_OUTPUT['lists'][$list_id]['longitude'] = $longitude;
-	$XHR_OUTPUT['lists'][$list_id]['radius'] = $rad;
+	global $XHR_GLOBAL;
+	$XHR_GLOBAL['lists'][$list_id]['center']['latitude'] = $latitude;
+	$XHR_GLOBAL['lists'][$list_id]['longitude'] = $longitude;
+	$XHR_GLOBAL['lists'][$list_id]['radius'] = $rad;
 	
 	return $options;
 }

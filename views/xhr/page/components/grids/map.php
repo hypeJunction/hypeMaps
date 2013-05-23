@@ -53,7 +53,10 @@ if ($show_pagination) {
 	$pagination = elgg_view("page/components/grids/elements/pagination/$pagination_type", $vars);
 }
 
-$output['pagination'] = '<div class="hj-framework-list-pagination-wrapper row-fluid">' . $pagination . '</div>';
+$list_id = elgg_extract('list_id', $vars);
+$pagination = '<div class="hj-framework-list-pagination-wrapper row-fluid" for="' . $list_id . '">' . $pagination . '</div>';
+
+$output['pagination'] = $pagination;
 
 echo json_encode($output);
 

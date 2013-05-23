@@ -16,7 +16,7 @@ if (elgg_view_exists($view)) {
 	return true;
 }
 
-$class = "elgg-$type-$subtype hj-map-marker-anchor";
+$class = "elgg-$type elgg-$type-$subtype hj-map-marker-anchor";
 
 $id = false;
 

@@ -67,11 +67,11 @@ $body .= elgg_view('input/dropdown', array(
 $body .= '</div>';
 
 // Loader placeholder
-$footer .= '<div class="pull-left">';
+$footer .= '<div class="float">';
 $footer .= '<div class="hj-ajax-loader hj-loader-indicator hidden"></div>';
 $footer .= '</div>';
 
-$footer .= '<div class="pull-left">';
+$footer .= '<div class="float">';
 $footer .= elgg_view('input/submit', array(
 	'value' => elgg_echo('search')
 ));
