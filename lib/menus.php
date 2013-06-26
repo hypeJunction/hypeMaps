@@ -9,10 +9,115 @@ if (HYPEMAPS_INTERFACE_VICINITY || HYPEMAPS_INTERFACE_PLACES) {
 	));
 }
 
-//elgg_register_plugin_hook_handler('register', 'menu:hjentityhead', 'hj_maps_places_entity_head_menu');
+elgg_register_plugin_hook_handler('register', 'menu:entity', 'hj_maps_entity_menu');
+elgg_register_plugin_hook_handler('register', 'menu:title', 'hj_maps_entity_title_menu');
 elgg_register_plugin_hook_handler('register', 'menu:list_filter', 'hj_maps_list_filter_menu');
 elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'hj_maps_owner_block_menu');
 
+function hj_maps_entity_menu($hook, $type, $return, $params) {
+
+	$entity = elgg_extract('entity', $params, false);
+
+	if (!elgg_instanceof($entity))
+		return $return;
+
+	switch ($entity->getSubtype()) {
+
+		default :
+			return $return;
+			break;
+
+		case 'hjplace' :
+
+			if ($entity->canEdit()) {
+				$items['edit'] = array(
+					'text' => elgg_echo('edit'),
+					'href' => $entity->getEditURL(),
+					'class' => 'elgg-button-edit-entity',
+					'data-toggle' => 'dialog',
+					'data-callback' => 'refresh:lists::framework',
+					'data-uid' => $entity->guid,
+					'priority' => 995
+				);
+				$items['delete'] = array(
+					'text' => elgg_echo('delete'),
+					'href' => $entity->getDeleteURL(),
+					'class' => 'elgg-button-delete-entity',
+					'data-uid' => $entity->guid,
+					'priority' => 1000
+				);
+			}
+			break;
+	}
+
+	if ($items) {
+		foreach ($items as $name => $item) {
+			foreach ($return as $key => $val) {
+				if (!$val instanceof ElggMenuItem) {
+					unset($return[$key]);
+				}
+				if ($val instanceof ElggMenuItem && $val->getName() == $name) {
+					unset($return[$key]);
+				}
+			}
+			$item['name'] = $name;
+			$return[$name] = ElggMenuItem::factory($item);
+		}
+	}
+
+	return $return;
+}
+
+function hj_maps_entity_title_menu($hook, $type, $return, $params) {
+
+	$entity = elgg_extract('entity', $params, false);
+
+	if (!elgg_instanceof($entity))
+		return $return;
+
+	switch ($entity->getSubtype()) {
+
+		case 'hjplace' :
+
+			if ($entity->canEdit()) {
+				$items['edit'] = array(
+					'text' => elgg_echo('edit'),
+					'href' => $entity->getEditURL(),
+					'class' => 'elgg-button elgg-button-action elgg-button-edit-entity',
+					'data-toggle' => 'dialog',
+					'data-uid' => $entity->guid,
+					'priority' => 995
+				);
+
+				$items['delete'] = array(
+					'text' => elgg_echo('delete'),
+					'href' => $entity->getDeleteURL(),
+					'class' => 'elgg-button elgg-button-delete elgg-button-delete-entity',
+					'data-uid' => $entity->guid,
+					'priority' => 1000
+				);
+			}
+
+			break;
+	}
+
+	if ($items) {
+		foreach ($items as $name => $item) {
+			foreach ($return as $key => $val) {
+				if (!$val instanceof ElggMenuItem) {
+					unset($return[$key]);
+				}
+				if ($val instanceof ElggMenuItem && $val->getName() == $name) {
+					unset($return[$key]);
+				}
+			}
+			$item['name'] = $name;
+			$return[$name] = ElggMenuItem::factory($item);
+		}
+	}
+
+	return $return;
+}
 
 function hj_maps_list_filter_menu($hook, $type, $return, $params) {
 
@@ -95,7 +200,6 @@ function hj_maps_register_dashboard_title_buttons($dashboard = 'site') {
 			break;
 	}
 }
-
 
 function hj_maps_owner_block_menu($hook, $type, $return, $params) {
 	$entity = elgg_extract('entity', $params);
