@@ -1,0 +1,173 @@
+[
+    {
+        "name": "composer/installers",
+        "version": "v1.0.15",
+        "version_normalized": "1.0.15.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/composer/installers.git",
+            "reference": "8e6a72a78f6cfd537fde3350720dfdc9ae3c5621"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/composer/installers/zipball/8e6a72a78f6cfd537fde3350720dfdc9ae3c5621",
+            "reference": "8e6a72a78f6cfd537fde3350720dfdc9ae3c5621",
+            "shasum": ""
+        },
+        "replace": {
+            "roundcube/plugin-installer": "*",
+            "shama/baton": "*"
+        },
+        "require-dev": {
+            "composer/composer": "1.0.*@dev",
+            "phpunit/phpunit": "4.1.*"
+        },
+        "time": "2014-06-23 16:25:28",
+        "type": "composer-installer",
+        "extra": {
+            "class": "Composer\\Installers\\Installer",
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Composer\\Installers\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Kyle Robinson Young",
+                "email": "kyle@dontkry.com",
+                "homepage": "https://github.com/shama",
+                "role": "Developer"
+            }
+        ],
+        "description": "A multi-framework Composer library installer",
+        "homepage": "http://composer.github.com/installers/",
+        "keywords": [
+            "Craft",
+            "Dolibarr",
+            "Hurad",
+            "MODX Evo",
+            "OXID",
+            "WolfCMS",
+            "agl",
+            "annotatecms",
+            "bitrix",
+            "cakephp",
+            "codeigniter",
+            "concrete5",
+            "croogo",
+            "drupal",
+            "elgg",
+            "fuelphp",
+            "installer",
+            "joomla",
+            "kohana",
+            "laravel",
+            "lithium",
+            "magento",
+            "mako",
+            "mediawiki",
+            "modulework",
+            "moodle",
+            "phpbb",
+            "piwik",
+            "ppi",
+            "roundcube",
+            "shopware",
+            "silverstripe",
+            "symfony",
+            "typo3",
+            "wordpress",
+            "zend",
+            "zikula"
+        ]
+    },
+    {
+        "name": "hypejunction/cmp-lists",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/hypeJunction/cmp-lists.git",
+            "reference": "33d81f59298ddd7195ffd51f0702c86d2faeeefa"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/hypeJunction/cmp-lists/zipball/33d81f59298ddd7195ffd51f0702c86d2faeeefa",
+            "reference": "33d81f59298ddd7195ffd51f0702c86d2faeeefa",
+            "shasum": ""
+        },
+        "time": "2014-07-04 20:46:19",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "hypeJunction\\": "classes/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Ismayil Khayredinov",
+                "email": "ismayil.khayredinov@gmail.com"
+            }
+        ],
+        "description": "List manipulation classes",
+        "homepage": "http://hypejunction.com",
+        "keywords": [
+            "Lists",
+            "classes"
+        ]
+    },
+    {
+        "name": "hypejunction/cmp-filestore",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/hypeJunction/cmp-filestore.git",
+            "reference": "54f00248c1cb4335a3d4285c85bb637b0a683a9e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/hypeJunction/cmp-filestore/zipball/54f00248c1cb4335a3d4285c85bb637b0a683a9e",
+            "reference": "54f00248c1cb4335a3d4285c85bb637b0a683a9e",
+            "shasum": ""
+        },
+        "time": "2014-06-13 09:40:24",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "hypeJunction\\": "classes/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Ismayil Khayredinov",
+                "email": "ismayil.khayredinov@gmail.com"
+            }
+        ],
+        "description": "Filestore classes",
+        "homepage": "http://hypejunction.com",
+        "keywords": [
+            "classes",
+            "filestore"
+        ]
+    }
+]

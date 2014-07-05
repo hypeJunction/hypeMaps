@@ -15,7 +15,7 @@ $result = false;
 
 foreach ($params as $k => $v) {
 	if (is_array($v)) {
-		$v = implode(',', $v);
+		$v = serialize($v);
 	}
 	$result = $plugin->setSetting($k, $v);
 	if (!$result) {

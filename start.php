@@ -1,83 +1,99 @@
 <?php
 
-/* hypeMaps
+/**
+ * hypeMaps
  *
- * Maps and Places
+ * Maps UI
  * @package hypeJunction
- * @subpackage hypeMaps
+ * @subpackage Maps
  *
  * @author Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
  * @copyright Copyrigh (c) 2011-2013, Ismayil Khayredinov
  */
 
-define('HYPEMAPS_RELEASE', 1362277413);
+namespace hypeJunction\Maps;
 
-define('HYPEMAPS_INTERFACE_LOCATION', elgg_get_plugin_setting('interface_location', 'hypeMaps'));
-define('HYPEMAPS_INTERFACE_PLACES', elgg_get_plugin_setting('interface_places', 'hypeMaps'));
-define('HYPEMAPS_INTERFACE_VICINITY', elgg_get_plugin_setting('interface_vicinity', 'hypeMaps'));
-define('HYPEMAPS_METRIC_SYSTEM', elgg_get_plugin_setting('metric_system', 'hypeMaps'));
-define('HYPEMAPS_PLACES_RIVER', elgg_get_plugin_setting('places_river', 'hypeMaps'));
-define('HYPEMAPS_PLACES_COVER', elgg_get_plugin_setting('places_cover', 'hypeMaps'));
-define('HYPEMAPS_SUMMARY_MAP', elgg_get_plugin_setting('summary_map', 'hypeMaps'));
-define('HYPEMAPS_LINK_MAP', elgg_get_plugin_setting('link_map', 'hypeMaps'));
-define('HYPEMAPS_GROUP_PLACES', elgg_get_plugin_setting('group_places', 'hypeMaps'));
+use ElggGroup;
 
-elgg_register_event_handler('init', 'system', 'hj_maps_init');
+const PLUGIN_ID = 'hypeMaps';
+const PAGEHANDLER = 'maps';
 
-function hj_maps_init() {
+require_once __DIR__ . '/vendors/autoload.php';
 
-	$plugin = 'hypeMaps';
+require_once __DIR__ . '/lib/functions.php';
+require_once __DIR__ . '/lib/settings.php';
+require_once __DIR__ . '/lib/events.php';
+require_once __DIR__ . '/lib/hooks.php';
+require_once __DIR__ . '/lib/page_handlers.php';
 
-	// Make sure hypeFramework is active and precedes hypeMaps in the plugin list
-	if (!is_callable('hj_framework_path_shortcuts')) {
-		register_error(elgg_echo('framework:error:plugin_order', array($plugin)));
-		disable_plugin($plugin);
-		forward('admin/plugins');
-	}
+elgg_register_event_handler('init', 'system', __NAMESPACE__ . '\\init');
+elgg_register_event_handler('init', 'system', __NAMESPACE__ . '\\init_groups');
+elgg_register_event_handler('pagesetup', 'system', __NAMESPACE__ . '\\pagesetup');
+elgg_register_event_handler('pagesetup', 'system', __NAMESPACE__ . '\\pagesetup_groups');
 
-	// Run upgrade scripts
-	hj_framework_check_release($plugin, HYPEMAPS_RELEASE);
+function init() {
 
-	$shortcuts = hj_framework_path_shortcuts($plugin);
+	/**
+	 * Pages and URLs
+	 */
+	elgg_register_page_handler(PAGEHANDLER, __NAMESPACE__ . '\\page_handler');
 
-	// Helper Classes
-	elgg_register_classes($shortcuts['classes']);
+	/**
+	 * Actions
+	 */
+	elgg_register_action(PLUGIN_ID . '/settings/save', __DIR__ . '/actions/settings/maps.php', 'admin');
+	elgg_register_action('maps/geopositioning/update', __DIR__ . '/actions/geopositioning/update.php', 'public');
 
-	// Libraries
-	$libraries = array(
-		'base',
-		'forms',
-		'page_handlers',
-		'actions',
-		'assets',
-		'views',
-		'menus',
-		'hooks',
-		'views'
-	);
+	/**
+	 * JS and CSS
+	 */
+	$libs = elgg_get_config('google_maps_libraries');
+	$gmaps_lib = elgg_http_add_url_query_elements('//maps.googleapis.com/maps/api/js', array(
+		'key' => elgg_get_plugin_setting('google_api_key', PLUGIN_ID),
+		'libraries' => is_array($libs) ? implode(',', $libs) : $libs,
+		'language' => get_current_language(),
+		'output' => 'svembed',
+	));
+	elgg_register_js('google.maps', $gmaps_lib);
 
-	if (!HYPEFRAMEWORK_INTERFACE_LOCATION) {
-		$libraries[] = 'location';
-	}
+	elgg_register_simplecache_view('css/framework/maps/stylesheet');
+	elgg_register_css('maps', elgg_get_simplecache_url('css', 'framework/maps/stylesheet'));
 
-	foreach ($libraries as $lib) {
-		$path = "{$shortcuts['lib']}{$lib}.php";
-		if (file_exists($path)) {
-			elgg_register_library("maps:library:$lib", $path);
-			elgg_load_library("maps:library:$lib");
+	elgg_register_js('jquery.sticky-kit', '/mod/' . PLUGIN_ID . '/vendors/sticky-kit/jquery.sticky-kit.min.js', 'footer', 500);
+
+	elgg_register_simplecache_view('js/framework/maps/mapbox');
+	elgg_register_js('maps.mapbox', elgg_get_simplecache_url('js', 'framework/maps/mapbox'), 'footer', 550);
+
+	// Add User Location to config
+	elgg_extend_view('js/initialize_elgg', 'js/framework/maps/config');
+
+	/**
+	 * Hooks
+	 */
+	elgg_register_plugin_hook_handler('search:site', 'maps', __NAMESPACE__ . '\\setup_site_search_maps');
+
+	// Replace a list with a map when ?list_type=mapbox
+	elgg_register_plugin_hook_handler('view', 'page/components/list', __NAMESPACE__ . '\\list_type_map_view');
+	elgg_register_plugin_hook_handler('view', 'page/components/gallery', __NAMESPACE__ . '\\list_type_map_view');
+
+	// Filter out views when loading map items via ajax
+	elgg_register_plugin_hook_handler('view', 'all', __NAMESPACE__ . '\\ajax_list_view');
+
+	// Map Markers
+	elgg_register_plugin_hook_handler('entity:icon:url', 'user', __NAMESPACE__ . '\\get_marker_url', 600);
+	elgg_register_plugin_hook_handler('entity:icon:url', 'object', __NAMESPACE__ . '\\get_marker_url', 600);
+}
+
+function init_groups() {
+
+	elgg_register_plugin_hook_handler('entity:icon:url', 'group', __NAMESPACE__ . '\\get_marker_url', 600);
+	elgg_register_plugin_hook_handler('search:group', 'maps', __NAMESPACE__ . '\\setup_group_search_maps');
+
+	$group_maps = get_group_search_maps(new ElggGroup);
+	if (is_array($group_maps)) {
+		foreach ($group_maps as $id => $gm) {
+			add_group_tool_option("maps_$id", elgg_echo("maps:groupoption:$id:enable"), true);
+			elgg_extend_view('groups/tool_latest', "framework/maps/group/$id");
 		}
-	}
-
-	hj_maps_define_default_map_center();
-
-	// Search
-	elgg_register_entity_type('object', 'hjplace');
-
-	elgg_register_tag_metadata_name('location');
-
-	// Add group option
-	if (HYPEMAPS_GROUP_PLACES) {
-		add_group_tool_option('places', elgg_echo('hj:maps:groupoption:enable'), true);
-		elgg_extend_view('groups/tool_latest', 'framework/maps/group_module');
 	}
 }
