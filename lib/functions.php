@@ -125,6 +125,7 @@ function get_marker_types_options() {
 		$markertypes = get_marker_types_defaults();
 	}
 
+	$markertypes = array_filter($markertypes);
 	foreach ($markertypes as $type) {
 		$options_values[$type] = elgg_echo("maps:marker:type:$type");
 	}

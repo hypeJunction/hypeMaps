@@ -127,6 +127,7 @@ $english = array(
 	'maps:marker:type:clothing_store' => 'Clothing Store',
 	'maps:marker:type:convenience_store' => 'Convenience Store',
 	'maps:marker:type:courthouse' => 'Courthouse',
+	'maps:marker:type:doctor' => 'Doctor',
 	'maps:marker:type:dentist' => 'Dentist',
 	'maps:marker:type:department_store' => 'Department Store',
 	'maps:marker:type:electrician' => 'Electrician',
@@ -172,6 +173,8 @@ $english = array(
 	'maps:marker:type:university' => 'University',
 	'maps:marker:type:veterinary_care' => 'Veterinary Care',
 	'maps:marker:type:zoo' => 'Zoo',
+	'maps:marker:type:user' => 'User',
+	'maps:marker:type:group' => 'Group',
 	/**
 	 * WIDGETS
 	 */
