@@ -24,8 +24,7 @@
 	"require": {
 		"php": ">=5.3.3",
 		"composer/installers": ">=1.0.8",
-		"hypejunction/cmp-lists": "1.0.*",
-		"hypejunction/cmp-filestore": "1.0.*"
+		"hypejunction/cmp-lists": "1.0.*"
 	},
 	"autoload": {
 		"psr-4": {

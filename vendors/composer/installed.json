@@ -129,45 +129,5 @@
             "Lists",
             "classes"
         ]
-    },
-    {
-        "name": "hypejunction/cmp-filestore",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/hypeJunction/cmp-filestore.git",
-            "reference": "54f00248c1cb4335a3d4285c85bb637b0a683a9e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/hypeJunction/cmp-filestore/zipball/54f00248c1cb4335a3d4285c85bb637b0a683a9e",
-            "reference": "54f00248c1cb4335a3d4285c85bb637b0a683a9e",
-            "shasum": ""
-        },
-        "time": "2014-06-13 09:40:24",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "hypeJunction\\": "classes/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Ismayil Khayredinov",
-                "email": "ismayil.khayredinov@gmail.com"
-            }
-        ],
-        "description": "Filestore classes",
-        "homepage": "http://hypejunction.com",
-        "keywords": [
-            "classes",
-            "filestore"
-        ]
     }
 ]
