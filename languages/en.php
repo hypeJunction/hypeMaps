@@ -172,6 +172,16 @@ $english = array(
 	'maps:marker:type:university' => 'University',
 	'maps:marker:type:veterinary_care' => 'Veterinary Care',
 	'maps:marker:type:zoo' => 'Zoo',
+	/**
+	 * WIDGETS
+	 */
+	'maps:widget:staticmap' => 'Static Map',
+	'maps:widget:staticmap:desc' => 'Displays a static map of a specified location with a marker',
+	'maps:widget:staticmap:title' => 'Title',
+	'maps:widget:staticmap:description' => 'Description',
+	'maps:widget:staticmap:location' => 'Location',
+	'maps:widget:staticmap:zoom' => 'Zoom',
+	'maps:widget:staticmap:pin_color' => 'Pin color',
 );
 
 add_translation("en", $english);
