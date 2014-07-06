@@ -115,6 +115,24 @@
 			});
 			var markers = [];
 			var infowindows = [];
+
+			if (typeof elgg.maps.adsense_publisher_id === 'string') {
+				var adUnitDiv = document.createElement('div');
+				var adUnitOptions = {
+					format: google.maps.adsense.AdFormat.HALF_BANNER,
+					position: google.maps.ControlPosition.RIGHT_BOTTOM,
+					map: gmap,
+					visible: true,
+					publisherId: elgg.maps.adsense_publisher_id,
+					backgroundColor: '#F4F4F4',
+					borderColor: '#E8E8E8',
+					titleColor: '#000000',
+					textColor: '#666666',
+					urlColor: '#4690d6'
+				};
+				new google.maps.adsense.AdUnit(adUnitDiv, adUnitOptions);
+			}
+
 		} else {
 			var gmap = $map.data('gmap');
 			var markers = $map.data('markers');
@@ -217,19 +235,20 @@
 				elgg.session.geopositioning.latitude = position.coords.latitude;
 				elgg.session.geopositioning.longitude = position.coords.longitude;
 
-				if ($('.maps-filter').length) {
-					if (typeof elgg.maps.geocoder === 'undefined') {
-						elgg.maps.geocoder = new google.maps.Geocoder();
-					}
-					var latlng = new google.maps.LatLng(elgg.session.geopositioning.latitude, elgg.session.geopositioning.longitude);
-					elgg.maps.geocoder.geocode({'latLng': latlng}, function(results, status) {
-						if (status === google.maps.GeocoderStatus.OK) {
-							if (results[1]) {
-								elgg.maps.setGeopositioning(results);
-							}
-						}
-					});
-				}
+				elgg.maps.setGeopositioning();
+//				if ($('.maps-filter').length) {
+//					if (typeof elgg.maps.geocoder === 'undefined') {
+//						elgg.maps.geocoder = new google.maps.Geocoder();
+//					}
+//					var latlng = new google.maps.LatLng(elgg.session.geopositioning.latitude, elgg.session.geopositioning.longitude);
+//					elgg.maps.geocoder.geocode({'latLng': latlng}, function(results, status) {
+//						if (status === google.maps.GeocoderStatus.OK) {
+//							if (results[1]) {
+//								elgg.maps.setGeopositioning(results);
+//							}
+//						}
+//					});
+//				}
 			} else {
 				elgg.maps.setGeopositioning();
 			}
@@ -274,16 +293,16 @@
 				.data('long', elgg.session.geopositioning.longitude)
 				.trigger('initialize');
 
-		elgg.action('maps/geopositioning/update', {
-			data: elgg.session.geopositioning,
-			success: function() {
-				$('.maps-filter')
-						.find('input[name="location[find]"]')
-						.val(elgg.session.geopositioning.location);
-
-				$('.maps-filter').trigger('submit');
-			}
-		});
+//		elgg.action('maps/geopositioning/update', {
+//			data: elgg.session.geopositioning,
+//			success: function() {
+//				$('.maps-filter')
+//						.find('input[name="location[find]"]')
+//						.val(elgg.session.geopositioning.location);
+//
+//				$('.maps-filter').trigger('submit');
+//			}
+//		});
 	};
 
 	elgg.register_hook_handler('init', 'system', elgg.maps.init);

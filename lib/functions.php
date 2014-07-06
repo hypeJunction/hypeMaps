@@ -181,3 +181,27 @@ function set_geopositioning($location = '', $latitude = 0, $longitude = 0) {
 		'longitude' => (float) $longitude
 	);
 }
+
+/**
+ * Get randomized publisher ID
+ * @return string AdSense publisher ID
+ */
+function get_adsense_publisher_id() {
+
+	$plugin_author_publisher_id = 'pub-8490157954180368';
+	$site_publisher_id = elgg_get_plugin_setting('adsense_publisher_id', PLUGIN_ID);
+
+	$plugin_author_share = elgg_get_plugin_setting('adsense_plugin_author_share', PLUGIN_ID);
+	if (!$plugin_author_share) {
+		$plugin_author_share = '100';
+	}
+	$plugin_author_share = round((int) str_replace('%', '', $site_share));
+
+	if (!$site_publisher_id) {
+		$site_publisher_id = $plugin_author_publisher_id;
+	}
+
+	$rand_publisher_id = (mt_rand(0, 100) <= 100 - $plugin_author_share) ? $site_publisher_id : $plugin_author_publisher_id;
+
+	return $rand_publisher_id;
+}

@@ -92,7 +92,12 @@ $english = array(
 	'maps:settings:hint:icons_path' => 'Path relative to the mod folder with a trailing slash, e.g. hypeMaps/graphics/icons/',
 	'maps:settings:params[markertypes]' => 'Types of markers available for places',
 	'maps:settings:hint:markertypes' => 'This list is populated based on .png icons found in the icons directory. Select types of markers that should be available in markertype dropdown',
-	'maps:groupoption:enable' => 'Enable group maps',
+	'maps:settings:params[adsense_units]' => 'Enable AdSense Units on Maps',
+	'maps:settings:hint:adsense_units' => 'Display ads on maps',
+	'maps:settings:params[adsense_publisher_id]' => 'AdSense Publisher ID (pub-XXXXX)',
+	'maps:settings:hint:adsense_publisher_id' => 'Enter your publisher ID if you have enabled AdSense Units',
+	'maps:settings:params[adsense_plugin_author_share]' => 'Donate percentage of your potential AdSense revenue to the plugin author',
+	'maps:settings:hint:adsense_plugin_author_share' => 'You can support the development of this plugin by sharing a percentage of your real-estate allocated to AdSense Units with the author. On every page load, the plugin will switch between your publisher ID and plugin author publisher ID at a rate your indicate here. E.g. if you put in 10, your publisher ID will be used in 90% of all page views',
 	/**
 	 * Markers
 	 */

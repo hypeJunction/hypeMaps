@@ -14,6 +14,37 @@ echo elgg_view('input/text', array(
 echo '</div>';
 
 echo '<div>';
+echo '<label>' . elgg_echo("maps:settings:params[adsense_units]") . '</label>';
+echo '<div class="elgg-text-help">' . elgg_echo('maps:settings:hint:adsense_units') . '</div>';
+echo elgg_view('input/dropdown', array(
+	'name' => "params[adsense_units]",
+	'value' => $entity->adsense_units,
+	'options_values' => array(
+		0 => elgg_echo('disable'),
+		1 => elgg_echo('enable')
+	),
+));
+echo '</div>';
+
+echo '<div>';
+echo '<label>' . elgg_echo('maps:settings:params[adsense_publisher_id]') . '</label>';
+echo '<div class="elgg-text-help">' . elgg_echo('maps:settings:hint:adsense_publisher_id') . '</div>';
+echo elgg_view('input/text', array(
+	'name' => 'params[adsense_publisher_id]',
+	'value' => $entity->adsense_publisher_id
+));
+echo '</div>';
+
+echo '<div>';
+echo '<label>' . elgg_echo('maps:settings:params[adsense_plugin_author_share]') . '</label>';
+echo '<div class="elgg-text-help">' . elgg_echo('maps:settings:hint:adsense_plugin_author_share') . '</div>';
+echo elgg_view('input/text', array(
+	'name' => 'params[adsense_plugin_author_share]',
+	'value' => round((int)$entity->adsense_plugin_author_share, 0)
+));
+echo '</div>';
+
+echo '<div>';
 echo '<label>' . elgg_echo('maps:settings:params[default_location]') . '</label>';
 echo '<div class="elgg-text-help">' . elgg_echo('maps:settings:hint:default_location') . '</div>';
 echo elgg_view('input/text', array(

@@ -8,9 +8,6 @@ define('HYPEMAPS_METRIC_SYSTEM', elgg_get_plugin_setting('metric_system', PLUGIN
 define('HYPEMAPS_SEARCH_RADIUS', 0);
 
 elgg_set_config('google_maps_libraries', array(
-	'adsense',
+	elgg_get_plugin_setting('adsense_units', PLUGIN_ID) ? 'adsense' : null,
 	'drawing',
-	//'geometry',
-	'places',
-		//'visualization'
 ));
