@@ -91,7 +91,7 @@ function ajax_list_view($hook, $type, $return, $params) {
 		$maps_ajax_output = $return;
 	}
 
-	if ($type == 'page/default' || $type = 'framework/maps/content') {
+	if ($type == 'page/default' || $type = 'page/layouts/maps_ajax') {
 		return $maps_ajax_output;
 	}
 

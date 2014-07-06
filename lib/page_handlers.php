@@ -50,7 +50,7 @@ function page_handler($page, $handler) {
 		case 'group' :
 
 			$group_guid = elgg_extract(1, $page);
-			$group  = get_entity($group_guid);
+			$group = get_entity($group_guid);
 
 			if (!elgg_instanceof($group, 'group')) {
 				return false;
@@ -84,25 +84,28 @@ function page_handler($page, $handler) {
 			break;
 	}
 
-	if ($content) {
-		if (elgg_is_xhr()) {
-			echo elgg_view('output/content', array(
-				'content' => $content
-			));
-			exit;
-		} else {
-			$layout = elgg_view_layout('content', array(
-				'title' => $title,
-				'content' => $content,
-				'filter' => $filter,
-				'sidebar' => $sidebar,
-			));
-			echo elgg_view_page($title, $layout);
-		}
-		return true;
+	$layout = (elgg_is_xhr()) ? 'maps_ajax' : 'content';
+	$pageshell = (elgg_is_xhr()) ? 'maps_ajax' : 'default';
+	$layout_vars = array(
+		'title' => $title,
+		'content' => $content,
+		'filter' => $filter,
+		'sidebar' => $sidebar,
+	);
+
+	$layout_vars = elgg_trigger_plugin_hook('layout', 'maps', array(
+		'segments' => $page,
+		'handler' => $handler,
+			), $layout_vars);
+
+	if (empty($layout_vars['content'])) {
+		return false;
 	}
 
-	return false;
+	$layout = elgg_view_layout($layout, $layout_vars);
+	echo elgg_view_page($title, $layout, $pageshell);
+
+	return true;
 }
 
 /**
