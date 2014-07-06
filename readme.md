@@ -70,4 +70,6 @@ overview, use ```elgg_list_entities_*``` and pass a mapbox list type.
 You will need to add your custom views.
 
 
+## Screenshots
 
+![alt text](https://raw.github.com/hypeJunction/hypeMaps/master/screenshots/map_users.png "User search")
