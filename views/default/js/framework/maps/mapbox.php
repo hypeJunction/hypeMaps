@@ -283,8 +283,8 @@
 			elgg.session.geopositioning = {};
 		}
 
-		if (data && data[1]) {
-			elgg.session.geopositioning.location = data[1].formatted_address;
+		if (data && data[0]) {
+			elgg.session.geopositioning.location = data[0].formatted_address;
 		}
 
 		$('[data-mapbox]')

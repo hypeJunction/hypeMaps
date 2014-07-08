@@ -97,15 +97,15 @@
         "source": {
             "type": "git",
             "url": "https://github.com/hypeJunction/cmp-lists.git",
-            "reference": "33d81f59298ddd7195ffd51f0702c86d2faeeefa"
+            "reference": "743ca514c4a6476e6d1453fd45e4d2e3f676d0dc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/hypeJunction/cmp-lists/zipball/33d81f59298ddd7195ffd51f0702c86d2faeeefa",
-            "reference": "33d81f59298ddd7195ffd51f0702c86d2faeeefa",
+            "url": "https://api.github.com/repos/hypeJunction/cmp-lists/zipball/743ca514c4a6476e6d1453fd45e4d2e3f676d0dc",
+            "reference": "743ca514c4a6476e6d1453fd45e4d2e3f676d0dc",
             "shasum": ""
         },
-        "time": "2014-07-04 20:46:19",
+        "time": "2014-07-07 08:53:25",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
