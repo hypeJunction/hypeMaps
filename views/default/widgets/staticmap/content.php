@@ -1,5 +1,7 @@
 <?php
 
+namespace hypeJunction\Maps;
+
 $entity = elgg_extract('entity', $vars);
 
 if ($entity->description) {
@@ -10,7 +12,13 @@ if ($entity->description) {
 	echo '</div>';
 }
 
-$src = "//maps.googleapis.com/maps/api/staticmap?center={$entity->location}&zoom={$entity->zoom}&size=300x300&markers=color:{$entity->pin_color}%7C{$entity->location}";
+$src = elgg_http_add_url_query_elements("//maps.googleapis.com/maps/api/staticmap", array(
+	'center' => $entity->location,
+	'zoom' => $entity->zoom,
+	'size' => '300x300',
+	'markers' => "color:{$entity->pin_color}%7C{$entity->location}",
+	'key' => elgg_get_plugin_setting('google_api_key', PLUGIN_ID)
+));
 
 echo '<div>';
 echo elgg_view('output/url', array(
