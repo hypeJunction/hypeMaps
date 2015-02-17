@@ -1,17 +1,17 @@
 [
     {
         "name": "composer/installers",
-        "version": "v1.0.15",
-        "version_normalized": "1.0.15.0",
+        "version": "v1.0.20",
+        "version_normalized": "1.0.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer/installers.git",
-            "reference": "8e6a72a78f6cfd537fde3350720dfdc9ae3c5621"
+            "reference": "1bff8aa77a18f3616f468ed8000cf86a5725bac3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/installers/zipball/8e6a72a78f6cfd537fde3350720dfdc9ae3c5621",
-            "reference": "8e6a72a78f6cfd537fde3350720dfdc9ae3c5621",
+            "url": "https://api.github.com/repos/composer/installers/zipball/1bff8aa77a18f3616f468ed8000cf86a5725bac3",
+            "reference": "1bff8aa77a18f3616f468ed8000cf86a5725bac3",
             "shasum": ""
         },
         "replace": {
@@ -22,7 +22,7 @@
             "composer/composer": "1.0.*@dev",
             "phpunit/phpunit": "4.1.*"
         },
-        "time": "2014-06-23 16:25:28",
+        "time": "2015-01-11 03:51:11",
         "type": "composer-installer",
         "extra": {
             "class": "Composer\\Installers\\Installer",
@@ -44,8 +44,7 @@
             {
                 "name": "Kyle Robinson Young",
                 "email": "kyle@dontkry.com",
-                "homepage": "https://github.com/shama",
-                "role": "Developer"
+                "homepage": "https://github.com/shama"
             }
         ],
         "description": "A multi-framework Composer library installer",
@@ -56,17 +55,22 @@
             "Hurad",
             "MODX Evo",
             "OXID",
+            "SMF",
+            "Thelia",
             "WolfCMS",
             "agl",
             "annotatecms",
             "bitrix",
             "cakephp",
+            "chef",
             "codeigniter",
             "concrete5",
             "croogo",
+            "dokuwiki",
             "drupal",
             "elgg",
             "fuelphp",
+            "grav",
             "installer",
             "joomla",
             "kohana",
@@ -80,6 +84,7 @@
             "phpbb",
             "piwik",
             "ppi",
+            "puppet",
             "roundcube",
             "shopware",
             "silverstripe",
@@ -88,46 +93,6 @@
             "wordpress",
             "zend",
             "zikula"
-        ]
-    },
-    {
-        "name": "hypejunction/cmp-lists",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/hypeJunction/cmp-lists.git",
-            "reference": "743ca514c4a6476e6d1453fd45e4d2e3f676d0dc"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/hypeJunction/cmp-lists/zipball/743ca514c4a6476e6d1453fd45e4d2e3f676d0dc",
-            "reference": "743ca514c4a6476e6d1453fd45e4d2e3f676d0dc",
-            "shasum": ""
-        },
-        "time": "2014-07-07 08:53:25",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "hypeJunction\\": "classes/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Ismayil Khayredinov",
-                "email": "ismayil.khayredinov@gmail.com"
-            }
-        ],
-        "description": "List manipulation classes",
-        "homepage": "http://hypejunction.com",
-        "keywords": [
-            "Lists",
-            "classes"
         ]
     }
 ]

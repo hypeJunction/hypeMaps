@@ -156,8 +156,11 @@ class ElggMap extends ElggList {
 			return array();
 		}
 
-		$latitude = $entity->getLatitude();
-		$longitude = $entity->getLongitude();
+		$lat_key = 'geo:lat';
+		$long_key = 'geo:long';
+
+		$latitude = $entity->$lat_key;
+		$longitude = $entity->$long_key;
 
 		$mappable = ($latitude && $longitude);
 		$attributes = array(
@@ -190,7 +193,10 @@ class ElggMap extends ElggList {
 				$site = elgg_get_site_entity();
 				$user = elgg_get_logged_in_user_entity();
 
-				if (!$user || (!$user->getLatitude() || !$user->getLongitude())) {
+				$lat_key = 'geo:lat';
+				$long_key = 'geo:long';
+
+				if (!$user || (!$user->$lat_key || !$user->$long_key)) {
 					$entity = $site;
 				} else {
 					$entity = $user;
@@ -200,7 +206,7 @@ class ElggMap extends ElggList {
 			}
 		}
 
-		$latlong = elgg_geocode_location($location);
+		$latlong = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $location), false);
 		if (!$latlong) {
 			$latlong = array();
 		}
