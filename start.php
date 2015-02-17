@@ -83,7 +83,7 @@ function init() {
 	elgg_register_plugin_hook_handler('entity:icon:url', 'user', __NAMESPACE__ . '\\get_marker_url', 600);
 	elgg_register_plugin_hook_handler('entity:icon:url', 'object', __NAMESPACE__ . '\\get_marker_url', 600);
 
-	elgg_register_widget_type('staticmap', elgg_echo('maps:widget:staticmap'), elgg_echo('maps:widget:staticmap:desc'), 'all', true);
+	elgg_register_widget_type('staticmap', elgg_echo('maps:widget:staticmap'), elgg_echo('maps:widget:staticmap:desc'), array('all'), true);
 }
 
 function init_groups() {
