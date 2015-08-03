@@ -164,8 +164,9 @@ class ElggMapQuery extends ElggListQuery {
 	private function hasSpatial() {
 		if (!isset(self::$spatial)) {
 			$prefix = elgg_get_config('dbprefix');
-			$tables = get_db_tables();
-			self::$spatial = (in_array("{$prefix}entity_geometry", $tables));
+			$tables = get_data("SHOW TABLES LIKE '{$prefix}_entity_geometry'");
+			error_log(print_r($tables, true));
+			self::$spatial = count($tables) > 0;
 		}
 		return self::$spatial;
 	}
