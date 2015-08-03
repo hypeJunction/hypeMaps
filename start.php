@@ -18,7 +18,7 @@ use ElggGroup;
 const PLUGIN_ID = 'hypeMaps';
 const PAGEHANDLER = 'maps';
 
-require_once __DIR__ . '/vendors/autoload.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php';
 
 require_once __DIR__ . '/lib/functions.php';
 require_once __DIR__ . '/lib/settings.php';

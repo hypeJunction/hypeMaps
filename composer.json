@@ -18,17 +18,16 @@
 		"installer-name": "hypeMaps"
 	},
 	"config": {
-		"vendor-dir": "vendors",
-		"preferred-install": "dist"
+		"vendor-dir": "/vendor/"
 	},
 	"require": {
 		"php": ">=5.3.3",
 		"composer/installers": ">=1.0.8",
-		"hypejunction/cmp-lists": "dev-master"
+		"hypejunction/hypelists": ">=3.2"
 	},
 	"autoload": {
-		"psr-4": {
-			"hypeJunction\\": "classes/hypeJunction/"
+		"psr-0": {
+			"": "classes/"
 		}
 	}
 }
