@@ -11,19 +11,17 @@
 	"authors": [
 		{
 			"name": "Ismayil Khayredinov",
-			"email": "ismayil.khayredinov@gmail.com"
+			"email": "info@hypejunction.com"
 		}
 	],
 	"extra": {
 		"installer-name": "hypeMaps"
 	},
-	"config": {
-		"vendor-dir": "/vendor/"
-	},
 	"require": {
 		"php": ">=5.3.3",
 		"composer/installers": ">=1.0.8",
-		"hypejunction/api-lists": "dev-master"
+		"hypejunction/api-lists": "dev-master",
+		"bower-asset/sticky-kit": "~1.0"
 	},
 	"autoload": {
 		"psr-0": {

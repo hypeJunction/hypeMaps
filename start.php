@@ -18,7 +18,7 @@ use ElggGroup;
 const PLUGIN_ID = 'hypeMaps';
 const PAGEHANDLER = 'maps';
 
-require_once dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php';
+require_once __DIR__ . '/autoloader.php';
 
 require_once __DIR__ . '/lib/functions.php';
 require_once __DIR__ . '/lib/settings.php';
@@ -59,7 +59,19 @@ function init() {
 	elgg_register_simplecache_view('css/framework/maps/stylesheet');
 	elgg_register_css('maps', elgg_get_simplecache_url('css', 'framework/maps/stylesheet'));
 
-	elgg_register_js('jquery.sticky-kit', '/mod/' . PLUGIN_ID . '/vendors/sticky-kit/jquery.sticky-kit.min.js', 'footer', 500);
+	$plugin_root = __DIR__;
+	$root = dirname(dirname($plugin_root));
+	$alt_root = dirname(dirname(dirname($root)));
+
+	if (file_exists("$plugin_root/vendor/autoload.php")) {
+		$path = $plugin_root;
+	} else if (file_exists("$root/vendor/autoload.php")) {
+		$path = $root;
+	} else {
+		$path = $alt_root;
+	}
+
+	elgg_register_js('jquery.sticky-kit', $path . '/vendor/bower-asset/sticky-kit/jquery.sticky-kit.min.js', 'footer', 500);
 
 	elgg_register_simplecache_view('js/framework/maps/mapbox');
 	elgg_register_js('maps.mapbox', elgg_get_simplecache_url('js', 'framework/maps/mapbox'), 'footer', 550);
