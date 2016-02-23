@@ -16,11 +16,6 @@
 		<type>elgg_release</type>
 		<version>1.10</version>
 	</requires>
-
-	<requires>
-		<type>plugin</type>
-		<name>hypeLists</name>
-	</requires>
 	
 	<suggests>
 		<type>plugin</type>

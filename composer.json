@@ -23,7 +23,7 @@
 	"require": {
 		"php": ">=5.3.3",
 		"composer/installers": ">=1.0.8",
-		"hypejunction/hypelists": ">=3.2"
+		"hypejunction/api-lists": "dev-master"
 	},
 	"autoload": {
 		"psr-0": {
