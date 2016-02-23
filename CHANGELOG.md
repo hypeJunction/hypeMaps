@@ -1,3 +1,13 @@
+<a name="2.2.1"></a>
+## [2.2.1](https://github.com/hypeJunction/hypeMaps/compare/2.2.0...v2.2.1) (2016-02-23)
+
+
+### Bug Fixes
+
+* **deps:** change constraint for api-lists ([6d0bfc1](https://github.com/hypeJunction/hypeMaps/commit/6d0bfc1))
+
+
+
 <a name="2.2.0"></a>
 # [2.2.0](https://github.com/hypeJunction/hypeMaps/compare/2.1.0...v2.2.0) (2016-02-23)
 
