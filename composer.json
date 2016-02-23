@@ -20,7 +20,7 @@
 	"require": {
 		"php": ">=5.3.3",
 		"composer/installers": ">=1.0.8",
-		"hypejunction/api-lists": "dev-master",
+		"hypejunction/api-lists": "*",
 		"bower-asset/sticky-kit": "~1.0"
 	},
 	"autoload": {
