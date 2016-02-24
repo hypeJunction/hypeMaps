@@ -7,7 +7,7 @@
 
 	elgg.maps.init = function() {
 
-		$(window).resize(function(e) {
+		$(window).on('resize', function(e) {
 			if ($('#maps-modal').length) {
 				$('#maps-modal').dialog({
 					position: {my: "center", at: "center", of: window}
@@ -19,18 +19,16 @@
 			$('.maps-find-me').hide();
 		}
 
-		$('.maps-find-me').live('click', elgg.maps.findMe);
+		$(document).on('click', '.maps-find-me', elgg.maps.findMe);
 
-		$('[data-mapbox]').live('initialize', elgg.maps.initMapbox);
-		$('[data-mapbox]').each(function() {
-			$(this).trigger('initialize');
-		});
+		$(document).on('initialize', '[data-mapbox]', elgg.maps.initMapbox);
+		$('[data-mapbox]').trigger('initialize');
 
 		$('[data-mapbox]').stick_in_parent({
 			sticky_class: 'maps-stuck'
 		});
 
-		$('.maps-container .elgg-pagination li a').live('click', function(e) {
+		$(document).on('click', '.maps-container .elgg-pagination li a', function(e) {
 			e.preventDefault();
 			var $elem = $(this);
 			var $container = $elem.closest('.maps-container');
@@ -57,7 +55,7 @@
 			});
 		});
 
-		$('.maps-filter').live('submit', function(e) {
+		$(document).on('submit', '.maps-filter', function(e) {
 			e.preventDefault();
 
 			var $elem = $(this);
@@ -185,7 +183,7 @@
 				infowindow.open(gmap, marker);
 			});
 
-			$('.maps-item-pin', $elem).live('mouseover click', function(e) {
+			$('.maps-item-pin', $elem).on('mouseover click', function(e) {
 				zIndex++;
 				marker.setZIndex(zIndex);
 				gmap.setZoom(13);
