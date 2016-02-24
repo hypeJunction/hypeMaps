@@ -60,15 +60,10 @@ function init() {
 	elgg_register_css('maps', elgg_get_simplecache_url('css', 'framework/maps/stylesheet'));
 
 	$plugin_root = __DIR__;
-	$root = dirname(dirname($plugin_root));
-	$alt_root = dirname(dirname(dirname($root)));
-
 	if (file_exists("$plugin_root/vendor/autoload.php")) {
-		$path = $plugin_root;
-	} else if (file_exists("$root/vendor/autoload.php")) {
-		$path = $root;
+		$path = '/mod/' . PLUGIN_ID;
 	} else {
-		$path = $alt_root;
+		$path = '';
 	}
 
 	elgg_register_js('jquery.sticky-kit', $path . '/vendor/bower-asset/sticky-kit/jquery.sticky-kit.min.js', 'footer', 500);
