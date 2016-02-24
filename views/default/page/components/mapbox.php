@@ -37,7 +37,7 @@ $count = $map->getCount();
 
 $offset = elgg_extract('offset', $options);
 $limit = elgg_extract('limit', $options);
-$base_url = elgg_extract('base_url', $options, '');
+$base_url = elgg_extract('base_url', $options, current_page_url());
 $pagination = elgg_extract('pagination', $options, true);
 $offset_key = elgg_extract('offset_key', $options, 'offset');
 $position = elgg_extract('position', $options, 'after');
