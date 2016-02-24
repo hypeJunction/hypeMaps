@@ -1,3 +1,13 @@
+<a name="2.2.2"></a>
+## [2.2.2](https://github.com/hypeJunction/hypeMaps/compare/2.2.1...v2.2.2) (2016-02-24)
+
+
+### Bug Fixes
+
+* **js:** use relative path from site url ([75604f7](https://github.com/hypeJunction/hypeMaps/commit/75604f7))
+
+
+
 <a name="2.2.1"></a>
 ## [2.2.1](https://github.com/hypeJunction/hypeMaps/compare/2.2.0...v2.2.1) (2016-02-23)
 
