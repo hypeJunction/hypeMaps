@@ -136,7 +136,6 @@ function get_geopositioning()
  */
 function set_geopositioning($location = '', $latitude = 0, $longitude = 0)
 {
-    $location = sanitize_string($location);
     $lat = (float) $latitude;
     $long = (float) $longitude;
     $latlong = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $location), false);
@@ -144,9 +143,17 @@ function set_geopositioning($location = '', $latitude = 0, $longitude = 0)
         $latitude = elgg_extract('lat', $latlong);
         $longitude = elgg_extract('long', $latlong);
     } else if ($location && $latitude && $longitude) {
-        $dbprefix = elgg_get_config('dbprefix');
-        $query = "INSERT INTO {$dbprefix}geocode_cache\n\t\t\t\t(location, lat, `long`) VALUES ('{$location}', '{$lat}', '{$long}')\n\t\t\t\tON DUPLICATE KEY UPDATE lat='{$lat}', `long`='{$long}'";
-        insert_data($query);
+        $prefix = elgg_get_config('dbprefix');
+        $query = "INSERT INTO {$prefix}geocode_cache
+                (location, lat, `long`) VALUES (:location, :lat, :long)
+                ON DUPLICATE KEY UPDATE lat=:lat2, `long`=:long2";
+        insert_data($query, [
+            ':location' => $location,
+            ':lat' => $lat,
+            ':long' => $long,
+            ':lat2' => $lat,
+            ':long2' => $long,
+        ]);
     }
     $_SESSION['geopositioning'] = array('location' => $location, 'latitude' => (float) $latitude, 'longitude' => (float) $longitude);
 }

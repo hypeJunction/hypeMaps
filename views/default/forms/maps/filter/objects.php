@@ -48,9 +48,9 @@ if ($user) {
 		'owner_guids' => $user->guid,
 		'metadata_names' => array('location', 'temp_location'),
 		'limit' => 0,
-		'group_by' => 'v.string',
-		'wheres' => array("v.string != '' AND v.string != '0,0'"),
-		'order_by' => 'v.string ASC'
+		'group_by' => 'n_table.value',
+		'wheres' => array("n_table.value != '' AND n_table.value != '0,0'"),
+		'order_by' => 'n_table.value ASC'
 	);
 
 	$metadata = new ElggBatch('elgg_get_metadata', $options);

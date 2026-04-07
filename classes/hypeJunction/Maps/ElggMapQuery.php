@@ -75,9 +75,9 @@ class ElggMapQuery extends ElggListQuery {
 	 */
 	private function sqlOrderByProximity() {
 
-		$this->latitude = sanitize_string((float) $this->latitude);
-		$this->longitude = sanitize_string((float) $this->longitude);
-		$this->radius = sanitize_string((float) $this->radius);
+		$this->latitude = (float) $this->latitude;
+		$this->longitude = (float) $this->longitude;
+		$this->radius = (float) $this->radius;
 
 		if ($this->hasSpatial()) {
 			$this->sqlJoinSpatial('eg');
@@ -85,8 +85,8 @@ class ElggMapQuery extends ElggListQuery {
 			$this->options['order_by'] = "proximity ASC, e.time_updated DESC";
 			$this->options['callback'] = __NAMESPACE__ . '\\mappable_entity_row_to_elggstar';
 		} else {
-			$this->sqlJoinCoordinates('msvlat', 'msvlong', 'mdlat', 'mdlong');
-			$this->options['selects']['proximity'] = "(((acos(sin(($this->latitude*pi()/180))*sin((msvlat.string*pi()/180))+cos(($this->latitude*pi()/180))*cos((msvlat.string*pi()/180))*cos((($this->longitude-msvlong.string)*pi()/180)))))*180/pi())*60*1.1515*1.60934 AS proximity";
+			$this->sqlJoinCoordinates('mdlat', 'mdlong');
+			$this->options['selects']['proximity'] = "(((acos(sin(($this->latitude*pi()/180))*sin((mdlat.value*pi()/180))+cos(($this->latitude*pi()/180))*cos((mdlat.value*pi()/180))*cos((($this->longitude-mdlong.value)*pi()/180)))))*180/pi())*60*1.1515*1.60934 AS proximity";
 			$this->options['order_by'] = "proximity ASC, e.time_updated DESC";
 			$this->options['callback'] = __NAMESPACE__ . '\\mappable_entity_row_to_elggstar';
 		}
@@ -110,8 +110,8 @@ class ElggMapQuery extends ElggListQuery {
 			$this->sqlJoinSpatial('eg');
 			$this->options['wheres']['proximity'] = "(GLength(LineStringFromWKB(LineString(eg.geometry,GeomFromText('POINT({$this->latitude} {$this->longitude})')))))*60*1.825 <= {$this->radius}";
 		} else {
-			$this->sqlJoinCoordinates('msvlat', 'msvlong', 'mdlat', 'mdlong');
-			$this->options['wheres']['proximity'] = "(((acos(sin(($this->latitude*pi()/180))*sin((msvlat.string*pi()/180))+cos(($this->latitude*pi()/180))*cos((msvlat.string*pi()/180))*cos((($this->longitude-msvlong.string)*pi()/180)))))*180/pi())*60*1.1515*1.60934 <= {$this->radius}";
+			$this->sqlJoinCoordinates('mdlat', 'mdlong');
+			$this->options['wheres']['proximity'] = "(((acos(sin(($this->latitude*pi()/180))*sin((mdlat.value*pi()/180))+cos(($this->latitude*pi()/180))*cos((mdlat.value*pi()/180))*cos((($this->longitude-mdlong.value)*pi()/180)))))*180/pi())*60*1.1515*1.60934 <= {$this->radius}";
 		}
 
 		return $this;
@@ -119,27 +119,20 @@ class ElggMapQuery extends ElggListQuery {
 
 	/**
 	 * Join coordinates metadata
-	 * @param string $msvlat	Join name for latitude metadata value
-	 * @param string $msvlong	Join name for longitude metadata value
-	 * @param string $mdlat		Join name for latitude metadata row
-	 * @param string $mdlong	Join name for longitude metadata row
+	 *
+	 * In Elgg 3.x metadata values are stored directly in the metadata table
+	 * (no more metastrings). The metadata table has `name` and `value` columns.
+	 *
+	 * @param string $mdlat  Join alias for latitude metadata row
+	 * @param string $mdlong Join alias for longitude metadata row
 	 * @return ElggMap
 	 */
-	private function sqlJoinCoordinates($msvlat = 'msvlat', $msvlong = 'msvlong', $mdlat = 'mdlat', $mdlong = 'mdlong') {
+	private function sqlJoinCoordinates($mdlat = 'mdlat', $mdlong = 'mdlong') {
 
 		$dbprefix = elgg_get_config('dbprefix');
-		$map = ElggListQuery::getMetaMap(array('geo:lat', 'geo:long'));
 
-		$msvlat = sanitize_string($msvlat);
-		$msvlong = sanitize_string($msvlong);
-		$mdlat = sanitize_string($mdlat);
-		$mdlong = sanitize_string($mdlong);
-
-		$this->options['joins'][$mdlat] = "JOIN {$dbprefix}metadata $mdlat on e.guid = $mdlat.entity_guid AND $mdlat.name_id = {$map['geo:lat']}";
-		$this->options['joins'][$msvlat] = "JOIN {$dbprefix}metastrings $msvlat on $mdlat.value_id = $msvlat.id";
-
-		$this->options['joins'][$mdlong] = "JOIN {$dbprefix}metadata $mdlong on e.guid = $mdlong.entity_guid AND $mdlong.name_id = {$map['geo:long']}";
-		$this->options['joins'][$msvlong] = "JOIN {$dbprefix}metastrings $msvlong ON $mdlong.value_id = $msvlong.id";
+		$this->options['joins'][$mdlat] = "JOIN {$dbprefix}metadata $mdlat ON e.guid = $mdlat.entity_guid AND $mdlat.name = 'geo:lat'";
+		$this->options['joins'][$mdlong] = "JOIN {$dbprefix}metadata $mdlong ON e.guid = $mdlong.entity_guid AND $mdlong.name = 'geo:long'";
 
 		return $this;
 	}
@@ -152,7 +145,6 @@ class ElggMapQuery extends ElggListQuery {
 	private function sqlJoinSpatial($eg = 'eg') {
 
 		$dbprefix = elgg_get_config('dbprefix');
-		$eg = sanitize_string($eg);
 		$this->options['joins'][$eg] = "JOIN {$dbprefix}entity_geometry $eg ON e.guid = $eg.entity_guid";
 		return $this;
 	}
@@ -181,8 +173,8 @@ class ElggMapQuery extends ElggListQuery {
  */
 function mappable_entity_row_to_elggstar($row) {
 
-	$entity = entity_row_to_elggstar($row);
-	if (elgg_instanceof($entity)) {
+	$entity = _elgg_services()->entityTable->rowToElggStar($row);
+	if ($entity instanceof \ElggEntity) {
 		$entity->setVolatileData('select:proximity', (float) $row->proximity);
 	}
 	return $entity;

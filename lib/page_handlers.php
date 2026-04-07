@@ -84,7 +84,7 @@ function page_handler($page, $handler) {
 			break;
 	}
 
-	$layout = (elgg_is_xhr()) ? 'maps_ajax' : 'content';
+	$layout = (elgg_is_xhr()) ? 'maps_ajax' : 'default';
 	$pageshell = (elgg_is_xhr()) ? 'maps_ajax' : 'default';
 	$layout_vars = array(
 		'title' => $title,

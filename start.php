@@ -74,7 +74,10 @@ function init_groups()
     $group_maps = get_group_search_maps(new ElggGroup());
     if (is_array($group_maps)) {
         foreach ($group_maps as $id => $gm) {
-            add_group_tool_option("maps_{$id}", elgg_echo("maps:groupoption:{$id}:enable"), true);
+            elgg()->group_tools->register("maps_{$id}", [
+                'label' => elgg_echo("maps:groupoption:{$id}:enable"),
+                'default_on' => true,
+            ]);
             //elgg_extend_view('groups/tool_latest', "framework/maps/group/$id");
         }
     }
