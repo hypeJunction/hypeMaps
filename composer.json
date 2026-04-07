@@ -27,6 +27,10 @@
 		"psr-0": {
 			"": "classes/"
 		}
+	},
+	"config": {
+		"allow-plugins": {
+			"composer/installers": true
+		}
 	}
 }
-
