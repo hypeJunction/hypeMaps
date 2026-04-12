@@ -101,7 +101,7 @@ echo '<label>' . elgg_echo('maps:settings:params[mapptable_subtypes]') . '</labe
 echo '<div class="elgg-text-help">' . elgg_echo('maps:settings:hint:mappable_subtypes') . '</div>';
 echo elgg_view('input/checkboxes', array(
 	'name' => 'params[mappable_subtypes]',
-	'value' => ($entity->mappable_subtypes) ? unserialize($entity->mappable_subtypes) : array(),
+	'value' => hypeJunction\Maps\get_mappable_object_subtypes(),
 	'options' => $subtype_options,
 	'multiple' => true,
 ));

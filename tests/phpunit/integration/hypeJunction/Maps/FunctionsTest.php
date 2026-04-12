@@ -70,38 +70,50 @@ class FunctionsTest extends IntegrationTestCase {
         $this->assertIsArray($subtypes);
     }
 
-    /**
-     * SECURITY REGRESSION: unserialize() on plugin settings.
-     *
-     * get_mappable_object_subtypes() calls unserialize() on the 'mappable_subtypes'
-     * plugin setting. If a (admin) writer can place a serialized object with a
-     * gadget chain (e.g. __destruct / __wakeup), this would be an RCE sink.
-     *
-     * This test locks in the CURRENT behavior (unserialize is called) so that
-     * migration MUST replace it with json_decode or a safe-list of classes.
-     * Post-migration the test should be updated to assert no unserialize().
-     */
-    public function testUnserializeOnMappableSubtypesIsInvokedLegacy(): void {
+    public function testMappableSubtypesReadsJsonEncoded(): void {
         $plugin = \elgg_get_plugin_from_id('hypeMaps');
         if (!$plugin) {
             $this->markTestSkipped('hypeMaps plugin not installed');
         }
         $original = $plugin->getSetting('mappable_subtypes');
         try {
-            // Write a serialized ARRAY (safe payload — no objects)
-            $plugin->setSetting('mappable_subtypes', serialize(['blog', 'file']));
-            $result = get_mappable_object_subtypes();
-            $this->assertIsArray($result);
-            $this->assertSame(['blog', 'file'], $result);
+            $plugin->setSetting('mappable_subtypes', json_encode(['blog', 'file']));
+            $this->assertSame(['blog', 'file'], get_mappable_object_subtypes());
         } finally {
             $plugin->setSetting('mappable_subtypes', (string) $original);
         }
     }
 
-    /**
-     * Same pattern for markertypes setting — also passes through unserialize().
-     */
-    public function testUnserializeOnMarkertypesIsInvokedLegacy(): void {
+    public function testMappableSubtypesReadsLegacySerializedForBackwardCompat(): void {
+        $plugin = \elgg_get_plugin_from_id('hypeMaps');
+        if (!$plugin) {
+            $this->markTestSkipped('hypeMaps plugin not installed');
+        }
+        $original = $plugin->getSetting('mappable_subtypes');
+        try {
+            $plugin->setSetting('mappable_subtypes', serialize(['blog', 'file']));
+            $this->assertSame(['blog', 'file'], get_mappable_object_subtypes());
+        } finally {
+            $plugin->setSetting('mappable_subtypes', (string) $original);
+        }
+    }
+
+    public function testMarkertypesReadsJsonEncoded(): void {
+        $plugin = \elgg_get_plugin_from_id('hypeMaps');
+        if (!$plugin) {
+            $this->markTestSkipped('hypeMaps plugin not installed');
+        }
+        $original = $plugin->getSetting('markertypes');
+        try {
+            $plugin->setSetting('markertypes', json_encode(['user', 'group']));
+            $options = get_marker_types_options();
+            $this->assertIsArray($options);
+        } finally {
+            $plugin->setSetting('markertypes', (string) $original);
+        }
+    }
+
+    public function testMarkertypesReadsLegacySerializedForBackwardCompat(): void {
         $plugin = \elgg_get_plugin_from_id('hypeMaps');
         if (!$plugin) {
             $this->markTestSkipped('hypeMaps plugin not installed');

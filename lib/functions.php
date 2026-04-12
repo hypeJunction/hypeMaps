@@ -72,10 +72,11 @@ function get_mappable_object_subtypes()
         return array();
     }
     $decoded = json_decode($mappable_subtypes, true);
-    if (is_array($decoded)) {
-        return $decoded;
+    if (!is_array($decoded)) {
+        // Backward compat with serialize()d settings written by older versions
+        $decoded = @unserialize($mappable_subtypes, ['allowed_classes' => false]);
     }
-    return (array) @unserialize($mappable_subtypes, ['allowed_classes' => false]);
+    return is_array($decoded) ? $decoded : array();
 }
 /**
  * Get path location of marker icons
@@ -112,7 +113,11 @@ function get_marker_types_options()
     $markertypes = elgg_get_plugin_setting('markertypes', PLUGIN_ID);
     if ($markertypes) {
         $decoded = json_decode($markertypes, true);
-        $markertypes = is_array($decoded) ? $decoded : (array) @unserialize($markertypes, ['allowed_classes' => false]);
+        if (!is_array($decoded)) {
+            // Backward compat with serialize()d settings written by older versions
+            $decoded = @unserialize($markertypes, ['allowed_classes' => false]);
+        }
+        $markertypes = is_array($decoded) ? $decoded : get_marker_types_defaults();
     } else {
         $markertypes = get_marker_types_defaults();
     }

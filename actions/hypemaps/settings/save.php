@@ -15,7 +15,7 @@ $result = false;
 
 foreach ($params as $k => $v) {
 	if (is_array($v)) {
-		$v = serialize($v);
+		$v = json_encode($v);
 	}
 	$result = $plugin->setSetting($k, $v);
 	if (!$result) {
