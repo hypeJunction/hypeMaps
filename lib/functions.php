@@ -68,7 +68,14 @@ function get_mappable_type_subtype_pairs()
 function get_mappable_object_subtypes()
 {
     $mappable_subtypes = elgg_get_plugin_setting('mappable_subtypes', PLUGIN_ID);
-    return $mappable_subtypes ? unserialize($mappable_subtypes) : array();
+    if (!$mappable_subtypes) {
+        return array();
+    }
+    $decoded = json_decode($mappable_subtypes, true);
+    if (is_array($decoded)) {
+        return $decoded;
+    }
+    return (array) @unserialize($mappable_subtypes, ['allowed_classes' => false]);
 }
 /**
  * Get path location of marker icons
@@ -104,7 +111,8 @@ function get_marker_types_options()
 {
     $markertypes = elgg_get_plugin_setting('markertypes', PLUGIN_ID);
     if ($markertypes) {
-        $markertypes = unserialize($markertypes);
+        $decoded = json_decode($markertypes, true);
+        $markertypes = is_array($decoded) ? $decoded : (array) @unserialize($markertypes, ['allowed_classes' => false]);
     } else {
         $markertypes = get_marker_types_defaults();
     }

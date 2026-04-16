@@ -32,4 +32,7 @@ return [
 			'access' => 'public',
 		],
 	],
+	'upgrades' => [
+		\hypeJunction\Maps\Upgrades\EncodeSettingsAsJson::class,
+	],
 ];
