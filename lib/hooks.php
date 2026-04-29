@@ -2,13 +2,13 @@
 
 namespace hypeJunction\Maps;
 
-use Elgg\Hook;
+use Elgg\Event;
 
 /**
- * @param Hook $hook
+ * @param Event $hook
  * @return mixed
  */
-function get_marker_url(Hook $hook) {
+function get_marker_url(Event $hook) {
 	$entity = $hook->getEntityParam();
 	$params = $hook->getParams();
 	$size = elgg_extract('size', $params);
@@ -40,10 +40,10 @@ function get_marker_url(Hook $hook) {
 }
 
 /**
- * @param Hook $hook
+ * @param Event $hook
  * @return mixed
  */
-function list_type_map_view(Hook $hook) {
+function list_type_map_view(Event $hook) {
 	$vars = $hook->getParam('vars', []);
 	$list_type = elgg_extract('list_type', $vars, 'list');
 
@@ -56,10 +56,10 @@ function list_type_map_view(Hook $hook) {
 }
 
 /**
- * @param Hook $hook
+ * @param Event $hook
  * @return mixed
  */
-function ajax_list_view(Hook $hook) {
+function ajax_list_view(Event $hook) {
 	static $maps_ajax_output;
 
 	if (!elgg_is_xhr() || !get_input('mapbox')) {
@@ -82,10 +82,10 @@ function ajax_list_view(Hook $hook) {
 }
 
 /**
- * @param Hook $hook
+ * @param Event $hook
  * @return mixed
  */
-function setup_site_search_maps(Hook $hook) {
+function setup_site_search_maps(Event $hook) {
 	$return = $hook->getValue();
 	if (!is_array($return)) {
 		$return = [];
@@ -111,10 +111,10 @@ function setup_site_search_maps(Hook $hook) {
 }
 
 /**
- * @param Hook $hook
+ * @param Event $hook
  * @return mixed
  */
-function setup_group_search_maps(Hook $hook) {
+function setup_group_search_maps(Event $hook) {
 	$return = $hook->getValue();
 	if (!is_array($return)) {
 		$return = [];

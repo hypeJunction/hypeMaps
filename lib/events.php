@@ -2,13 +2,13 @@
 
 namespace hypeJunction\Maps;
 
-use Elgg\Hook;
+use Elgg\Event;
 
 /**
- * @param Hook $hook
+ * @param Event $hook
  * @return mixed
  */
-function register_site_menu(Hook $hook) {
+function register_site_menu(Event $hook) {
 	$return = $hook->getValue();
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'maps',
@@ -19,10 +19,10 @@ function register_site_menu(Hook $hook) {
 }
 
 /**
- * @param Hook $hook
+ * @param Event $hook
  * @return mixed
  */
-function register_owner_block_menu(Hook $hook) {
+function register_owner_block_menu(Event $hook) {
 	$page_owner = $hook->getEntityParam();
 	if (!$page_owner instanceof \ElggGroup) {
 		return;

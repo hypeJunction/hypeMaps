@@ -8,7 +8,7 @@ namespace hypeJunction\Maps;
  */
 function get_site_search_maps()
 {
-    $maps = elgg_trigger_plugin_hook('search:site', 'maps', null, array());
+    $maps = elgg_trigger_event_results('search:site', 'maps', null, array());
     if (!is_array($maps)) {
         return array();
     }
@@ -32,7 +32,7 @@ function get_group_search_maps($group = null)
     if (!$group instanceof \ElggGroup) {
         $group = new \ElggGroup();
     }
-    $maps = elgg_trigger_plugin_hook('search:group', 'maps', array('entity' => $group), array());
+    $maps = elgg_trigger_event_results('search:group', 'maps', array('entity' => $group), array());
     if (!is_array($maps)) {
         return array();
     }
@@ -125,7 +125,7 @@ function get_marker_types_options()
     foreach ($markertypes as $type) {
         $options_values[$type] = elgg_echo("maps:marker:type:{$type}");
     }
-    return elgg_trigger_plugin_hook('markers:types', 'maps', null, $options_values);
+    return elgg_trigger_event_results('markers:types', 'maps', null, $options_values);
 }
 /**
  * Get latest known location
@@ -151,7 +151,7 @@ function set_geopositioning($location = '', $latitude = 0, $longitude = 0)
 {
     $lat = (float) $latitude;
     $long = (float) $longitude;
-    $latlong = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $location), false);
+    $latlong = elgg_trigger_event_results('geocode', 'location', array('location' => $location), false);
     if ($latlong) {
         $latitude = elgg_extract('lat', $latlong);
         $longitude = elgg_extract('long', $latlong);

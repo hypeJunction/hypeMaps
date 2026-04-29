@@ -1,6 +1,6 @@
 <?php
 
-$english = array(
+return array(
 	/**
 	 *  UI elements
 	 */
@@ -186,5 +186,3 @@ $english = array(
 	'maps:widget:staticmap:zoom' => 'Zoom',
 	'maps:widget:staticmap:pin_color' => 'Pin color',
 );
-
-add_translation("en", $english);

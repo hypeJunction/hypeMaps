@@ -3,7 +3,7 @@
 return [
 	'plugin' => [
 		'name' => 'hypeMaps',
-		'version' => '4.0.0',
+		'version' => '5.0.0',
 	],
 	'bootstrap' => \hypeJunction\Maps\Bootstrap::class,
 	'routes' => [
@@ -33,7 +33,7 @@ return [
 			'access' => 'public',
 		],
 	],
-	'hooks' => [
+	'events' => [
 		'search:site' => [
 			'maps' => [
 				'hypeJunction\Maps\setup_site_search_maps' => [],
