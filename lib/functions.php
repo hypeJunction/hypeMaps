@@ -155,12 +155,12 @@ function set_geopositioning($location = '', $latitude = 0, $longitude = 0)
     if ($latlong) {
         $latitude = elgg_extract('lat', $latlong);
         $longitude = elgg_extract('long', $latlong);
-    } else if ($location && $latitude && $longitude) {
-        $prefix = elgg_get_config('dbprefix');
+    } elseif ($location && $latitude && $longitude) {
+        $prefix = elgg()->db->getTablePrefix();
         $query = "INSERT INTO {$prefix}geocode_cache
                 (location, lat, `long`) VALUES (:location, :lat, :long)
                 ON DUPLICATE KEY UPDATE lat=:lat2, `long`=:long2";
-        insert_data($query, [
+        elgg()->db->getConnection('write')->executeStatement($query, [
             ':location' => $location,
             ':lat' => $lat,
             ':long' => $long,

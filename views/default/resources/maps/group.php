@@ -11,12 +11,12 @@ $group_guid = (int) elgg_extract('group_guid', $vars);
 $group = get_entity($group_guid);
 
 if (!$group instanceof \ElggGroup) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new \Elgg\Exceptions\Http\EntityNotFoundException();
 }
 
 $maps = hypeJunction\Maps\get_group_search_maps($group);
 if (empty($maps)) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new \Elgg\Exceptions\Http\EntityNotFoundException();
 }
 
 $ids = array_keys($maps);
@@ -27,7 +27,7 @@ if (!$id) {
 
 $map = elgg_extract($id, $maps);
 if (!$map) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new \Elgg\Exceptions\Http\EntityNotFoundException();
 }
 
 $title = elgg_extract('title', $map, elgg_echo('maps:untitled'));
@@ -60,7 +60,7 @@ $layout_vars = elgg_trigger_plugin_hook('layout', 'maps', [
 ], $layout_vars);
 
 if (empty($layout_vars['content'])) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new \Elgg\Exceptions\Http\EntityNotFoundException();
 }
 
 $layout_name = elgg_is_xhr() ? 'maps_ajax' : 'default';

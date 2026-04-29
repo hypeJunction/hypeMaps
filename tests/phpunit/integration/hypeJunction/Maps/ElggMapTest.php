@@ -22,6 +22,9 @@ class ElggMapTest extends IntegrationTestCase {
 
     public function down() {}
 
+    /**
+     * @return void
+     */
     public function testGetKilometersMetricPassThrough(): void {
         // In SI system, value is returned as-is
         if (!defined('HYPEMAPS_METRIC_SYSTEM') || HYPEMAPS_METRIC_SYSTEM !== 'US') {
@@ -32,12 +35,18 @@ class ElggMapTest extends IntegrationTestCase {
         }
     }
 
+    /**
+     * @return void
+     */
     public function testGetProximityReturnsString(): void {
         $result = ElggMap::getProximity(5.0);
         $this->assertIsString($result);
         $this->assertNotEmpty($result);
     }
 
+    /**
+     * @return void
+     */
     public function testConstructorInstantiatesMap(): void {
         try {
             $map = new ElggMap(['types' => 'user']);
@@ -49,6 +58,9 @@ class ElggMapTest extends IntegrationTestCase {
         }
     }
 
+    /**
+     * @return void
+     */
     public function testGetMapboxAttributesReturnsArray(): void {
         try {
             $map = new ElggMap(['types' => 'user']);

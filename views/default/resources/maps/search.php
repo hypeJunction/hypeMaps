@@ -10,7 +10,7 @@ $id = elgg_extract('id', $vars);
 
 $maps = hypeJunction\Maps\get_site_search_maps();
 if (empty($maps)) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new \Elgg\Exceptions\Http\EntityNotFoundException();
 }
 
 $ids = array_keys($maps);
@@ -20,7 +20,7 @@ if (!$id) {
 
 $map = elgg_extract($id, $maps);
 if (!$map) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new \Elgg\Exceptions\Http\EntityNotFoundException();
 }
 
 $map['filter_context'] = 'search';
@@ -57,7 +57,7 @@ $layout_vars = elgg_trigger_plugin_hook('layout', 'maps', [
 ], $layout_vars);
 
 if (empty($layout_vars['content'])) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new \Elgg\Exceptions\Http\EntityNotFoundException();
 }
 
 $layout_name = elgg_is_xhr() ? 'maps_ajax' : 'default';

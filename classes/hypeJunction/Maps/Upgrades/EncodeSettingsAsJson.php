@@ -17,23 +17,40 @@ class EncodeSettingsAsJson implements Batch {
 
 	private const SETTINGS = ['mappable_subtypes', 'markertypes'];
 
-	public function getVersion(): int {
+	/**
+     * @return int
+     */
+    public function getVersion(): int {
 		return 2026041200;
 	}
 
-	public function shouldBeSkipped(): bool {
+	/**
+     * @return bool
+     */
+    public function shouldBeSkipped(): bool {
 		return false;
 	}
 
-	public function needsIncrementOffset(): bool {
+	/**
+     * @return bool
+     */
+    public function needsIncrementOffset(): bool {
 		return false;
 	}
 
-	public function countItems(): int {
+	/**
+     * @return int
+     */
+    public function countItems(): int {
 		return Batch::UNKNOWN_COUNT;
 	}
 
-	public function run(Result $result, $offset): Result {
+	/**
+     * @param Result $result
+     * @param mixed $offset
+     * @return Result
+     */
+    public function run(Result $result, $offset): Result {
 		$plugin = elgg_get_plugin_from_id('hypemaps');
 		if (!$plugin) {
 			$result->markComplete();

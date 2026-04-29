@@ -22,11 +22,17 @@ class FunctionsTest extends IntegrationTestCase {
 
     public function down() {}
 
+    /**
+     * @return void
+     */
     public function testGetSiteSearchMapsReturnsArray(): void {
         $maps = get_site_search_maps();
         $this->assertIsArray($maps);
     }
 
+    /**
+     * @return void
+     */
     public function testGetSiteSearchMapsSortedByPriority(): void {
         // Register a hook that returns two maps with distinct priorities
         $handler = function (\Elgg\Hook $hook) {
@@ -49,27 +55,42 @@ class FunctionsTest extends IntegrationTestCase {
         $this->assertLessThan($lowIdx, $highIdx, 'Lower priority value sorted first');
     }
 
+    /**
+     * @return void
+     */
     public function testGetGroupSearchMapsReturnsArrayForNonGroup(): void {
         $maps = get_group_search_maps(null);
         $this->assertIsArray($maps);
     }
 
+    /**
+     * @return void
+     */
     public function testGetGroupSearchMapsWithGroup(): void {
         $group = $this->createGroup();
         $maps = get_group_search_maps($group);
         $this->assertIsArray($maps);
     }
 
+    /**
+     * @return void
+     */
     public function testGetMappableTypeSubtypePairsReturnsArray(): void {
         $pairs = get_mappable_type_subtype_pairs();
         $this->assertIsArray($pairs);
     }
 
+    /**
+     * @return void
+     */
     public function testGetMappableObjectSubtypesReturnsArray(): void {
         $subtypes = get_mappable_object_subtypes();
         $this->assertIsArray($subtypes);
     }
 
+    /**
+     * @return void
+     */
     public function testMappableSubtypesReadsJsonEncoded(): void {
         $plugin = \elgg_get_plugin_from_id('hypeMaps');
         if (!$plugin) {
@@ -84,6 +105,9 @@ class FunctionsTest extends IntegrationTestCase {
         }
     }
 
+    /**
+     * @return void
+     */
     public function testMappableSubtypesReadsLegacySerializedForBackwardCompat(): void {
         $plugin = \elgg_get_plugin_from_id('hypeMaps');
         if (!$plugin) {
@@ -98,6 +122,9 @@ class FunctionsTest extends IntegrationTestCase {
         }
     }
 
+    /**
+     * @return void
+     */
     public function testMarkertypesReadsJsonEncoded(): void {
         $plugin = \elgg_get_plugin_from_id('hypeMaps');
         if (!$plugin) {
@@ -113,6 +140,9 @@ class FunctionsTest extends IntegrationTestCase {
         }
     }
 
+    /**
+     * @return void
+     */
     public function testMarkertypesReadsLegacySerializedForBackwardCompat(): void {
         $plugin = \elgg_get_plugin_from_id('hypeMaps');
         if (!$plugin) {
@@ -128,23 +158,35 @@ class FunctionsTest extends IntegrationTestCase {
         }
     }
 
+    /**
+     * @return void
+     */
     public function testGetMarkerIconsPathReturnsFilesystemPath(): void {
         $path = get_marker_icons_path(false);
         $this->assertIsString($path);
         $this->assertNotEmpty($path);
     }
 
+    /**
+     * @return void
+     */
     public function testGetMarkerIconsPathReturnsUrl(): void {
         $url = get_marker_icons_path(true);
         $this->assertIsString($url);
         $this->assertNotEmpty($url);
     }
 
+    /**
+     * @return void
+     */
     public function testGetMarkerTypesDefaultsReturnsArray(): void {
         $defaults = get_marker_types_defaults();
         $this->assertIsArray($defaults);
     }
 
+    /**
+     * @return void
+     */
     public function testGeopositioningDefaultsWhenUnset(): void {
         unset($_SESSION['geopositioning']);
         $pos = get_geopositioning();
@@ -157,6 +199,9 @@ class FunctionsTest extends IntegrationTestCase {
         $this->assertSame(0, $pos['longitude']);
     }
 
+    /**
+     * @return void
+     */
     public function testSetGeopositioningStoresInSession(): void {
         unset($_SESSION['geopositioning']);
         set_geopositioning('Berlin', 52.52, 13.405);
@@ -166,6 +211,9 @@ class FunctionsTest extends IntegrationTestCase {
         $this->assertSame(13.405, $_SESSION['geopositioning']['longitude']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetGeopositioningReturnsStoredValue(): void {
         $_SESSION['geopositioning'] = ['location' => 'Paris', 'latitude' => 48.85, 'longitude' => 2.35];
         $pos = get_geopositioning();

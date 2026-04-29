@@ -168,7 +168,7 @@ class ElggMap extends ElggList {
 			'data-guid' => $entity->guid,
 			'data-url' => $entity->getURL(),
 			'data-title' => (elgg_instanceof($entity, 'object')) ? $entity->title : $entity->name,
-			'data-location' => $entity->getLocation(),
+			'data-location' => $entity->location,
 			'data-lat' => $latitude,
 			'data-long' => $longitude,
 			'data-pin' => ($mappable) ? $entity->getIconURL('marker') : null,
@@ -202,7 +202,7 @@ class ElggMap extends ElggList {
 					$entity = $user;
 				}
 
-				$location = $entity->getLocation();
+				$location = $entity->location;
 			}
 		}
 

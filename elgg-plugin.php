@@ -3,8 +3,9 @@
 return [
 	'plugin' => [
 		'name' => 'hypeMaps',
-		'version' => '3.0.0',
+		'version' => '4.0.0',
 	],
+	'bootstrap' => \hypeJunction\Maps\Bootstrap::class,
 	'routes' => [
 		'default:maps:search' => [
 			'path' => '/maps/search/{id?}',
@@ -30,6 +31,56 @@ return [
 		],
 		'maps/geopositioning/update' => [
 			'access' => 'public',
+		],
+	],
+	'hooks' => [
+		'search:site' => [
+			'maps' => [
+				'hypeJunction\Maps\setup_site_search_maps' => [],
+			],
+		],
+		'search:group' => [
+			'maps' => [
+				'hypeJunction\Maps\setup_group_search_maps' => [],
+			],
+		],
+		'view' => [
+			'page/components/list' => [
+				'hypeJunction\Maps\list_type_map_view' => [],
+			],
+			'page/components/gallery' => [
+				'hypeJunction\Maps\list_type_map_view' => [],
+			],
+			'all' => [
+				'hypeJunction\Maps\ajax_list_view' => [],
+			],
+		],
+		'entity:icon:url' => [
+			'user' => [
+				'hypeJunction\Maps\get_marker_url' => ['priority' => 600],
+			],
+			'object' => [
+				'hypeJunction\Maps\get_marker_url' => ['priority' => 600],
+			],
+			'group' => [
+				'hypeJunction\Maps\get_marker_url' => ['priority' => 600],
+			],
+		],
+		'register:menu:site' => [
+			'default' => [
+				'hypeJunction\Maps\register_site_menu' => [],
+			],
+		],
+		'register:menu:owner_block' => [
+			'default' => [
+				'hypeJunction\Maps\register_owner_block_menu' => [],
+			],
+		],
+	],
+	'widgets' => [
+		'staticmap' => [
+			'context' => ['all'],
+			'multiple' => true,
 		],
 	],
 	'upgrades' => [

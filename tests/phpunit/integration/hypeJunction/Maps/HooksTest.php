@@ -22,6 +22,9 @@ class HooksTest extends IntegrationTestCase {
 
     public function down() {}
 
+    /**
+     * @return void
+     */
     public function testGetMarkerUrlReturnsOriginalWhenNotMarkerSize(): void {
         $user = $this->createUser();
         $originalUrl = 'http://example.com/original.png';
@@ -32,6 +35,9 @@ class HooksTest extends IntegrationTestCase {
         $this->assertSame($originalUrl, $result);
     }
 
+    /**
+     * @return void
+     */
     public function testGetMarkerUrlReturnsIconUrlForMarkerSize(): void {
         $user = $this->createUser();
         $result = get_marker_url('entity:icon:url', 'user', 'original', [
@@ -42,6 +48,9 @@ class HooksTest extends IntegrationTestCase {
         $this->assertStringContainsString('.png', $result);
     }
 
+    /**
+     * @return void
+     */
     public function testGetMarkerUrlRespectsMapiconOverride(): void {
         $user = $this->createUser();
         $user->mapicon = 'http://example.com/custom-icon.png';
@@ -52,6 +61,9 @@ class HooksTest extends IntegrationTestCase {
         $this->assertSame('http://example.com/custom-icon.png', $result);
     }
 
+    /**
+     * @return void
+     */
     public function testSetupSiteSearchMapsRespectsSettings(): void {
         $plugin = \elgg_get_plugin_from_id('hypeMaps');
         if (!$plugin) {
@@ -80,12 +92,18 @@ class HooksTest extends IntegrationTestCase {
         }
     }
 
+    /**
+     * @return void
+     */
     public function testSetupGroupSearchMapsReturnsUnchangedForNonGroup(): void {
         $initial = ['existing' => 'value'];
         $result = setup_group_search_maps('search:group', 'maps', $initial, ['entity' => null]);
         $this->assertSame($initial, $result);
     }
 
+    /**
+     * @return void
+     */
     public function testSetupGroupSearchMapsWithGroup(): void {
         $plugin = \elgg_get_plugin_from_id('hypeMaps');
         if (!$plugin) {
@@ -105,6 +123,9 @@ class HooksTest extends IntegrationTestCase {
         }
     }
 
+    /**
+     * @return void
+     */
     public function testAjaxListViewReturnsOriginalWhenNotXhr(): void {
         // Not in xhr context — should return original
         $result = ajax_list_view('view', 'page/components/list', 'original', ['vars' => []]);

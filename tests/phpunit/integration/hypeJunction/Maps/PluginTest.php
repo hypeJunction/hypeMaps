@@ -14,6 +14,7 @@ use Elgg\IntegrationTestCase;
  */
 class PluginTest extends IntegrationTestCase {
 
+    /** @var bool */
     private static bool $booted = false;
 
     public function up() {
@@ -34,17 +35,26 @@ class PluginTest extends IntegrationTestCase {
 
     public function down() {}
 
+    /**
+     * @return void
+     */
     public function testPluginConstantsDefined(): void {
         $this->assertSame('hypeMaps', PLUGIN_ID);
         $this->assertSame('maps', PAGEHANDLER);
     }
 
+    /**
+     * @return void
+     */
     public function testPluginIsRegistered(): void {
         $plugin = \elgg_get_plugin_from_id('hypeMaps');
         $this->assertNotNull($plugin);
         $this->assertInstanceOf(\ElggPlugin::class, $plugin);
     }
 
+    /**
+     * @return void
+     */
     public function testPageHandlerRegistered(): void {
         // In 3.x/4.x, we can check via the services
         $handlers = _elgg_services()->routes;
@@ -54,12 +64,18 @@ class PluginTest extends IntegrationTestCase {
         $this->assertStringContainsString('maps', $url);
     }
 
+    /**
+     * @return void
+     */
     public function testActionsRegistered(): void {
         $actions = _elgg_services()->actions;
         $this->assertTrue($actions->exists('hypeMaps/settings/save'));
         $this->assertTrue($actions->exists('maps/geopositioning/update'));
     }
 
+    /**
+     * @return void
+     */
     public function testWidgetRegistered(): void {
         $widgets = \elgg_get_widget_types('all');
         $this->assertArrayHasKey('staticmap', $widgets);
