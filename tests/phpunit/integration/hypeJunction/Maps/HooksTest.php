@@ -2,11 +2,11 @@
 
 namespace hypeJunction\Maps;
 
-use Elgg\HooksRegistrationService\Hook;
+use Elgg\Event;
 use Elgg\IntegrationTestCase;
 
 /**
- * Tests for lib/hooks.php hook handlers.
+ * Tests for lib/hooks.php event handlers.
  */
 class HooksTest extends IntegrationTestCase {
 
@@ -20,8 +20,8 @@ class HooksTest extends IntegrationTestCase {
 
     public function down() {}
 
-    private function makeHook(string $name, string $type, $value = null, array $params = []): Hook {
-        return new Hook(elgg(), $name, $type, $value, $params);
+    private function makeHook(string $name, string $type, $value = null, array $params = []): Event {
+        return new Event(elgg(), $name, $type, $value, $params);
     }
 
     /**

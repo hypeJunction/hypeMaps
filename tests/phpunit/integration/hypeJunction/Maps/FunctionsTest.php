@@ -34,17 +34,17 @@ class FunctionsTest extends IntegrationTestCase {
      */
     public function testGetSiteSearchMapsSortedByPriority(): void {
         // Register a hook that returns two maps with distinct priorities
-        $handler = function (\Elgg\Hook $hook) {
+        $handler = function (\Elgg\Event $hook) {
             $return = $hook->getValue();
             $return['high'] = ['title' => 'High', 'priority' => 100];
             $return['low'] = ['title' => 'Low', 'priority' => 999];
             return $return;
         };
-        \elgg_register_plugin_hook_handler('search:site', 'maps', $handler);
+        \elgg_register_event_handler('search:site', 'maps', $handler);
 
         $maps = get_site_search_maps();
 
-        \elgg_unregister_plugin_hook_handler('search:site', 'maps', $handler);
+        \elgg_unregister_event_handler('search:site', 'maps', $handler);
 
         $keys = array_keys($maps);
         $highIdx = array_search('high', $keys, true);

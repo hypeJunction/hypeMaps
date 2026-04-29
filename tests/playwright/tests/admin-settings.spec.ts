@@ -12,7 +12,7 @@ import { loginAs } from '../helpers/elgg';
 test.describe('hypeMaps admin settings', () => {
   test('admin plugin settings page renders', async ({ page }) => {
     await loginAs(page, 'admin');
-    const response = await page.goto('/admin/plugin_settings/hypeMaps');
+    const response = await page.goto('/admin/plugin_settings/hypemaps');
     const status = response?.status() ?? 0;
     expect(status).toBeLessThan(500);
 
