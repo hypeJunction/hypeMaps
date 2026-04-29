@@ -1,4 +1,4 @@
-# hypeMaps — Architecture (Elgg 4.x)
+# hypeMaps — Architecture (Elgg 5.x)
 
 ## Overview
 
@@ -8,7 +8,7 @@ Elgg plugin that renders interactive Google Maps and proximity-search for entiti
 
 | File | Purpose |
 |------|---------|
-| `elgg-plugin.php` | Declarative config: bootstrap, routes, actions, hooks, widgets, upgrades |
+| `elgg-plugin.php` | Declarative config: bootstrap, routes, actions, events, widgets, upgrades |
 | `classes/hypeJunction/Maps/Bootstrap.php` | `load()` defines constants + requires lib files; `init()` registers JS/CSS/group tools; `activate()` creates DB table |
 
 ## Key Classes
@@ -28,10 +28,10 @@ Elgg plugin that renders interactive Google Maps and proximity-search for entiti
 | `HYPEMAPS_SEARCH_RADIUS` | `0` |
 | `HYPEMAPS_RELEASE` | Unix timestamp of 2.x release |
 
-## Registered Hooks (elgg-plugin.php)
+## Registered Events (elgg-plugin.php)
 
-| Hook | Type | Handler |
-|------|------|---------|
+| Event | Type | Handler |
+|-------|------|---------|
 | `search:site` | `maps` | `setup_site_search_maps` — builds per-type map search config |
 | `search:group` | `maps` | `setup_group_search_maps` — builds group-scoped search maps |
 | `view` | `page/components/list`, `page/components/gallery` | `list_type_map_view` — swaps list for mapbox view when `list_type=mapbox` |
@@ -104,3 +104,14 @@ Two strategies depending on available tables:
 - `ElggEntity::getLocation()/setLocation()` → `$entity->location` property
 - `forward(REFERER)` → `elgg_ok_response()` / `elgg_error_response()`
 - Plugin ID lowercased: `hypeMaps` → `hypemaps`
+
+## Migration Notes (4.x → 5.x)
+
+- `elgg-plugin.php` `'hooks'` key → `'events'` key
+- All handler signatures: `use Elgg\Hook; Hook $hook` → `use Elgg\Event; Event $hook`
+- `elgg_trigger_plugin_hook()` → `elgg_trigger_event_results()` (4 call sites in functions.php)
+- `add_translation('en', $array)` → `return $array` in language files
+- `Bootstrap::activate()`: backtick `\`long\`` column (MySQL 8.0 reserved word)
+- PHP 8.2: `$owner->location` in widget view guarded with null check
+- Docker: PHP 7.4 → 8.2, MySQL 5.7 → 8.0; Playwright image v1.49 → v1.59.1
+- `elgg_trigger_event_results()` $params must be array (not null) in PHP 8.2

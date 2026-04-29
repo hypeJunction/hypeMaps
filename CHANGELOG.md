@@ -1,3 +1,21 @@
+<a name="5.0.0"></a>
+# [5.0.0] (2026-04-29) — Elgg 5.x Migration
+
+### Breaking Changes
+
+* Requires Elgg ^5.0 and PHP >=8.2 (dropped support for Elgg 4.x)
+* Hook event handlers now use `\Elgg\Event` (was `\Elgg\Hook`)
+* `elgg-plugin.php` uses `events` key (was `hooks`)
+* Language files return array directly (dropped `add_translation()`)
+* Docker stack: PHP 8.2, MySQL 8.0
+
+### Internal
+
+* `elgg_trigger_plugin_hook()` → `elgg_trigger_event_results()` in functions.php
+* `geocode_cache` table: backtick `\`long\`` column for MySQL 8.0 compatibility
+
+---
+
 <a name="4.0.0"></a>
 # [4.0.0] (2026-04-29) — Elgg 4.x Migration
 
