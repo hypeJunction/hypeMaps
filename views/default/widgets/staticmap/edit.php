@@ -4,7 +4,7 @@ $entity = elgg_extract('entity', $vars);
 $owner = $entity->getOwnerEntity();
 
 if (!isset($entity->location)) {
-	$entity->location = $owner->location;
+	$entity->location = $owner ? $owner->location : '';
 }
 
 if (!isset($entity->zoom)) {

@@ -11,9 +11,11 @@ const DB_CONFIG = {
 
 export async function loginAs(page: Page, username: string, password: string = 'testpass123') {
   await page.goto('/login');
-  await page.fill('input[name="username"]', username);
-  await page.fill('input[name="password"]', password);
-  await page.click('button[type="submit"], input[type="submit"]');
+  // Elgg renders two login forms — a hidden header dropdown and a visible sidebar form.
+  // Target the visible sidebar form (.elgg-module-aside) to avoid the hidden dropdown.
+  await page.locator('.elgg-module-aside input[name="username"]').fill(username);
+  await page.locator('.elgg-module-aside input[name="password"]').fill(password);
+  await page.locator('.elgg-module-aside').getByRole('button', { name: /log in/i }).click();
   await page.waitForLoadState('networkidle');
 }
 

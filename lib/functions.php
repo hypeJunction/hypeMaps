@@ -8,7 +8,7 @@ namespace hypeJunction\Maps;
  */
 function get_site_search_maps()
 {
-    $maps = elgg_trigger_event_results('search:site', 'maps', null, array());
+    $maps = elgg_trigger_event_results('search:site', 'maps', [], array());
     if (!is_array($maps)) {
         return array();
     }
@@ -125,7 +125,7 @@ function get_marker_types_options()
     foreach ($markertypes as $type) {
         $options_values[$type] = elgg_echo("maps:marker:type:{$type}");
     }
-    return elgg_trigger_event_results('markers:types', 'maps', null, $options_values);
+    return elgg_trigger_event_results('markers:types', 'maps', [], $options_values);
 }
 /**
  * Get latest known location

@@ -47,6 +47,7 @@ services:
 
   db:
     image: mysql:8.0
+    command: --innodb-use-native-aio=0
     environment:
       MYSQL_DATABASE: elgg
       MYSQL_USER: elgg
@@ -67,7 +68,7 @@ services:
   # /plugin so a destructive in-container command cannot touch anything
   # outside this repo.
   node:
-    image: mcr.microsoft.com/playwright:v1.49.0-noble
+    image: mcr.microsoft.com/playwright:v1.59.1-noble
     volumes:
       - ..:/plugin
     working_dir: /plugin

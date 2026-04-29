@@ -38,7 +38,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 			. "id INT(11) NOT NULL AUTO_INCREMENT,"
 			. "location VARCHAR(255) NOT NULL,"
 			. "lat DECIMAL(10,7) NOT NULL DEFAULT 0,"
-			. "long DECIMAL(10,7) NOT NULL DEFAULT 0,"
+			. "`long` DECIMAL(10,7) NOT NULL DEFAULT 0,"
 			. "PRIMARY KEY (id),"
 			. "UNIQUE KEY location (location)"
 			. ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
