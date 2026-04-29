@@ -1,4 +1,4 @@
-# Per-plugin test stack for Elgg 4.x.
+# Per-plugin test stack for Elgg 5.x.
 #
 # This file lives at <plugin>/docker/docker-compose.yml inside the plugin
 # repository. Each plugin gets its own copy, with its own volumes and
@@ -15,7 +15,7 @@
 #   docker compose -f docker/docker-compose.yml --profile test run --rm node \
 #     sh -c "cd /plugin/tests/playwright && npm ci && npx playwright test"
 
-name: ${PLUGIN_ID:?set PLUGIN_ID in docker/.env}-elgg4
+name: ${PLUGIN_ID:?set PLUGIN_ID in docker/.env}-elgg5
 
 services:
   elgg:
@@ -46,8 +46,7 @@ services:
     entrypoint: /usr/local/bin/elgg-install.sh
 
   db:
-    image: mysql:5.7
-    command: --innodb-use-native-aio=0
+    image: mysql:8.0
     environment:
       MYSQL_DATABASE: elgg
       MYSQL_USER: elgg
