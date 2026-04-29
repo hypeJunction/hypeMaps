@@ -33,10 +33,11 @@ services:
       ELGG_DB_NAME: elgg
       ELGG_DB_USER: elgg
       ELGG_DB_PASS: elgg
-      ELGG_SITE_URL: "http://localhost:${ELGG_PORT:-8480}/"
+      ELGG_SITE_URL: "http://elgg/"
       ELGG_DATA_ROOT: "/var/www/data/"
       ELGG_ADMIN_EMAIL: "admin@example.com"
       ELGG_ADMIN_PASSWORD: "admin12345"
+      ELGG_DB_PREFIX: "elgg_"
     ports:
       - "${ELGG_PORT:-8480}:80"
     depends_on:
@@ -46,6 +47,7 @@ services:
 
   db:
     image: mysql:5.7
+    command: --innodb-use-native-aio=0
     environment:
       MYSQL_DATABASE: elgg
       MYSQL_USER: elgg

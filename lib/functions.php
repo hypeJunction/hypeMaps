@@ -29,8 +29,8 @@ function get_group_search_maps($group = null)
     if (is_null($group)) {
         $group = elgg_get_page_owner_entity();
     }
-    if (!elgg_instanceof($group, 'group')) {
-        $group = new ElggGroup();
+    if (!$group instanceof \ElggGroup) {
+        $group = new \ElggGroup();
     }
     $maps = elgg_trigger_plugin_hook('search:group', 'maps', array('entity' => $group), array());
     if (!is_array($maps)) {
@@ -86,7 +86,7 @@ function get_marker_icons_path($url = false)
 {
     $path = elgg_get_plugin_setting('icons_path', PLUGIN_ID);
     if (!$path) {
-        $path = PLUGIN_ID . '/graphics/icons/';
+        return $url ? elgg_normalize_url('mod/' . PLUGIN_ID . '/graphics/icons/') : __DIR__ . '/../graphics/icons/';
     }
     return $url ? elgg_normalize_url('mod/' . $path) : __DIR__ . '/../' . $path;
 }
@@ -156,16 +156,16 @@ function set_geopositioning($location = '', $latitude = 0, $longitude = 0)
         $latitude = elgg_extract('lat', $latlong);
         $longitude = elgg_extract('long', $latlong);
     } elseif ($location && $latitude && $longitude) {
-        $prefix = elgg()->db->getTablePrefix();
+        $prefix = elgg_get_config('dbprefix');
         $query = "INSERT INTO {$prefix}geocode_cache
                 (location, lat, `long`) VALUES (:location, :lat, :long)
                 ON DUPLICATE KEY UPDATE lat=:lat2, `long`=:long2";
         elgg()->db->getConnection('write')->executeStatement($query, [
-            ':location' => $location,
-            ':lat' => $lat,
-            ':long' => $long,
-            ':lat2' => $lat,
-            ':long2' => $long,
+            'location' => $location,
+            'lat' => $lat,
+            'long' => $long,
+            'lat2' => $lat,
+            'long2' => $long,
         ]);
     }
     $_SESSION['geopositioning'] = array('location' => $location, 'latitude' => (float) $latitude, 'longitude' => (float) $longitude);

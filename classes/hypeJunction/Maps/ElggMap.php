@@ -140,9 +140,9 @@ class ElggMap extends ElggList {
 	 */
 	public function getItemAttributes($item = null) {
 
-		if (elgg_instanceof($item)) {
+		if ($item instanceof \ElggEntity) {
 			$entity = $item;
-		} else if ($item instanceof ElggRiverItem) {
+		} elseif ($item instanceof ElggRiverItem) {
 
 			$entity = $item->getObjectEntity();
 			if (!$entity) {
@@ -152,7 +152,7 @@ class ElggMap extends ElggList {
 			$entity = $item->getEntity();
 		}
 
-		if (!elgg_instanceof($entity)) {
+		if (!$entity instanceof \ElggEntity) {
 			return array();
 		}
 
@@ -167,7 +167,7 @@ class ElggMap extends ElggList {
 			'data-mappable' => $mappable,
 			'data-guid' => $entity->guid,
 			'data-url' => $entity->getURL(),
-			'data-title' => (elgg_instanceof($entity, 'object')) ? $entity->title : $entity->name,
+			'data-title' => ($entity instanceof \ElggObject) ? $entity->title : $entity->name,
 			'data-location' => $entity->location,
 			'data-lat' => $latitude,
 			'data-long' => $longitude,

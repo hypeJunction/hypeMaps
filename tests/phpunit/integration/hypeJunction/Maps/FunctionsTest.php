@@ -14,7 +14,6 @@ class FunctionsTest extends IntegrationTestCase {
     public function up() {
         $pluginRoot = dirname(__DIR__, 5);
         if (!function_exists('hypeJunction\\Maps\\get_site_search_maps')) {
-            require_once $pluginRoot . '/autoloader.php';
             require_once $pluginRoot . '/lib/functions.php';
             require_once $pluginRoot . '/lib/hooks.php';
         }
@@ -92,7 +91,7 @@ class FunctionsTest extends IntegrationTestCase {
      * @return void
      */
     public function testMappableSubtypesReadsJsonEncoded(): void {
-        $plugin = \elgg_get_plugin_from_id('hypeMaps');
+        $plugin = \elgg_get_plugin_from_id('hypemaps');
         if (!$plugin) {
             $this->markTestSkipped('hypeMaps plugin not installed');
         }
@@ -109,7 +108,7 @@ class FunctionsTest extends IntegrationTestCase {
      * @return void
      */
     public function testMappableSubtypesReadsLegacySerializedForBackwardCompat(): void {
-        $plugin = \elgg_get_plugin_from_id('hypeMaps');
+        $plugin = \elgg_get_plugin_from_id('hypemaps');
         if (!$plugin) {
             $this->markTestSkipped('hypeMaps plugin not installed');
         }
@@ -126,7 +125,7 @@ class FunctionsTest extends IntegrationTestCase {
      * @return void
      */
     public function testMarkertypesReadsJsonEncoded(): void {
-        $plugin = \elgg_get_plugin_from_id('hypeMaps');
+        $plugin = \elgg_get_plugin_from_id('hypemaps');
         if (!$plugin) {
             $this->markTestSkipped('hypeMaps plugin not installed');
         }
@@ -144,7 +143,7 @@ class FunctionsTest extends IntegrationTestCase {
      * @return void
      */
     public function testMarkertypesReadsLegacySerializedForBackwardCompat(): void {
-        $plugin = \elgg_get_plugin_from_id('hypeMaps');
+        $plugin = \elgg_get_plugin_from_id('hypemaps');
         if (!$plugin) {
             $this->markTestSkipped('hypeMaps plugin not installed');
         }

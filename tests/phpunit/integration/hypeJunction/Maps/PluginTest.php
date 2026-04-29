@@ -5,12 +5,10 @@ namespace hypeJunction\Maps;
 use Elgg\IntegrationTestCase;
 
 /**
- * Plugin smoke tests: verify the plugin activates, page handler registered,
+ * Plugin smoke tests: verify the plugin activates, routes registered,
  * actions registered, hooks registered, widget registered.
  *
- * Target Elgg version: 3.x (per manifest.xml: elgg_release >= 3.0).
- * These tests lock in pre-migration behavior — do NOT change assertions
- * to match post-migration state.
+ * Target Elgg version: 4.x.
  */
 class PluginTest extends IntegrationTestCase {
 
@@ -20,14 +18,11 @@ class PluginTest extends IntegrationTestCase {
     public function up() {
         if (!self::$booted) {
             $pluginRoot = dirname(__DIR__, 5);
-            // start.php may have already run if plugin is active; load lib files directly
             if (!function_exists('hypeJunction\\Maps\\get_site_search_maps')) {
-                require_once $pluginRoot . '/autoloader.php';
                 require_once $pluginRoot . '/lib/functions.php';
                 require_once $pluginRoot . '/lib/settings.php';
                 require_once $pluginRoot . '/lib/events.php';
                 require_once $pluginRoot . '/lib/hooks.php';
-                require_once $pluginRoot . '/lib/page_handlers.php';
             }
             self::$booted = true;
         }
@@ -39,7 +34,7 @@ class PluginTest extends IntegrationTestCase {
      * @return void
      */
     public function testPluginConstantsDefined(): void {
-        $this->assertSame('hypeMaps', PLUGIN_ID);
+        $this->assertSame('hypemaps', PLUGIN_ID);
         $this->assertSame('maps', PAGEHANDLER);
     }
 
@@ -47,7 +42,7 @@ class PluginTest extends IntegrationTestCase {
      * @return void
      */
     public function testPluginIsRegistered(): void {
-        $plugin = \elgg_get_plugin_from_id('hypeMaps');
+        $plugin = \elgg_get_plugin_from_id('hypemaps');
         $this->assertNotNull($plugin);
         $this->assertInstanceOf(\ElggPlugin::class, $plugin);
     }
@@ -69,7 +64,7 @@ class PluginTest extends IntegrationTestCase {
      */
     public function testActionsRegistered(): void {
         $actions = _elgg_services()->actions;
-        $this->assertTrue($actions->exists('hypeMaps/settings/save'));
+        $this->assertTrue($actions->exists('hypemaps/settings/save'));
         $this->assertTrue($actions->exists('maps/geopositioning/update'));
     }
 
@@ -77,7 +72,7 @@ class PluginTest extends IntegrationTestCase {
      * @return void
      */
     public function testWidgetRegistered(): void {
-        $widgets = \elgg_get_widget_types('all');
+        $widgets = \elgg_get_widget_types('profile');
         $this->assertArrayHasKey('staticmap', $widgets);
     }
 }

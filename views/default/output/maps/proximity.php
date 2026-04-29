@@ -14,5 +14,4 @@ if (!$value) {
 unset($vars['value']);
 
 $proximity_str = ElggMap::getProximity($value);
-$attrs = elgg_format_attributes($vars);
-echo "<div $attrs>$proximity_str</div>";
+echo elgg_format_element('div', $vars, $proximity_str);

@@ -39,7 +39,4 @@ $img_vars = array(
 	'alt' => $alt,
 );
 
-$attrs = elgg_format_attributes($vars);
-echo "<div $attrs>";
-echo elgg_view('output/img', $img_vars);
-echo '</div>';
+echo elgg_format_element('div', $vars, elgg_view('output/img', $img_vars));

@@ -17,12 +17,12 @@
 
 namespace hypeJunction\Maps;
 
-elgg_load_css('maps');
+elgg_load_external_file('css', 'maps');
 
-elgg_load_js('jquery.sticky-kit');
-elgg_load_js('jquery.form');
-elgg_load_js('google.maps');
-elgg_load_js('maps.mapbox');
+elgg_load_external_file('js', 'jquery.sticky-kit');
+elgg_load_external_file('js', 'jquery.form');
+elgg_load_external_file('js', 'google.maps');
+elgg_load_external_file('js', 'maps.mapbox');
 
 elgg_push_context('mapbox');
 
@@ -65,7 +65,6 @@ if ($pagination && $count) {
 echo '<div class="maps-container maps-list">';
 
 $mapbox_attrs = $map->getMapboxAttributes();
-$mapbox_attrs = elgg_format_attributes($mapbox_attrs);
 
 echo elgg_view('output/url', array(
 	'href' => 'javascript:void(0);',
@@ -73,7 +72,7 @@ echo elgg_view('output/url', array(
 	'class' => 'maps-find-me',
 ));
 
-echo "<div $mapbox_attrs></div>";
+echo elgg_format_element('div', $mapbox_attrs);
 
 if ($position == 'before' || $position == 'both') {
 	echo $nav;
@@ -116,12 +115,11 @@ foreach ($items as $item) {
 		'class' => 'maps-item-pin-block'
 	));
 
-	$id = (elgg_instanceof($item)) ? "elgg-{$item->getType()}-{$item->getGUID()}" : "item-{$item->getType()}-{$item->id}";
+	$id = ($item instanceof \ElggEntity) ? "elgg-{$item->getType()}-{$item->getGUID()}" : "item-{$item->getType()}-{$item->id}";
 	$item_attrs['id'] = $id;
 	$item_attrs['class'] = $item_class;
-	$item_attrs = elgg_format_attributes($item_attrs);
 
-	echo "<li $item_attrs>$view</li>";
+	echo elgg_format_element('li', $item_attrs, $view);
 }
 
 if (!$has_items) {

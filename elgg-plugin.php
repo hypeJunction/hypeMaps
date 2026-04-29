@@ -79,7 +79,7 @@ return [
 	],
 	'widgets' => [
 		'staticmap' => [
-			'context' => ['all'],
+			'context' => ['profile', 'dashboard', 'groups'],
 			'multiple' => true,
 		],
 	],

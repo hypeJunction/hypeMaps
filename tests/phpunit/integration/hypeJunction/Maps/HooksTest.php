@@ -2,19 +2,17 @@
 
 namespace hypeJunction\Maps;
 
+use Elgg\HooksRegistrationService\Hook;
 use Elgg\IntegrationTestCase;
 
 /**
  * Tests for lib/hooks.php hook handlers.
- *
- * Pre-migration behavioral lock-in for Elgg 3.x.
  */
 class HooksTest extends IntegrationTestCase {
 
     public function up() {
         $pluginRoot = dirname(__DIR__, 5);
         if (!function_exists('hypeJunction\\Maps\\get_marker_url')) {
-            require_once $pluginRoot . '/autoloader.php';
             require_once $pluginRoot . '/lib/functions.php';
             require_once $pluginRoot . '/lib/hooks.php';
         }
@@ -22,17 +20,21 @@ class HooksTest extends IntegrationTestCase {
 
     public function down() {}
 
+    private function makeHook(string $name, string $type, $value = null, array $params = []): Hook {
+        return new Hook(elgg(), $name, $type, $value, $params);
+    }
+
     /**
      * @return void
      */
-    public function testGetMarkerUrlReturnsOriginalWhenNotMarkerSize(): void {
+    public function testGetMarkerUrlReturnsNullWhenNotMarkerSize(): void {
         $user = $this->createUser();
-        $originalUrl = 'http://example.com/original.png';
-        $result = get_marker_url('entity:icon:url', 'user', $originalUrl, [
+        $hook = $this->makeHook('entity:icon:url', 'user', 'http://example.com/original.png', [
             'entity' => $user,
             'size' => 'small',
         ]);
-        $this->assertSame($originalUrl, $result);
+        $result = get_marker_url($hook);
+        $this->assertNull($result);
     }
 
     /**
@@ -40,10 +42,11 @@ class HooksTest extends IntegrationTestCase {
      */
     public function testGetMarkerUrlReturnsIconUrlForMarkerSize(): void {
         $user = $this->createUser();
-        $result = get_marker_url('entity:icon:url', 'user', 'original', [
+        $hook = $this->makeHook('entity:icon:url', 'user', 'original', [
             'entity' => $user,
             'size' => 'marker',
         ]);
+        $result = get_marker_url($hook);
         $this->assertIsString($result);
         $this->assertStringContainsString('.png', $result);
     }
@@ -54,10 +57,11 @@ class HooksTest extends IntegrationTestCase {
     public function testGetMarkerUrlRespectsMapiconOverride(): void {
         $user = $this->createUser();
         $user->mapicon = 'http://example.com/custom-icon.png';
-        $result = get_marker_url('entity:icon:url', 'user', 'original', [
+        $hook = $this->makeHook('entity:icon:url', 'user', 'original', [
             'entity' => $user,
             'size' => 'marker',
         ]);
+        $result = get_marker_url($hook);
         $this->assertSame('http://example.com/custom-icon.png', $result);
     }
 
@@ -65,9 +69,9 @@ class HooksTest extends IntegrationTestCase {
      * @return void
      */
     public function testSetupSiteSearchMapsRespectsSettings(): void {
-        $plugin = \elgg_get_plugin_from_id('hypeMaps');
+        $plugin = \elgg_get_plugin_from_id('hypemaps');
         if (!$plugin) {
-            $this->markTestSkipped('hypeMaps plugin not installed');
+            $this->markTestSkipped('hypemaps plugin not installed');
         }
         $originals = [
             'search_all' => $plugin->getSetting('search_all'),
@@ -79,7 +83,8 @@ class HooksTest extends IntegrationTestCase {
             $plugin->setSetting('search_users', '1');
             $plugin->setSetting('search_groups', '');
 
-            $result = setup_site_search_maps('search:site', 'maps', [], []);
+            $hook = $this->makeHook('search:site', 'maps', [], []);
+            $result = setup_site_search_maps($hook);
             $this->assertIsArray($result);
             $this->assertArrayHasKey('all', $result);
             $this->assertArrayHasKey('users', $result);
@@ -95,25 +100,26 @@ class HooksTest extends IntegrationTestCase {
     /**
      * @return void
      */
-    public function testSetupGroupSearchMapsReturnsUnchangedForNonGroup(): void {
-        $initial = ['existing' => 'value'];
-        $result = setup_group_search_maps('search:group', 'maps', $initial, ['entity' => null]);
-        $this->assertSame($initial, $result);
+    public function testSetupGroupSearchMapsReturnsNullForNonGroup(): void {
+        $hook = $this->makeHook('search:group', 'maps', ['existing' => 'value'], ['entity' => null]);
+        $result = setup_group_search_maps($hook);
+        $this->assertNull($result);
     }
 
     /**
      * @return void
      */
     public function testSetupGroupSearchMapsWithGroup(): void {
-        $plugin = \elgg_get_plugin_from_id('hypeMaps');
+        $plugin = \elgg_get_plugin_from_id('hypemaps');
         if (!$plugin) {
-            $this->markTestSkipped('hypeMaps plugin not installed');
+            $this->markTestSkipped('hypemaps plugin not installed');
         }
         $original = $plugin->getSetting('search_group_members');
         try {
             $plugin->setSetting('search_group_members', '1');
             $group = $this->createGroup();
-            $result = setup_group_search_maps('search:group', 'maps', [], ['entity' => $group]);
+            $hook = $this->makeHook('search:group', 'maps', [], ['entity' => $group]);
+            $result = setup_group_search_maps($hook);
             $this->assertIsArray($result);
             $this->assertArrayHasKey('group_members', $result);
             $this->assertSame('user', $result['group_members']['options']['types']);
@@ -126,9 +132,9 @@ class HooksTest extends IntegrationTestCase {
     /**
      * @return void
      */
-    public function testAjaxListViewReturnsOriginalWhenNotXhr(): void {
-        // Not in xhr context — should return original
-        $result = ajax_list_view('view', 'page/components/list', 'original', ['vars' => []]);
-        $this->assertSame('original', $result);
+    public function testAjaxListViewReturnsNullWhenNotXhr(): void {
+        $hook = $this->makeHook('view', 'page/components/list', 'original', ['vars' => []]);
+        $result = ajax_list_view($hook);
+        $this->assertNull($result);
     }
 }

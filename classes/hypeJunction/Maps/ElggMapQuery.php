@@ -129,7 +129,7 @@ class ElggMapQuery extends ElggListQuery {
 	 */
 	private function sqlJoinCoordinates($mdlat = 'mdlat', $mdlong = 'mdlong') {
 
-		$dbprefix = elgg()->db->getTablePrefix();
+		$dbprefix = elgg_get_config('dbprefix');
 
 		$this->options['joins'][$mdlat] = "JOIN {$dbprefix}metadata $mdlat ON e.guid = $mdlat.entity_guid AND $mdlat.name = 'geo:lat'";
 		$this->options['joins'][$mdlong] = "JOIN {$dbprefix}metadata $mdlong ON e.guid = $mdlong.entity_guid AND $mdlong.name = 'geo:long'";
@@ -144,7 +144,7 @@ class ElggMapQuery extends ElggListQuery {
 	 */
 	private function sqlJoinSpatial($eg = 'eg') {
 
-		$dbprefix = elgg()->db->getTablePrefix();
+		$dbprefix = elgg_get_config('dbprefix');
 		$this->options['joins'][$eg] = "JOIN {$dbprefix}entity_geometry $eg ON e.guid = $eg.entity_guid";
 		return $this;
 	}
@@ -155,7 +155,7 @@ class ElggMapQuery extends ElggListQuery {
 	 */
 	private function hasSpatial() {
 		if (!isset(self::$spatial)) {
-			$prefix = elgg()->db->getTablePrefix();
+			$prefix = elgg_get_config('dbprefix');
 			$tables = elgg()->db->getConnection('read')->executeQuery("SHOW TABLES LIKE '{$prefix}entity_geometry'")->fetchAllAssociative();
 			self::$spatial = count($tables) > 0;
 		}
