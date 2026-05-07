@@ -18,25 +18,28 @@ if (isset($vars['img_class'])) {
 	$img_class = $vars['img_class'];
 	unset($vars['img_class']);
 }
+
 if (isset($vars['width'])) {
 	$width = $vars['width'];
 	unset($vars['width']);
 }
+
 if (isset($vars['height'])) {
 	$height = $vars['height'];
 	unset($vars['height']);
 }
+
 if (isset($vars['alt'])) {
 	$alt = $vars['alt'];
 	unset($vars['alt']);
 }
 
-$img_vars = array(
+$img_vars = [
 	'src' => $value,
 	'class' => $img_class,
 	'width' => $width,
 	'height' => $height,
 	'alt' => $alt,
-);
+];
 
 echo elgg_format_element('div', $vars, elgg_view('output/img', $img_vars));

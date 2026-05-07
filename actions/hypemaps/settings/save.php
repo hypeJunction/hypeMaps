@@ -14,6 +14,7 @@ foreach ((array) $params as $k => $v) {
 	if (is_array($v)) {
 		$v = json_encode($v);
 	}
+
 	if (!$plugin->setSetting($k, $v)) {
 		return elgg_error_response(elgg_echo('plugins:settings:save:fail', [$plugin_name]), REFERER);
 	}

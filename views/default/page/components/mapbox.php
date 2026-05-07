@@ -53,24 +53,24 @@ if (isset($options['item_class'])) {
 }
 
 if ($pagination && $count) {
-	$nav = elgg_view('navigation/pagination', array(
+	$nav = elgg_view('navigation/pagination', [
 		'base_url' => $base_url,
 		'offset' => $offset,
 		'count' => $count,
 		'limit' => $limit,
 		'offset_key' => $offset_key,
-	));
+	]);
 }
 
 echo '<div class="maps-container maps-list">';
 
 $mapbox_attrs = $map->getMapboxAttributes();
 
-echo elgg_view('output/url', array(
+echo elgg_view('output/url', [
 	'href' => 'javascript:void(0);',
 	'text' => elgg_echo('maps:findme'),
 	'class' => 'maps-find-me',
-));
+]);
 
 echo elgg_format_element('div', $mapbox_attrs);
 
@@ -81,7 +81,6 @@ if ($position == 'before' || $position == 'both') {
 echo "<ul class=\"$list_class\">";
 
 foreach ($items as $item) {
-
 	$has_items = true;
 
 	$view = elgg_view_list_item($item, $options);
@@ -94,26 +93,26 @@ foreach ($items as $item) {
 
 	$proximity = '';
 	if (!is_null($item_attrs['data-proximity'])) {
-		$proximity = elgg_view('output/maps/proximity', array(
+		$proximity = elgg_view('output/maps/proximity', [
 			'value' => $item_attrs['data-proximity'],
 			'class' => 'elgg-text-help maps-item-proximity'
-		));
+		]);
 		$view .= $proximity;
 	}
 
 	$pin = '&nbsp;';
 	if ($item_attrs['data-pin']) {
-		$pin = elgg_view('output/maps/pin', array(
+		$pin = elgg_view('output/maps/pin', [
 			'value' => $item_attrs['data-pin'],
 			'class' => 'maps-item-pin',
 			'alt' => $item_attrs['data-title'],
-			'title' => ($proximity) ? elgg_echo('maps:proximity:info', array(strip_tags($proximity), $map->getLocation())) : $item_attrs['data-title'],
-		));
+			'title' => ($proximity) ? elgg_echo('maps:proximity:info', [strip_tags($proximity), $map->getLocation()]) : $item_attrs['data-title'],
+		]);
 	}
 
-	$view = elgg_view_image_block($pin, $view, array(
+	$view = elgg_view_image_block($pin, $view, [
 		'class' => 'maps-item-pin-block'
-	));
+	]);
 
 	$id = ($item instanceof \ElggEntity) ? "elgg-{$item->getType()}-{$item->getGUID()}" : "item-{$item->getType()}-{$item->id}";
 	$item_attrs['id'] = $id;

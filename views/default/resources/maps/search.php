@@ -30,18 +30,18 @@ $title = elgg_extract('title', $map, elgg_echo('maps:untitled'));
 elgg_push_breadcrumb(elgg_echo('maps'), 'maps');
 elgg_push_breadcrumb($title);
 
-$filter = elgg_view("framework/maps/filters/site", $map);
+$filter = elgg_view('framework/maps/filters/site', $map);
 
 if (elgg_view_exists("framework/maps/search/$id/map")) {
 	$content = elgg_view("framework/maps/search/$id/map", $map);
 } else {
-	$content = elgg_view("framework/maps/search/_default/map", $map);
+	$content = elgg_view('framework/maps/search/_default/map', $map);
 }
 
 if (elgg_view_exists("framework/maps/search/$id/sidebar")) {
 	$sidebar = elgg_view("framework/maps/search/$id/sidebar", $map);
 } else {
-	$sidebar = elgg_view("framework/maps/search/_default/sidebar", $map);
+	$sidebar = elgg_view('framework/maps/search/_default/sidebar', $map);
 }
 
 $layout_vars = [

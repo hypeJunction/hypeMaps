@@ -8,8 +8,8 @@ if (!$value) {
 	return true;
 }
 
-echo elgg_view('output/url', array(
+echo elgg_view('output/url', [
 	'text' => $value,
 	'href' => "//maps.google.com/maps?q=$value",
 	'target' => '_blank'
-));
+]);

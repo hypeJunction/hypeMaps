@@ -30,7 +30,7 @@ body.maps-state-loading:before {
 }
 @media only screen and (min-width: 1440px) {
   .maps-container.ready {
-    margin-left: -50%;
+	margin-left: -50%;
   }
 }
 .maps-container [data-mapbox] {

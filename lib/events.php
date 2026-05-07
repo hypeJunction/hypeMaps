@@ -5,7 +5,7 @@ namespace hypeJunction\Maps;
 use Elgg\Event;
 
 /**
- * @param Event $hook
+ * @param Event $hook Event being handled
  * @return mixed
  */
 function register_site_menu(Event $hook) {
@@ -19,7 +19,7 @@ function register_site_menu(Event $hook) {
 }
 
 /**
- * @param Event $hook
+ * @param Event $hook Event being handled
  * @return mixed
  */
 function register_owner_block_menu(Event $hook) {
@@ -39,6 +39,7 @@ function register_owner_block_menu(Event $hook) {
 		if ($page_owner->$groupoption === 'no') {
 			continue;
 		}
+
 		$return[] = \ElggMenuItem::factory([
 			'name' => "maps:$id",
 			'text' => elgg_extract('title', $gm),

@@ -2,7 +2,7 @@
 
 namespace hypeJunction\Maps;
 
-if ($group->maps_group_content_enable == "no") {
+if ($group->maps_group_content_enable == 'no') {
 	return true;
 }
 
@@ -18,7 +18,7 @@ $params = $maps['group_content'];
 $content = ElggMap::showMap($params);
 elgg_pop_context();
 
-echo elgg_view('groups/profile/module', array(
+echo elgg_view('groups/profile/module', [
 	'title' => elgg_echo('maps:module:group_content'),
 	'content' => $content,
-));
+]);

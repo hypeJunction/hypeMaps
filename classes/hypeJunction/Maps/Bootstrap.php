@@ -5,12 +5,15 @@ namespace hypeJunction\Maps;
 use Elgg\DefaultPluginBootstrap;
 use ElggGroup;
 
+/**
+ * Bootstrap class.
+ */
 class Bootstrap extends DefaultPluginBootstrap {
 
 	/**
-     * @return void
-     */
-    public function load(): void {
+	 * @return void
+	 */
+	public function load(): void {
 		define('hypeJunction\Maps\PLUGIN_ID', 'hypemaps');
 		define('hypeJunction\Maps\PAGEHANDLER', 'maps');
 
@@ -29,26 +32,19 @@ class Bootstrap extends DefaultPluginBootstrap {
 	}
 
 	/**
-     * @return void
-     */
-    public function activate(): void {
+	 * @return void
+	 */
+	public function activate(): void {
 		$prefix = elgg_get_config('dbprefix');
 		elgg()->db->getConnection('write')->executeStatement(
-			"CREATE TABLE IF NOT EXISTS {$prefix}geocode_cache ("
-			. "id INT(11) NOT NULL AUTO_INCREMENT,"
-			. "location VARCHAR(255) NOT NULL,"
-			. "lat DECIMAL(10,7) NOT NULL DEFAULT 0,"
-			. "`long` DECIMAL(10,7) NOT NULL DEFAULT 0,"
-			. "PRIMARY KEY (id),"
-			. "UNIQUE KEY location (location)"
-			. ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
+			"CREATE TABLE IF NOT EXISTS {$prefix}geocode_cache (id INT(11) NOT NULL AUTO_INCREMENT, location VARCHAR(255) NOT NULL, lat DECIMAL(10,7) NOT NULL DEFAULT 0, `long` DECIMAL(10,7) NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY location (location)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
 		);
 	}
 
 	/**
-     * @return void
-     */
-    public function init(): void {
+	 * @return void
+	 */
+	public function init(): void {
 		$libs = array_filter((array) elgg_get_config('google_maps_libraries'));
 		$gmaps_lib = elgg_http_add_url_query_elements('//maps.googleapis.com/maps/api/js', [
 			'key' => elgg_get_plugin_setting('google_api_key', PLUGIN_ID),

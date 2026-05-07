@@ -6,6 +6,9 @@ use ElggAnnotation;
 use ElggRiverItem;
 use hypeJunction\Lists\ElggList;
 
+/**
+ * ElggMap class.
+ */
 class ElggMap extends ElggList {
 
 	/**
@@ -41,19 +44,22 @@ class ElggMap extends ElggList {
 
 	/**
 	 * Construct a new list
-	 * @param array $options	Options to pass to the getter function
+	 *
+	 * @param array  $options Options to pass to the getter function
+	 * @param string $getter  Getter function name
 	 */
-	function __construct($options = array(), $getter = 'elgg_get_entities') {
+	public function __construct($options = [], $getter = 'elgg_get_entities') {
 		parent::__construct($options, $getter);
 		$this->setLocation();
 	}
 
 	/**
 	 * Prepare and render a map
-	 * @param array $params
+	 *
+	 * @param array $params Render parameters
 	 * @return string
 	 */
-	public static function showMap($params = array()) {
+	public static function showMap($params = []) {
 
 		$location = get_input('location', '');
 		if (is_array($location)) {
@@ -69,13 +75,13 @@ class ElggMap extends ElggList {
 
 		$getter = elgg_extract('getter', $params, 'elgg_get_entities');
 
-		$defaults = array(
+		$defaults = [
 			'full_view' => false,
 			'list_type' => 'mapbox',
 			'pagination' => true,
 			'limit' => $limit,
 			'offset' => $offset,
-		);
+		];
 		$options = elgg_extract('options', $params);
 
 		$options = array_merge($defaults, $options);
@@ -84,15 +90,17 @@ class ElggMap extends ElggList {
 		$map->setSearchLocation($location, $radius);
 		$map->setSearchQuery($query);
 
-		return elgg_view('page/components/mapbox', array(
+		return elgg_view('page/components/mapbox', [
 			'list' => $map
-		));
+		]);
 	}
 
 	/**
 	 * Set the search location
-	 * @param string $location		Location address
-	 * @param integer $radius		Radius in the unit of preset metric system (kilometer or mile)
+	 *
+	 * @param string  $location Location address
+	 * @param integer $radius   Radius in the unit of preset metric system (kilometer or mile)
+	 * @return self
 	 */
 	public function setSearchLocation($location = '', $radius = 0) {
 
@@ -100,42 +108,43 @@ class ElggMap extends ElggList {
 		$this->setLocation($location);
 
 		try {
-			$query = new ElggMapQuery('proximity', array(
+			$query = new ElggMapQuery('proximity', [
 				'location' => $this->getLocation(),
 				'latitude' => $this->getLatitude(),
 				'longitude' => $this->getLongitude(),
 				'radius' => $this->radius
-			));
+			]);
 
 			$this->options = $query->sqlGetOptions($this->options);
 		} catch (Exception $e) {
 			elgg_log($e->getMessage(), 'ERROR');
 		}
+
 		return $this;
 	}
 
 	/**
-	 * Get an array of attributes to contruct a new mapbox
-	 * @param array $vars
+	 * Get an array of attributes to construct a new mapbox
+	 *
 	 * @return array
 	 */
 	public function getMapboxAttributes() {
 
-		$attributes = array(
+		$attributes = [
 			'data-mapbox' => true,
 			'data-hash' => $this->hash,
 			'data-location' => $this->location,
 			'data-lat' => $this->latitude,
 			'data-long' => $this->longitude,
-		);
-		return elgg_trigger_plugin_hook('attributes:mapbox', 'maps', array(
+		];
+		return elgg_trigger_plugin_hook('attributes:mapbox', 'maps', [
 			'mapbox' => $this
-				), $attributes);
+		], $attributes);
 	}
 
 	/**
 	 * Get a list of attributes to attach to the list item
-	 * @param mixed $item	List item (entity, annotation or river)
+	 * @param mixed $item List item (entity, annotation or river)
 	 * @return array
 	 */
 	public function getItemAttributes($item = null) {
@@ -143,7 +152,6 @@ class ElggMap extends ElggList {
 		if ($item instanceof \ElggEntity) {
 			$entity = $item;
 		} elseif ($item instanceof ElggRiverItem) {
-
 			$entity = $item->getObjectEntity();
 			if (!$entity) {
 				$item->getSubjectEntity();
@@ -153,7 +161,7 @@ class ElggMap extends ElggList {
 		}
 
 		if (!$entity instanceof \ElggEntity) {
-			return array();
+			return [];
 		}
 
 		$lat_key = 'geo:lat';
@@ -163,7 +171,7 @@ class ElggMap extends ElggList {
 		$longitude = $entity->$long_key;
 
 		$mappable = ($latitude && $longitude);
-		$attributes = array(
+		$attributes = [
 			'data-mappable' => $mappable,
 			'data-guid' => $entity->guid,
 			'data-url' => $entity->getURL(),
@@ -173,14 +181,16 @@ class ElggMap extends ElggList {
 			'data-long' => $longitude,
 			'data-pin' => ($mappable) ? $entity->getIconURL('marker') : null,
 			'data-proximity' => ($this->location) ? $entity->getVolatileData('select:proximity') : null,
-		);
-		return elgg_trigger_plugin_hook('attributes:item', 'maps', array(
+		];
+		return elgg_trigger_plugin_hook('attributes:item', 'maps', [
 			'item' => $item
-				), $attributes);
+		], $attributes);
 	}
 
 	/**
 	 * Initialize a map with a location
+	 *
+	 * @param string $location Location address
 	 * @return ElggMap
 	 */
 	private function setLocation($location = '') {
@@ -206,10 +216,11 @@ class ElggMap extends ElggList {
 			}
 		}
 
-		$latlong = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $location), false);
+		$latlong = elgg_trigger_plugin_hook('geocode', 'location', ['location' => $location], false);
 		if (!$latlong) {
-			$latlong = array();
+			$latlong = [];
 		}
+
 		$this->location = $location;
 		$this->latitude = elgg_extract('lat', $latlong, 0);
 		$this->longitude = elgg_extract('long', $latlong, 0);
@@ -243,7 +254,9 @@ class ElggMap extends ElggList {
 
 	/**
 	 * Set search radius
-	 * @param integer $radius		Radius in the unit of preset metric system (kilometer or mile)
+	 *
+	 * @param integer $radius Radius in the unit of preset metric system (kilometer or mile)
+	 * @return void
 	 */
 	private function setRadius($radius = 0) {
 		$this->radius = $this->getKilometers($radius);
@@ -251,7 +264,8 @@ class ElggMap extends ElggList {
 
 	/**
 	 * Convert value from the preset metric system to kilometers
-	 * @param $value
+	 *
+	 * @param float $value Value in the preset metric system
 	 * @return float
 	 */
 	public static function getKilometers($value) {
@@ -260,17 +274,17 @@ class ElggMap extends ElggList {
 
 	/**
 	 * Get human readable proximity value
-	 * @param float $value
+	 *
+	 * @param float $value Distance value in kilometers
 	 * @return string
 	 */
 	public static function getProximity($value) {
 		if (self::METRIC_SYSTEM == 'US') {
 			$miles = number_format(round($value * self::KM_TO_MILE, 2), 2, '.', ' ');
-			return elgg_echo('maps:proximity:US', array($miles));
+			return elgg_echo('maps:proximity:US', [$miles]);
 		} else {
 			$kilometers = number_format(round($value, 2), 2, '.', ' ');
-			return elgg_echo('maps:proximity:SI', array($kilometers));
+			return elgg_echo('maps:proximity:SI', [$kilometers]);
 		}
 	}
-
 }

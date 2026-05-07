@@ -4,13 +4,16 @@ namespace hypeJunction\Maps;
 
 use hypeJunction\Lists\ElggListQuery;
 
+/**
+ * ElggMapQuery class.
+ */
 class ElggMapQuery extends ElggListQuery {
 
 	/**
-	 * Flag if spatical sql table exists
+	 * Flag if spatial sql table exists
 	 * @var boolean
 	 */
-	static $spatial;
+	public static $spatial;
 
 	/**
 	 * Search location
@@ -38,11 +41,12 @@ class ElggMapQuery extends ElggListQuery {
 
 	/**
 	 * Construct a new query
-	 * @param string $search_type
-	 * @param mixed $query
-	 * @param array $table_map
+	 *
+	 * @param string $search_type Search type (e.g. proximity)
+	 * @param mixed  $query       Query options
+	 * @param array  $table_map   Table column mapping
 	 */
-	function __construct($search_type, $query = '', $table_map = null) {
+	public function __construct($search_type, $query = '', $table_map = null) {
 		parent::__construct($search_type, $query, $table_map);
 
 		if ($search_type == 'proximity') {
@@ -55,10 +59,11 @@ class ElggMapQuery extends ElggListQuery {
 
 	/**
 	 * Filter ege* options
-	 * @param array $options
+	 *
+	 * @param array $options Existing ege* options
 	 * @return array
 	 */
-	public function sqlGetOptions($options = array()) {
+	public function sqlGetOptions($options = []) {
 		parent::sqlGetOptions($options);
 
 		if ($this->search_type == 'proximity') {
@@ -82,12 +87,12 @@ class ElggMapQuery extends ElggListQuery {
 		if ($this->hasSpatial()) {
 			$this->sqlJoinSpatial('eg');
 			$this->options['selects']['proximity'] = "(GLength(LineStringFromWKB(LineString(eg.geometry,GeomFromText('POINT({$this->latitude} {$this->longitude})')))))*60*1.825 as proximity";
-			$this->options['order_by'] = "proximity ASC, e.time_updated DESC";
+			$this->options['order_by'] = 'proximity ASC, e.time_updated DESC';
 			$this->options['callback'] = __NAMESPACE__ . '\\mappable_entity_row_to_elggstar';
 		} else {
 			$this->sqlJoinCoordinates('mdlat', 'mdlong');
 			$this->options['selects']['proximity'] = "(((acos(sin(($this->latitude*pi()/180))*sin((mdlat.value*pi()/180))+cos(($this->latitude*pi()/180))*cos((mdlat.value*pi()/180))*cos((($this->longitude-mdlong.value)*pi()/180)))))*180/pi())*60*1.1515*1.60934 AS proximity";
-			$this->options['order_by'] = "proximity ASC, e.time_updated DESC";
+			$this->options['order_by'] = 'proximity ASC, e.time_updated DESC';
 			$this->options['callback'] = __NAMESPACE__ . '\\mappable_entity_row_to_elggstar';
 		}
 
@@ -139,7 +144,7 @@ class ElggMapQuery extends ElggListQuery {
 
 	/**
 	 * Join spatial table
-	 * @param string $eg	Join name for spatial table
+	 * @param string $eg Join name for spatial table
 	 * @return ElggMap
 	 */
 	private function sqlJoinSpatial($eg = 'eg') {
@@ -159,15 +164,15 @@ class ElggMapQuery extends ElggListQuery {
 			$tables = elgg()->db->getConnection('read')->executeQuery("SHOW TABLES LIKE '{$prefix}entity_geometry'")->fetchAllAssociative();
 			self::$spatial = count($tables) > 0;
 		}
+
 		return self::$spatial;
 	}
-
 }
 
 /**
  * Set proximity select as volatile data on a constructed entity
- * @todo Make this a class method in 1.9 (1.8 doesn't use call_user_func())
- * @param stdClass $row
+ *
+ * @param stdClass $row Entity row
  * @return ElggEntity
  */
 function mappable_entity_row_to_elggstar($row) {
@@ -176,5 +181,6 @@ function mappable_entity_row_to_elggstar($row) {
 	if ($entity instanceof \ElggEntity) {
 		$entity->setVolatileData('select:proximity', (float) $row->proximity);
 	}
+
 	return $entity;
 }

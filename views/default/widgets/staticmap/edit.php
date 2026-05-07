@@ -17,42 +17,42 @@ if (!isset($entity->pin_color)) {
 
 echo '<div>';
 echo '<label>' . elgg_echo('maps:widget:staticmap:title') . '</label>';
-echo elgg_view('input/text', array(
+echo elgg_view('input/text', [
 	'name' => 'params[title]',
 	'value' => $entity->title,
-));
+]);
 echo '</div>';
 
 echo '<div>';
 echo '<label>' . elgg_echo('maps:widget:staticmap:description') . '</label>';
-echo elgg_view('input/plaintext', array(
+echo elgg_view('input/plaintext', [
 	'name' => 'params[description]',
 	'value' => $entity->description,
-));
+]);
 echo '</div>';
 
 echo '<div>';
 echo '<label>' . elgg_echo('maps:widget:staticmap:location') . '</label>';
-echo elgg_view('input/text', array(
+echo elgg_view('input/text', [
 	'name' => 'params[location]',
 	'value' => $entity->location,
-));
+]);
 echo '</div>';
 
 echo '<div>';
 echo '<label>' . elgg_echo('maps:widget:staticmap:zoom') . '</label>';
-echo elgg_view('input/dropdown', array(
+echo elgg_view('input/dropdown', [
 	'name' => 'params[zoom]',
 	'value' => $entity->zoom,
 	'options' => range(0, 21),
-));
+]);
 echo '</div>';
 
 echo '<div>';
 echo '<label>' . elgg_echo('maps:widget:staticmap:pin_color') . '</label>';
-echo elgg_view('input/dropdown', array(
+echo elgg_view('input/dropdown', [
 	'name' => 'params[pin_color]',
 	'value' => $entity->pin_color,
-	'options' => array('black', 'brown', 'green', 'purple', 'yellow', 'blue', 'gray', 'orange', 'red', 'white'),
-));
+	'options' => ['black', 'brown', 'green', 'purple', 'yellow', 'blue', 'gray', 'orange', 'red', 'white'],
+]);
 echo '</div>';
