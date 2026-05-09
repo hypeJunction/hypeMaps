@@ -24,6 +24,7 @@
 	},
 	"require": {
 		"php": ">=8.3",
+		"ext-intl": "*",
 		"elgg/elgg": "^7.0",
 		"composer/installers": "^2.0",
 		"bower-asset/sticky-kit": "~1.0"
