@@ -1,3 +1,19 @@
+<a name="6.0.0"></a>
+# [6.0.0] (2026-05-09) — Elgg 6.x Migration
+
+### Breaking Changes
+
+* Requires Elgg ^6.0
+* `elgg_trigger_plugin_hook()` replaced with `elgg_trigger_event_results()` (deprecated
+  hook functions removed in Elgg 6.0): `ElggMap::getMapboxAttributes()`,
+  `ElggMap::getItemAttributes()`, `ElggMap::setLocation()`,
+  `resources/maps/search.php`, `resources/maps/group.php`
+
+### Changed
+
+* Updated `composer.json` to require `elgg/elgg ^6.0`
+* Plugin version bumped to 6.0.0
+
 <a name="5.0.0"></a>
 # [5.0.0] (2026-04-29) — Elgg 5.x Migration
 

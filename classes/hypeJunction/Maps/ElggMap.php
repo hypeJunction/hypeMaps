@@ -137,7 +137,7 @@ class ElggMap extends ElggList {
 			'data-lat' => $this->latitude,
 			'data-long' => $this->longitude,
 		];
-		return elgg_trigger_plugin_hook('attributes:mapbox', 'maps', [
+		return elgg_trigger_event_results('attributes:mapbox', 'maps', [
 			'mapbox' => $this
 		], $attributes);
 	}
@@ -182,7 +182,7 @@ class ElggMap extends ElggList {
 			'data-pin' => ($mappable) ? $entity->getIconURL('marker') : null,
 			'data-proximity' => ($this->location) ? $entity->getVolatileData('select:proximity') : null,
 		];
-		return elgg_trigger_plugin_hook('attributes:item', 'maps', [
+		return elgg_trigger_event_results('attributes:item', 'maps', [
 			'item' => $item
 		], $attributes);
 	}
@@ -216,7 +216,7 @@ class ElggMap extends ElggList {
 			}
 		}
 
-		$latlong = elgg_trigger_plugin_hook('geocode', 'location', ['location' => $location], false);
+		$latlong = elgg_trigger_event_results('geocode', 'location', ['location' => $location], false);
 		if (!$latlong) {
 			$latlong = [];
 		}

@@ -51,7 +51,7 @@ $layout_vars = [
 	'sidebar' => $sidebar,
 ];
 
-$layout_vars = elgg_trigger_plugin_hook('layout', 'maps', [
+$layout_vars = elgg_trigger_event_results('layout', 'maps', [
 	'segments' => ['search', $id],
 	'handler' => 'maps',
 ], $layout_vars);
