@@ -3,7 +3,7 @@
 return [
 	'plugin' => [
 		'name' => 'hypeMaps',
-		'version' => '6.0.0',
+		'version' => '7.0.0',
 	],
 	'bootstrap' => \hypeJunction\Maps\Bootstrap::class,
 	'routes' => [
