@@ -1,22 +1,9 @@
 hypeMaps
 ========
-![Elgg 1.10](https://img.shields.io/badge/Elgg-1.10.x-orange.svg?style=flat-square)
-![Elgg 1.11](https://img.shields.io/badge/Elgg-1.11.x-orange.svg?style=flat-square)
-![Elgg 1.12](https://img.shields.io/badge/Elgg-1.12.x-orange.svg?style=flat-square)
-![Elgg 2.0](https://img.shields.io/badge/Elgg-2.0.x-orange.svg?style=flat-square)
+
+![Elgg 5.0](https://img.shields.io/badge/Elgg-5.0-orange.svg?style=flat-square)
 
 Google Maps integration for Elgg
-
-
-## Support the development
-
-1. [Buy me a vegetable!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P7QA9CFMENBKA)
-2. You can also support the development of this plugin by sharing a percentage of
-your real-estate allocated to AdSense Units. You can specify the percentage you
-would like to share with me (0 to 100) in the plugin settings.
-On every page load, the plugin will switch between your publisher ID and
-my publisher ID. E.g. if you choose to share 10%, your publisher ID will be used
-on 90% of all page views, my publisher ID will be used on 10% of page views
 
 ## Getting Started
 
