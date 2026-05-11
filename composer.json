@@ -39,6 +39,5 @@
             "composer/installers": true,
             "fxp/composer-asset-plugin": true
         }
-    },
-    "version": "7.0.0"
+    }
 }
