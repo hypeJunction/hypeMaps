@@ -40,5 +40,8 @@
             "fxp/composer-asset-plugin": true
         }
     },
-    "version": "5.0.0"
+    "version": "5.0.0",
+	"require-dev": {
+		"phpunit/phpunit": "^9.6"
+	}
 }
