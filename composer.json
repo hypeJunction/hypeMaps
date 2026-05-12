@@ -23,9 +23,9 @@
 		}
 	},
 	"require": {
-		"php": ">=7.0",
-		"elgg/elgg": "^3.0",
 		"composer/installers": "^1.0 || ^2.0",
+		"php": ">=7.2",
+		"elgg/elgg": "^3.0",
 		"hypejunction/api-lists": "*",
 		"bower-asset/sticky-kit": "~1.0"
 	},
