@@ -23,7 +23,7 @@
 		}
 	},
 	"require": {
-		"php": ">=8.2",
+		"php": ">=8.1",
 		"elgg/elgg": "^6.0",
 		"composer/installers": "^2.0",
 		"bower-asset/sticky-kit": "~1.0"
