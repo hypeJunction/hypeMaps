@@ -1,42 +1,45 @@
 {
-	"name": "hypejunction/hypemaps",
-	"type": "elgg-plugin",
-	"description": "Maps UI for Elgg",
-	"homepage": "http://hypejunction.com",
-	"keywords": [
-		"elgg",
-		"plugin",
-		"maps",
-		"Google Maps API"
-	],
-	"license": "GPL-2.0-or-later",
-	"authors": [
-		{
-			"name": "Ismayil Khayredinov",
-			"email": "info@hypejunction.com"
-		}
-	],
-	"extra": {
-		"installer-name": "hypemaps",
-		"elgg-plugin": {
-			"id": "hypemaps"
-		}
-	},
-	"require": {
-		"php": ">=7.4",
-		"elgg/elgg": "^4.0",
-		"composer/installers": "^2.0",
-		"bower-asset/sticky-kit": "~1.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"hypeJunction\\Maps\\": "classes/hypeJunction/Maps/"
-		}
-	},
-	"config": {
-		"allow-plugins": {
-			"composer/installers": true,
-			"fxp/composer-asset-plugin": true
-		}
-	}
+    "name": "hypejunction/hypemaps",
+    "type": "elgg-plugin",
+    "description": "Maps UI for Elgg",
+    "homepage": "http://hypejunction.com",
+    "keywords": [
+        "elgg",
+        "plugin",
+        "maps",
+        "Google Maps API"
+    ],
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Ismayil Khayredinov",
+            "email": "info@hypejunction.com"
+        }
+    ],
+    "extra": {
+        "installer-name": "hypemaps",
+        "elgg-plugin": {
+            "id": "hypemaps"
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "elgg/elgg": "^4.0",
+        "composer/installers": "^2.0",
+        "bower-asset/sticky-kit": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "hypeJunction\\Maps\\": "classes/hypeJunction/Maps/"
+        },
+        "files": [
+            "lib/functions.php"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "fxp/composer-asset-plugin": true
+        }
+    }
 }
