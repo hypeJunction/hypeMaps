@@ -49,7 +49,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		$gmaps_lib = elgg_http_add_url_query_elements('//maps.googleapis.com/maps/api/js', [
 			'key' => elgg_get_plugin_setting('google_api_key', PLUGIN_ID),
 			'libraries' => implode(',', $libs),
-			'language' => elgg_get_current_language(),
+			'language' => elgg_elgg_get_language(),
 			'output' => 'svembed',
 		]);
 		elgg_register_external_file('js', 'google.maps', $gmaps_lib);
