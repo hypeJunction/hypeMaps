@@ -9,25 +9,25 @@ $location = get_input('location', array());
 $radius = get_input('radius', HYPEMAPS_SEARCH_RADIUS);
 
 $body .= '<div>';
-$body .= '<label>' . elgg_echo('maps:filter:users:attributes') . '</label>';
-$body .= elgg_view('input/text', array(
+$body .= '<label>' . \elgg_echo('maps:filter:users:attributes') . '</label>';
+$body .= \elgg_view('input/text', array(
 	'name' => 'query[user]',
-	'value' => elgg_extract('user', $query)
+	'value' => \elgg_extract('user', $query)
 		));
 $body .= '</div>';
 
 $body .= '<div>';
-$body .= '<label>' . elgg_echo('maps:filter:users:tags') . '</label>';
-$body .= elgg_view('input/text', array(
+$body .= '<label>' . \elgg_echo('maps:filter:users:tags') . '</label>';
+$body .= \elgg_view('input/text', array(
 	'name' => 'query[tags]',
-	'value' => elgg_extract('tags', $query)
+	'value' => \elgg_extract('tags', $query)
 		));
 $body .= '</div>';
 
-$user = elgg_get_logged_in_user_entity();
+$user = \elgg_get_logged_in_user_entity();
 
 $body .= '<div>';
-$body .= '<label>' . elgg_echo('maps:filter:users:location') . '</label>';
+$body .= '<label>' . \elgg_echo('maps:filter:users:location') . '</label>';
 
 if ($user) {
 	$options = array(
@@ -45,11 +45,11 @@ if ($user) {
 	}
 
 	if (count($locations)) {
-		array_unshift($locations, elgg_echo('maps:filter:location:change'));
+		array_unshift($locations, \elgg_echo('maps:filter:location:change'));
 		$body .= '<div class="maps-filter-location-cache">';
-		$body .= elgg_view('input/dropdown', array(
+		$body .= \elgg_view('input/dropdown', array(
 			'name' => 'location[cached]',
-			'value' => elgg_extract('cached', $location),
+			'value' => \elgg_extract('cached', $location),
 			'options' => $locations
 		));
 		$body .= '</div>';
@@ -57,36 +57,36 @@ if ($user) {
 }
 
 $body .= '<div class="maps-filter-location">';
-$body .= elgg_view('input/location', array(
+$body .= \elgg_view('input/location', array(
 	'name' => 'location[find]',
-	'value' => elgg_extract('find', $location),
+	'value' => \elgg_extract('find', $location),
 		));
 $body .= '</div>';
 $body .= '</div>';
 
 $body .= '<div>';
-$body .= '<label>' . elgg_echo('maps:filter:users:radius') . '</label>';
+$body .= '<label>' . \elgg_echo('maps:filter:users:radius') . '</label>';
 $body .= '<div class="maps-filter-radius">';
 $key = 'maps:proximity:' . HYPEMAPS_METRIC_SYSTEM;
-$body .= elgg_view('input/dropdown', array(
+$body .= \elgg_view('input/dropdown', array(
 	'name' => 'radius',
 	'value' => $radius,
 	'options_values' => array(
-		0 => elgg_echo('maps:filter:radius:none'),
-		5 => elgg_echo($key, array(5)),
-		10 => elgg_echo($key, array(10)),
-		25 => elgg_echo($key, array(25)),
-		100 => elgg_echo($key, array(100)),
-		500 => elgg_echo($key, array(500))
+		0 => \elgg_echo('maps:filter:radius:none'),
+		5 => \elgg_echo($key, array(5)),
+		10 => \elgg_echo($key, array(10)),
+		25 => \elgg_echo($key, array(25)),
+		100 => \elgg_echo($key, array(100)),
+		500 => \elgg_echo($key, array(500))
 	)
 		));
 $body .= '</div>';
 $body .= '</div>';
 
-$footer .= elgg_view('input/submit', array(
-	'value' => elgg_echo('filter'),
+$footer .= \elgg_view('input/submit', array(
+	'value' => \elgg_echo('filter'),
 		));
 
-echo elgg_view_module('aside', elgg_echo('maps:filter:users'), $body, array(
+echo \elgg_view_module('aside', \elgg_echo('maps:filter:users'), $body, array(
 	'footer' => $footer
 		));

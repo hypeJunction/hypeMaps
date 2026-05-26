@@ -17,16 +17,16 @@
 
 namespace hypeJunction\Maps;
 
-elgg_load_external_file('css', 'maps');
+\elgg_load_external_file('css', 'maps');
 
-elgg_load_external_file('js', 'jquery.sticky-kit');
-elgg_load_external_file('js', 'jquery.form');
-elgg_load_external_file('js', 'google.maps');
-elgg_load_external_file('js', 'maps.mapbox');
+\elgg_load_external_file('js', 'jquery.sticky-kit');
+\elgg_load_external_file('js', 'jquery.form');
+\elgg_load_external_file('js', 'google.maps');
+\elgg_load_external_file('js', 'maps.mapbox');
 
-elgg_push_context('mapbox');
+\elgg_push_context('mapbox');
 
-$map = elgg_extract('list', $vars);
+$map = \elgg_extract('list', $vars);
 if (!$map instanceof ElggMap) {
 	return;
 }
@@ -35,12 +35,12 @@ $items = $map->getItems();
 $options = $map->getOptions();
 $count = $map->getCount();
 
-$offset = elgg_extract('offset', $options);
-$limit = elgg_extract('limit', $options);
-$base_url = elgg_extract('base_url', $options, current_page_url());
-$pagination = elgg_extract('pagination', $options, true);
-$offset_key = elgg_extract('offset_key', $options, 'offset');
-$position = elgg_extract('position', $options, 'after');
+$offset = \elgg_extract('offset', $options);
+$limit = \elgg_extract('limit', $options);
+$base_url = \elgg_extract('base_url', $options, current_page_url());
+$pagination = \elgg_extract('pagination', $options, true);
+$offset_key = \elgg_extract('offset_key', $options, 'offset');
+$position = \elgg_extract('position', $options, 'after');
 
 $list_class = 'elgg-list maps-items';
 if (isset($options['list_class'])) {
@@ -53,7 +53,7 @@ if (isset($options['item_class'])) {
 }
 
 if ($pagination && $count) {
-	$nav = elgg_view('navigation/pagination', array(
+	$nav = \elgg_view('navigation/pagination', array(
 		'base_url' => $base_url,
 		'offset' => $offset,
 		'count' => $count,
@@ -66,13 +66,13 @@ echo '<div class="maps-container maps-list">';
 
 $mapbox_attrs = $map->getMapboxAttributes();
 
-echo elgg_view('output/url', array(
+echo \elgg_view('output/url', array(
 	'href' => 'javascript:void(0);',
-	'text' => elgg_echo('maps:findme'),
+	'text' => \elgg_echo('maps:findme'),
 	'class' => 'maps-find-me',
 ));
 
-echo elgg_format_element('div', $mapbox_attrs);
+echo \elgg_format_element('div', $mapbox_attrs);
 
 if ($position == 'before' || $position == 'both') {
 	echo $nav;
@@ -84,7 +84,7 @@ foreach ($items as $item) {
 
 	$has_items = true;
 
-	$view = elgg_view_list_item($item, $options);
+	$view = \elgg_view_list_item($item, $options);
 
 	if (!$view) {
 		continue;
@@ -94,7 +94,7 @@ foreach ($items as $item) {
 
 	$proximity = '';
 	if (!is_null($item_attrs['data-proximity'])) {
-		$proximity = elgg_view('output/maps/proximity', array(
+		$proximity = \elgg_view('output/maps/proximity', array(
 			'value' => $item_attrs['data-proximity'],
 			'class' => 'elgg-text-help maps-item-proximity'
 		));
@@ -103,15 +103,15 @@ foreach ($items as $item) {
 
 	$pin = '&nbsp;';
 	if ($item_attrs['data-pin']) {
-		$pin = elgg_view('output/maps/pin', array(
+		$pin = \elgg_view('output/maps/pin', array(
 			'value' => $item_attrs['data-pin'],
 			'class' => 'maps-item-pin',
 			'alt' => $item_attrs['data-title'],
-			'title' => ($proximity) ? elgg_echo('maps:proximity:info', array(strip_tags($proximity), $map->getLocation())) : $item_attrs['data-title'],
+			'title' => ($proximity) ? \elgg_echo('maps:proximity:info', array(strip_tags($proximity), $map->getLocation())) : $item_attrs['data-title'],
 		));
 	}
 
-	$view = elgg_view_image_block($pin, $view, array(
+	$view = \elgg_view_image_block($pin, $view, array(
 		'class' => 'maps-item-pin-block'
 	));
 
@@ -119,11 +119,11 @@ foreach ($items as $item) {
 	$item_attrs['id'] = $id;
 	$item_attrs['class'] = $item_class;
 
-	echo elgg_format_element('li', $item_attrs, $view);
+	echo \elgg_format_element('li', $item_attrs, $view);
 }
 
 if (!$has_items) {
-	echo '<li class="placeholder">' . elgg_echo('maps:empty') . '</li>';
+	echo '<li class="placeholder">' . \elgg_echo('maps:empty') . '</li>';
 }
 
 echo '</ul>';
@@ -134,4 +134,4 @@ if ($position == 'after' || $position == 'both') {
 
 echo '</div>';
 
-elgg_pop_context();
+\elgg_pop_context();

@@ -12,7 +12,7 @@ function register_site_menu(Hook $hook) {
 	$return = $hook->getValue();
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'maps',
-		'text' => elgg_echo('maps'),
+		'text' => \elgg_echo('maps'),
 		'href' => 'maps',
 	]);
 	return $return;
@@ -41,7 +41,7 @@ function register_owner_block_menu(Hook $hook) {
 		}
 		$return[] = \ElggMenuItem::factory([
 			'name' => "maps:$id",
-			'text' => elgg_extract('title', $gm),
+			'text' => \elgg_extract('title', $gm),
 			'href' => "maps/group/{$page_owner->guid}/{$id}",
 		]);
 	}

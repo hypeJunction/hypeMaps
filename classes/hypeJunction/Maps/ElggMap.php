@@ -57,8 +57,8 @@ class ElggMap extends ElggList {
 
 		$location = get_input('location', '');
 		if (is_array($location)) {
-			$find = elgg_extract('find', $location, false);
-			$cached = elgg_extract('cached', $location, '');
+			$find = \elgg_extract('find', $location, false);
+			$cached = \elgg_extract('cached', $location, '');
 			$location = ($find) ? $find : $cached;
 		}
 
@@ -67,7 +67,7 @@ class ElggMap extends ElggList {
 		$limit = get_input('limit', 20);
 		$offset = get_input('offset', 0);
 
-		$getter = elgg_extract('getter', $params, 'elgg_get_entities');
+		$getter = \elgg_extract('getter', $params, 'elgg_get_entities');
 
 		$defaults = array(
 			'full_view' => false,
@@ -76,7 +76,7 @@ class ElggMap extends ElggList {
 			'limit' => $limit,
 			'offset' => $offset,
 		);
-		$options = elgg_extract('options', $params);
+		$options = \elgg_extract('options', $params);
 
 		$options = array_merge($defaults, $options);
 
@@ -84,7 +84,7 @@ class ElggMap extends ElggList {
 		$map->setSearchLocation($location, $radius);
 		$map->setSearchQuery($query);
 
-		return elgg_view('page/components/mapbox', array(
+		return \elgg_view('page/components/mapbox', array(
 			'list' => $map
 		));
 	}
@@ -109,7 +109,7 @@ class ElggMap extends ElggList {
 
 			$this->options = $query->sqlGetOptions($this->options);
 		} catch (Exception $e) {
-			elgg_log($e->getMessage(), 'ERROR');
+			\elgg_log($e->getMessage(), 'ERROR');
 		}
 		return $this;
 	}
@@ -128,7 +128,7 @@ class ElggMap extends ElggList {
 			'data-lat' => $this->latitude,
 			'data-long' => $this->longitude,
 		);
-		return elgg_trigger_plugin_hook('attributes:mapbox', 'maps', array(
+		return \elgg_trigger_plugin_hook('attributes:mapbox', 'maps', array(
 			'mapbox' => $this
 				), $attributes);
 	}
@@ -174,7 +174,7 @@ class ElggMap extends ElggList {
 			'data-pin' => ($mappable) ? $entity->getIconURL('marker') : null,
 			'data-proximity' => ($this->location) ? $entity->getVolatileData('select:proximity') : null,
 		);
-		return elgg_trigger_plugin_hook('attributes:item', 'maps', array(
+		return \elgg_trigger_plugin_hook('attributes:item', 'maps', array(
 			'item' => $item
 				), $attributes);
 	}
@@ -190,8 +190,8 @@ class ElggMap extends ElggList {
 				$geopositioning = $_SESSION['geopositioning'];
 				$location = $geopositioning['location'];
 			} else {
-				$site = elgg_get_site_entity();
-				$user = elgg_get_logged_in_user_entity();
+				$site = \elgg_get_site_entity();
+				$user = \elgg_get_logged_in_user_entity();
 
 				$lat_key = 'geo:lat';
 				$long_key = 'geo:long';
@@ -206,13 +206,13 @@ class ElggMap extends ElggList {
 			}
 		}
 
-		$latlong = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $location), false);
+		$latlong = \elgg_trigger_plugin_hook('geocode', 'location', array('location' => $location), false);
 		if (!$latlong) {
 			$latlong = array();
 		}
 		$this->location = $location;
-		$this->latitude = elgg_extract('lat', $latlong, 0);
-		$this->longitude = elgg_extract('long', $latlong, 0);
+		$this->latitude = \elgg_extract('lat', $latlong, 0);
+		$this->longitude = \elgg_extract('long', $latlong, 0);
 
 		return $this;
 	}
@@ -266,10 +266,10 @@ class ElggMap extends ElggList {
 	public static function getProximity($value) {
 		if (self::METRIC_SYSTEM == 'US') {
 			$miles = number_format(round($value * self::KM_TO_MILE, 2), 2, '.', ' ');
-			return elgg_echo('maps:proximity:US', array($miles));
+			return \elgg_echo('maps:proximity:US', array($miles));
 		} else {
 			$kilometers = number_format(round($value, 2), 2, '.', ' ');
-			return elgg_echo('maps:proximity:SI', array($kilometers));
+			return \elgg_echo('maps:proximity:SI', array($kilometers));
 		}
 	}
 
