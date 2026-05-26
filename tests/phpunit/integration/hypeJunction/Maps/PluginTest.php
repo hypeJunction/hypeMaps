@@ -52,7 +52,7 @@ class PluginTest extends IntegrationTestCase {
      */
     public function testPageHandlerRegistered(): void {
         // In 3.x/4.x, we can check via the services
-        $handlers = _elgg_services()->routes;
+        $handlers = \_elgg_services()->routes;
         $this->assertNotNull($handlers);
         // Page handler 'maps' should route. We verify via elgg_normalize_url
         $url = \elgg_normalize_url('maps');
@@ -63,7 +63,7 @@ class PluginTest extends IntegrationTestCase {
      * @return void
      */
     public function testActionsRegistered(): void {
-        $actions = _elgg_services()->actions;
+        $actions = \_elgg_services()->actions;
         $this->assertTrue($actions->exists('hypemaps/settings/save'));
         $this->assertTrue($actions->exists('maps/geopositioning/update'));
     }

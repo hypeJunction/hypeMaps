@@ -7,14 +7,14 @@ namespace hypeJunction\Maps;
  * @return array
  */
 function get_site_search_maps() {
-	$maps = elgg_trigger_event_results('search:site', 'maps', [], []);
+	$maps = \elgg_trigger_event_results('search:site', 'maps', [], []);
 	if (!is_array($maps)) {
 		return [];
 	}
 
 	$priorities = [];
 	foreach ($maps as $key => $map) {
-		$priorities[$key] = elgg_extract('priority', $map, 500);
+		$priorities[$key] = \elgg_extract('priority', $map, 500);
 	}
 
 	array_multisort($priorities, SORT_ASC, $maps);
@@ -29,21 +29,21 @@ function get_site_search_maps() {
  */
 function get_group_search_maps($group = null) {
 	if (is_null($group)) {
-		$group = elgg_get_page_owner_entity();
+		$group = \elgg_get_page_owner_entity();
 	}
 
 	if (!$group instanceof \ElggGroup) {
 		$group = new \ElggGroup();
 	}
 
-	$maps = elgg_trigger_event_results('search:group', 'maps', ['entity' => $group], []);
+	$maps = \elgg_trigger_event_results('search:group', 'maps', ['entity' => $group], []);
 	if (!is_array($maps)) {
 		return [];
 	}
 
 	$priorities = [];
 	foreach ($maps as $key => $map) {
-		$priorities[$key] = elgg_extract('priority', $map, 500);
+		$priorities[$key] = \elgg_extract('priority', $map, 500);
 	}
 
 	array_multisort($priorities, SORT_ASC, $maps);
@@ -56,15 +56,15 @@ function get_group_search_maps($group = null) {
  */
 function get_mappable_type_subtype_pairs() {
 	$type_subtype_pairs = [];
-	if (elgg_get_plugin_setting('search_users', PLUGIN_ID)) {
+	if (\elgg_get_plugin_setting('search_users', PLUGIN_ID)) {
 		$type_subtype_pairs['user'] = '';
 	}
 
-	if (elgg_get_plugin_setting('search_groups', PLUGIN_ID)) {
+	if (\elgg_get_plugin_setting('search_groups', PLUGIN_ID)) {
 		$type_subtype_pairs['group'] = '';
 	}
 
-	if (elgg_get_plugin_setting('search_objects', PLUGIN_ID)) {
+	if (\elgg_get_plugin_setting('search_objects', PLUGIN_ID)) {
 		$type_subtype_pairs['object'] = get_mappable_object_subtypes();
 	}
 
@@ -76,7 +76,7 @@ function get_mappable_type_subtype_pairs() {
  * @return array
  */
 function get_mappable_object_subtypes() {
-	$mappable_subtypes = elgg_get_plugin_setting('mappable_subtypes', PLUGIN_ID);
+	$mappable_subtypes = \elgg_get_plugin_setting('mappable_subtypes', PLUGIN_ID);
 	if (!$mappable_subtypes) {
 		return [];
 	}
@@ -97,12 +97,12 @@ function get_mappable_object_subtypes() {
  * @return string
  */
 function get_marker_icons_path($url = false) {
-	$path = elgg_get_plugin_setting('icons_path', PLUGIN_ID);
+	$path = \elgg_get_plugin_setting('icons_path', PLUGIN_ID);
 	if (!$path) {
-		return $url ? elgg_normalize_url('mod/' . PLUGIN_ID . '/graphics/icons/') : __DIR__ . '/../graphics/icons/';
+		return $url ? \elgg_normalize_url('mod/' . PLUGIN_ID . '/graphics/icons/') : __DIR__ . '/../graphics/icons/';
 	}
 
-	return $url ? elgg_normalize_url('mod/' . $path) : __DIR__ . '/../' . $path;
+	return $url ? \elgg_normalize_url('mod/' . $path) : __DIR__ . '/../' . $path;
 }
 
 /**
@@ -125,7 +125,7 @@ function get_marker_types_defaults() {
  * @return array
  */
 function get_marker_types_options() {
-	$markertypes = elgg_get_plugin_setting('markertypes', PLUGIN_ID);
+	$markertypes = \elgg_get_plugin_setting('markertypes', PLUGIN_ID);
 	if ($markertypes) {
 		$decoded = json_decode($markertypes, true);
 		if (!is_array($decoded)) {
@@ -140,10 +140,10 @@ function get_marker_types_options() {
 
 	$markertypes = array_filter($markertypes);
 	foreach ($markertypes as $type) {
-		$options_values[$type] = elgg_echo("maps:marker:type:{$type}");
+		$options_values[$type] = \elgg_echo("maps:marker:type:{$type}");
 	}
 
-	return elgg_trigger_event_results('markers:types', 'maps', [], $options_values);
+	return \elgg_trigger_event_results('markers:types', 'maps', [], $options_values);
 }
 
 /**
@@ -170,12 +170,12 @@ function get_geopositioning() {
 function set_geopositioning($location = '', $latitude = 0, $longitude = 0) {
 	$lat = (float) $latitude;
 	$long = (float) $longitude;
-	$latlong = elgg_trigger_event_results('geocode', 'location', ['location' => $location], false);
+	$latlong = \elgg_trigger_event_results('geocode', 'location', ['location' => $location], false);
 	if ($latlong) {
-		$latitude = elgg_extract('lat', $latlong);
-		$longitude = elgg_extract('long', $latlong);
+		$latitude = \elgg_extract('lat', $latlong);
+		$longitude = \elgg_extract('long', $latlong);
 	} elseif ($location && $latitude && $longitude) {
-		$prefix = elgg_get_config('dbprefix');
+		$prefix = \elgg_get_config('dbprefix');
 		$query = "INSERT INTO {$prefix}geocode_cache
                 (location, lat, `long`) VALUES (:location, :lat, :long)
                 ON DUPLICATE KEY UPDATE lat=:lat2, `long`=:long2";
@@ -197,8 +197,8 @@ function set_geopositioning($location = '', $latitude = 0, $longitude = 0) {
  */
 function get_adsense_publisher_id() {
 	$plugin_author_publisher_id = 'pub-8490157954180368';
-	$site_publisher_id = elgg_get_plugin_setting('adsense_publisher_id', PLUGIN_ID);
-	$plugin_author_share = elgg_get_plugin_setting('adsense_plugin_author_share', PLUGIN_ID);
+	$site_publisher_id = \elgg_get_plugin_setting('adsense_publisher_id', PLUGIN_ID);
+	$plugin_author_share = \elgg_get_plugin_setting('adsense_plugin_author_share', PLUGIN_ID);
 	if (!$plugin_author_share) {
 		$plugin_author_share = '100';
 	}
