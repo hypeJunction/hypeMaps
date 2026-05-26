@@ -2,12 +2,12 @@
 
 namespace hypeJunction\Maps;
 
-$body = elgg_view('page/elements/body', $vars);
+$body = \elgg_view('page/elements/body', $vars);
 
 // Set the content type
 header('Content-type: text/html; charset=UTF-8');
 
-$lang = elgg_get_current_language();
+$lang = \elgg_get_current_language();
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang; ?>" lang="<?php echo $lang; ?>">

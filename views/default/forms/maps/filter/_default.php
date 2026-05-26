@@ -6,10 +6,10 @@ use ElggBatch;
 
 $query = get_input('query');
 
-$user = elgg_get_logged_in_user_entity();
+$user = \elgg_get_logged_in_user_entity();
 
 $body .= '<div>';
-$body .= '<label>' . elgg_echo('maps:filter:users:location') . '</label>';
+$body .= '<label>' . \elgg_echo('maps:filter:users:location') . '</label>';
 
 if ($user) {
 	$options = [
@@ -27,9 +27,9 @@ if ($user) {
 	}
 
 	if (count($locations)) {
-		array_unshift($locations, elgg_echo('maps:filter:location:change'));
+		array_unshift($locations, \elgg_echo('maps:filter:location:change'));
 		$body .= '<div class="maps-filter-location-cache">';
-		$body .= elgg_view('input/dropdown', [
+		$body .= \elgg_view('input/dropdown', [
 			'name' => 'location[cached]',
 			'value' => get_input('location'),
 			'options' => $locations
@@ -39,37 +39,37 @@ if ($user) {
 }
 
 $body .= '<div class="maps-filter-location">';
-$body .= elgg_view('input/location', [
+$body .= \elgg_view('input/location', [
 	'name' => 'location[find]',
-	'placeholder' => elgg_echo('maps:filter:location:find')
+	'placeholder' => \elgg_echo('maps:filter:location:find')
 ]);
 $body .= '</div>';
 $body .= '</div>';
 
 $body .= '<div>';
-$body .= '<label>' . elgg_echo('maps:filter:users:radius') . '</label>';
+$body .= '<label>' . \elgg_echo('maps:filter:users:radius') . '</label>';
 $body .= '<div class="maps-filter-radius">';
 $key = 'maps:proximity:' . HYPEMAPS_METRIC_SYSTEM;
-$body .= elgg_view('input/dropdown', [
+$body .= \elgg_view('input/dropdown', [
 	'name' => 'radius',
 	'value' => get_input('radius', HYPEMAPS_SEARCH_RADIUS),
 	'options_values' => [
-		0 => elgg_echo('maps:filter:radius:none'),
-		5 => elgg_echo($key, [5]),
-		10 => elgg_echo($key, [10]),
-		25 => elgg_echo($key, [25]),
-		100 => elgg_echo($key, [100]),
-		500 => elgg_echo($key, [500])
+		0 => \elgg_echo('maps:filter:radius:none'),
+		5 => \elgg_echo($key, [5]),
+		10 => \elgg_echo($key, [10]),
+		25 => \elgg_echo($key, [25]),
+		100 => \elgg_echo($key, [100]),
+		500 => \elgg_echo($key, [500])
 	]
 ]);
 $body .= '</div>';
 $body .= '</div>';
 
-$footer .= elgg_view('input/submit', [
-	'value' => elgg_echo('filter'),
+$footer .= \elgg_view('input/submit', [
+	'value' => \elgg_echo('filter'),
 ]);
 
 
-echo elgg_view_module('aside', elgg_echo('maps:filter:location'), $body, [
+echo \elgg_view_module('aside', \elgg_echo('maps:filter:location'), $body, [
 	'footer' => $footer
 ]);

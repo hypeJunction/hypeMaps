@@ -13,7 +13,7 @@ $geopositioning = get_geopositioning();
 	}
 
 	<?php
-	if (!elgg_get_plugin_setting('adsense_units', PLUGIN_ID)) {
+	if (!\elgg_get_plugin_setting('adsense_units', PLUGIN_ID)) {
 		return true;
 	}
 	?>

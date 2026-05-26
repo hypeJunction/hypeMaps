@@ -50,10 +50,10 @@ class ElggMapQuery extends ElggListQuery {
 		parent::__construct($search_type, $query, $table_map);
 
 		if ($search_type == 'proximity') {
-			$this->location = elgg_extract('location', $query);
-			$this->latitude = elgg_extract('latitude', $query);
-			$this->longitude = elgg_extract('longitude', $query);
-			$this->radius = elgg_extract('radius', $query);
+			$this->location = \elgg_extract('location', $query);
+			$this->latitude = \elgg_extract('latitude', $query);
+			$this->longitude = \elgg_extract('longitude', $query);
+			$this->radius = \elgg_extract('radius', $query);
 		}
 	}
 
@@ -134,7 +134,7 @@ class ElggMapQuery extends ElggListQuery {
 	 */
 	private function sqlJoinCoordinates($mdlat = 'mdlat', $mdlong = 'mdlong') {
 
-		$dbprefix = elgg_get_config('dbprefix');
+		$dbprefix = \elgg_get_config('dbprefix');
 
 		$this->options['joins'][$mdlat] = "JOIN {$dbprefix}metadata $mdlat ON e.guid = $mdlat.entity_guid AND $mdlat.name = 'geo:lat'";
 		$this->options['joins'][$mdlong] = "JOIN {$dbprefix}metadata $mdlong ON e.guid = $mdlong.entity_guid AND $mdlong.name = 'geo:long'";
@@ -149,7 +149,7 @@ class ElggMapQuery extends ElggListQuery {
 	 */
 	private function sqlJoinSpatial($eg = 'eg') {
 
-		$dbprefix = elgg_get_config('dbprefix');
+		$dbprefix = \elgg_get_config('dbprefix');
 		$this->options['joins'][$eg] = "JOIN {$dbprefix}entity_geometry $eg ON e.guid = $eg.entity_guid";
 		return $this;
 	}
@@ -160,7 +160,7 @@ class ElggMapQuery extends ElggListQuery {
 	 */
 	private function hasSpatial() {
 		if (!isset(self::$spatial)) {
-			$prefix = elgg_get_config('dbprefix');
+			$prefix = \elgg_get_config('dbprefix');
 			$tables = elgg()->db->getConnection('read')->executeQuery("SHOW TABLES LIKE '{$prefix}entity_geometry'")->fetchAllAssociative();
 			self::$spatial = count($tables) > 0;
 		}
@@ -177,7 +177,7 @@ class ElggMapQuery extends ElggListQuery {
  */
 function mappable_entity_row_to_elggstar($row) {
 
-	$entity = _elgg_services()->entityTable->rowToElggStar($row);
+	$entity = \_elgg_services()->entityTable->rowToElggStar($row);
 	if ($entity instanceof \ElggEntity) {
 		$entity->setVolatileData('select:proximity', (float) $row->proximity);
 	}

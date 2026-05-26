@@ -7,7 +7,7 @@
 
 namespace hypeJunction\Maps;
 
-$value = elgg_extract('value', $vars);
+$value = \elgg_extract('value', $vars);
 if (!$value) {
 	return true;
 }
@@ -42,4 +42,4 @@ $img_vars = [
 	'alt' => $alt,
 ];
 
-echo elgg_format_element('div', $vars, elgg_view('output/img', $img_vars));
+echo \elgg_format_element('div', $vars, \elgg_view('output/img', $img_vars));

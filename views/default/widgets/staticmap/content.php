@@ -2,27 +2,27 @@
 
 namespace hypeJunction\Maps;
 
-$entity = elgg_extract('entity', $vars);
+$entity = \elgg_extract('entity', $vars);
 
 if ($entity->description) {
 	echo '<div>';
-	echo elgg_view('output/longtext', [
+	echo \elgg_view('output/longtext', [
 		'value' => $entity->description,
 	]);
 	echo '</div>';
 }
 
-$src = elgg_http_add_url_query_elements('//maps.googleapis.com/maps/api/staticmap', [
+$src = \elgg_http_add_url_query_elements('//maps.googleapis.com/maps/api/staticmap', [
 	'center' => $entity->location,
 	'zoom' => $entity->zoom,
 	'size' => '300x300',
 	'markers' => "color:{$entity->pin_color}%7C{$entity->location}",
-	'key' => elgg_get_plugin_setting('google_api_key', PLUGIN_ID)
+	'key' => \elgg_get_plugin_setting('google_api_key', PLUGIN_ID)
 ]);
 
 echo '<div>';
-echo elgg_view('output/url', [
-	'text' => elgg_view('output/img', [
+echo \elgg_view('output/url', [
+	'text' => \elgg_view('output/img', [
 		'src' => $src,
 		'width' => 300,
 		'height' => 300,
@@ -33,7 +33,7 @@ echo elgg_view('output/url', [
 echo '</div>';
 
 echo '<div class="pam">';
-echo elgg_view('output/maps/location', [
+echo \elgg_view('output/maps/location', [
 	'value' => $entity->location,
 	'class' => 'elgg-text-help',
 ]);

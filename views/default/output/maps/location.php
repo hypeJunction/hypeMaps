@@ -2,13 +2,13 @@
 
 namespace hypeJunction\Maps;
 
-$value = elgg_extract('value', $vars, '');
+$value = \elgg_extract('value', $vars, '');
 
 if (!$value) {
 	return true;
 }
 
-echo elgg_view('output/url', [
+echo \elgg_view('output/url', [
 	'text' => $value,
 	'href' => "//maps.google.com/maps?q=$value",
 	'target' => '_blank'

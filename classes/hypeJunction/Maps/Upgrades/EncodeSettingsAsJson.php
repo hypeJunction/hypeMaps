@@ -51,7 +51,7 @@ class EncodeSettingsAsJson implements Batch {
      * @return Result
      */
     public function run(Result $result, $offset): Result {
-		$plugin = elgg_get_plugin_from_id('hypemaps');
+		$plugin = \elgg_get_plugin_from_id('hypemaps');
 		if (!$plugin) {
 			$result->markComplete();
 			return $result;

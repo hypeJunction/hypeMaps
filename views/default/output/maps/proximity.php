@@ -7,7 +7,7 @@
 
 namespace hypeJunction\Maps;
 
-$value = elgg_extract('value', $vars);
+$value = \elgg_extract('value', $vars);
 if (!$value) {
 	return true;
 }
@@ -15,4 +15,4 @@ if (!$value) {
 unset($vars['value']);
 
 $proximity_str = ElggMap::getProximity($value);
-echo elgg_format_element('div', $vars, $proximity_str);
+echo \elgg_format_element('div', $vars, $proximity_str);
