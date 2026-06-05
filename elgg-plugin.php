@@ -1,5 +1,9 @@
 <?php
 
+require_once __DIR__ . '/lib/functions.php';
+require_once __DIR__ . '/lib/hooks.php';
+require_once __DIR__ . '/lib/events.php';
+
 return [
 	'plugin' => [
 		'name' => 'hypeMaps',
