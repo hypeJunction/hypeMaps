@@ -2,7 +2,7 @@
 
 namespace hypeJunction\Maps\Upgrades;
 
-use Elgg\Upgrade\Batch;
+use Elgg\Upgrade\AsynchronousUpgrade;
 use Elgg\Upgrade\Result;
 
 /**
@@ -13,7 +13,7 @@ use Elgg\Upgrade\Result;
  * serialize() payloads as a backward-compat fallback. Once this upgrade
  * has run on every site, the fallback can be removed in a future release.
  */
-class EncodeSettingsAsJson implements Batch {
+class EncodeSettingsAsJson extends AsynchronousUpgrade {
 
 	private const SETTINGS = ['mappable_subtypes', 'markertypes'];
 
