@@ -10,4 +10,4 @@ if ($location) {
 	set_geopositioning($location, $latitude, $longitude);
 }
 
-return elgg_ok_response('', '', REFERER);
+return elgg_ok_response('', '', REFERRER);

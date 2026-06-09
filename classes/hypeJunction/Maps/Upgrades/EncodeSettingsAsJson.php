@@ -42,7 +42,7 @@ class EncodeSettingsAsJson extends AsynchronousUpgrade {
      * @return int
      */
     public function countItems(): int {
-		return Batch::UNKNOWN_COUNT;
+		return self::UNKNOWN_COUNT;
 	}
 
 	/**
