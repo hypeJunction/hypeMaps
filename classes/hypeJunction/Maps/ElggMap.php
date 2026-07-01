@@ -116,8 +116,8 @@ class ElggMap extends ElggList {
 			]);
 
 			$this->options = $query->sqlGetOptions($this->options);
-		} catch (Exception $e) {
-			elgg_log($e->getMessage(), 'ERROR');
+		} catch (\Exception $e) {
+			elgg_log($e->getMessage(), 'error');
 		}
 
 		return $this;
