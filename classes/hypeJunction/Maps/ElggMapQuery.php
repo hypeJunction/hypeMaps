@@ -86,7 +86,7 @@ class ElggMapQuery extends ElggListQuery {
 
 		if ($this->hasSpatial()) {
 			$this->sqlJoinSpatial('eg');
-			$this->options['selects']['proximity'] = "(GLength(LineStringFromWKB(LineString(eg.geometry,GeomFromText('POINT({$this->latitude} {$this->longitude})')))))*60*1.825 as proximity";
+			$this->options['selects']['proximity'] = "(ST_Length(ST_LineStringFromWKB(LineString(eg.geometry,ST_GeomFromText('POINT({$this->latitude} {$this->longitude})')))))*60*1.825 as proximity";
 			$this->options['order_by'] = 'proximity ASC, e.time_updated DESC';
 			$this->options['callback'] = __NAMESPACE__ . '\\mappable_entity_row_to_elggstar';
 		} else {
@@ -113,7 +113,7 @@ class ElggMapQuery extends ElggListQuery {
 			$this->options['wheres']['proximity'] = "proximity <= {$this->radius}";
 		} else if ($this->hasSpatial()) {
 			$this->sqlJoinSpatial('eg');
-			$this->options['wheres']['proximity'] = "(GLength(LineStringFromWKB(LineString(eg.geometry,GeomFromText('POINT({$this->latitude} {$this->longitude})')))))*60*1.825 <= {$this->radius}";
+			$this->options['wheres']['proximity'] = "(ST_Length(ST_LineStringFromWKB(LineString(eg.geometry,ST_GeomFromText('POINT({$this->latitude} {$this->longitude})')))))*60*1.825 <= {$this->radius}";
 		} else {
 			$this->sqlJoinCoordinates('mdlat', 'mdlong');
 			$this->options['wheres']['proximity'] = "(((acos(sin(($this->latitude*pi()/180))*sin((mdlat.value*pi()/180))+cos(($this->latitude*pi()/180))*cos((mdlat.value*pi()/180))*cos((($this->longitude-mdlong.value)*pi()/180)))))*180/pi())*60*1.1515*1.60934 <= {$this->radius}";
