@@ -541,8 +541,11 @@ final class MigrationRegressionTest extends TestCase
             return;
         }
         $violations = [];
-        if (preg_match('/[\'"](?:class|subtype)[\'"]\s*=>\s*[\\\\\w]+::(?:class|[A-Z_]+)\b/', $block[1])) {
-            $violations[] = 'entities block uses ClassName::class / ::CONST — use string literals (autoloader not wired at manifest parse time)';
+        // ::class is a COMPILE-TIME string and never autoloads, so it is safe here.
+        // ::SOME_CONST is not: reading a class constant triggers the autoloader, which
+        // is not wired yet when elgg-plugin.php is parsed. Flag only the constants.
+        if (preg_match('/[\'"](?:class|subtype)[\'"]\s*=>\s*[\\\\\w]+::(?!class\b)[A-Z_]+\b/', $block[1])) {
+            $violations[] = 'entities block reads a class CONSTANT (ClassName::CONST) — use a string literal (autoloader not wired at manifest parse time)';
         }
         $this->assertSame([], $violations, "Non-literal class/subtype in elgg-plugin.php entities block:\n" . implode("\n", $violations));
     }
